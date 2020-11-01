@@ -1,0 +1,92 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : pooling
+Version: I-2013.12-SP4
+Date   : Wed Dec 19 16:55:19 2018
+****************************************
+
+Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire
+Wire Load Model Mode: top
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_im_reg[0][2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  pooling            1K                    14nm_sg_345K_maxfan4_wire
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 32.05      32.05 f
+  U4656/X (inv_x1_sg)                     15.37      47.42 r
+  U4514/X (nand_x1_sg)                    17.41      64.83 f
+  U4513/X (nor_x1_sg)                     13.18      78.01 r
+  U3280/X (nor_x1_sg)                     17.78      95.79 f
+  U3319/X (inv_x1_sg)                     32.99     128.78 r
+  U3846/X (nor_x1_sg)                     21.36     150.13 f
+  U3087/X (inv_x1_sg)                     23.64     173.77 r
+  U3264/X (inv_x1_sg)                     19.40     193.17 f
+  U3790/X (nor_x1_sg)                     19.95     213.12 r
+  U3257/X (inv_x1_sg)                     24.29     237.40 f
+  U3261/X (inv_x1_sg)                     19.45     256.85 r
+  U3062/X (inv_x1_sg)                      8.32     265.17 f
+  U3063/X (inv_x1_sg)                     11.68     276.86 r
+  U3160/X (inv_x1_sg)                     22.76     299.62 f
+  U3161/X (inv_x1_sg)                     14.51     314.12 r
+  U4521/X (nand_x1_sg)                     7.91     322.04 f
+  U3622/X (nand_x1_sg)                     7.43     329.47 r
+  reg_im_reg[0][2]/D (dff_sg)              0.00     329.47 r
+  data arrival time                                 329.47
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_im_reg[0][2]/CP (dff_sg)             0.00    1379.00 r
+  library setup time                      -0.48    1378.52
+  data required time                               1378.52
+  -----------------------------------------------------------
+  data required time                               1378.52
+  data arrival time                                -329.47
+  -----------------------------------------------------------
+  slack (MET)                                      1049.05
+
+
+  Startpoint: state_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: state[1] (output port)
+  Path Group: default
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  pooling            1K                    14nm_sg_345K_maxfan4_wire
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  state_reg[1]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[1]/Q (dff_sg)                 43.13      43.13 f
+  state[1] (out)                           0.00      43.13 f
+  data arrival time                                  43.13
+
+  max_delay                             1429.00    1429.00
+  output external delay                    0.00    1429.00
+  data required time                               1429.00
+  -----------------------------------------------------------
+  data required time                               1429.00
+  data arrival time                                 -43.13
+  -----------------------------------------------------------
+  slack (MET)                                      1385.87
+
+
+1

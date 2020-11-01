@@ -1,0 +1,10 @@
+simv
+ucli.key
+csrc
+simv.daidir
+.nfs*
+tb_output
+DVEfiles
+opendatabase.log
+*.vcd
+PnR

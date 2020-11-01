@@ -1,0 +1,93 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : fifo
+Version: I-2013.12-SP4
+Date   : Wed Dec 19 16:49:00 2018
+****************************************
+
+Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire
+Wire Load Model Mode: top
+
+  Startpoint: rd_ptr_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: empty_reg (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  fifo               1K                    14nm_sg_345K_maxfan4_wire
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  rd_ptr_reg[0]/CP (dff_sg)                0.00       0.00 r
+  rd_ptr_reg[0]/Q (dff_sg)                37.79      37.79 f
+  U6445/X (inv_x1_sg)                     20.54      58.33 r
+  U6367/X (nor_x1_sg)                     19.37      77.70 f
+  U5566/X (inv_x1_sg)                     21.88      99.58 r
+  U6368/X (nor_x1_sg)                     19.45     119.04 f
+  U6444/X (nand_x1_sg)                    29.43     148.47 r
+  U5058/X (inv_x1_sg)                     17.35     165.81 f
+  U5533/X (inv_x1_sg)                     22.76     188.57 r
+  U5534/X (inv_x1_sg)                     13.82     202.40 f
+  U6449/X (nand_x1_sg)                    10.19     212.58 r
+  U4882/X (nand_x1_sg)                    26.11     238.69 f
+  U6369/X (nor_x1_sg)                     11.96     250.65 r
+  U5909/X (inv_x1_sg)                      4.84     255.49 f
+  U6360/X (nand_x1_sg)                    16.73     272.22 r
+  U5740/X (nor_x1_sg)                     12.47     284.69 f
+  U5906/X (nand_x2_sg)                     7.90     292.59 r
+  U6370/X (nand_x1_sg)                    11.71     304.30 f
+  U5905/X (inv_x1_sg)                     13.09     317.39 r
+  U6447/X (nor_x1_sg)                     12.74     330.13 f
+  U5912/X (inv_x1_sg)                      5.27     335.40 r
+  U5911/X (nand_x1_sg)                     6.40     341.80 f
+  empty_reg/D (dff_sg)                     0.00     341.80 f
+  data arrival time                                 341.80
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  empty_reg/CP (dff_sg)                    0.00    1379.00 r
+  library setup time                      -3.09    1375.91
+  data required time                               1375.91
+  -----------------------------------------------------------
+  data required time                               1375.91
+  data arrival time                                -341.80
+  -----------------------------------------------------------
+  slack (MET)                                      1034.11
+
+
+  Startpoint: empty_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: empty (output port)
+  Path Group: default
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  fifo               1K                    14nm_sg_345K_maxfan4_wire
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  empty_reg/CP (dff_sg)                    0.00       0.00 r
+  empty_reg/Q (dff_sg)                    47.21      47.21 f
+  empty (out)                              0.00      47.21 f
+  data arrival time                                  47.21
+
+  max_delay                             1429.00    1429.00
+  output external delay                    0.00    1429.00
+  data required time                               1429.00
+  -----------------------------------------------------------
+  data required time                               1429.00
+  data arrival time                                 -47.21
+  -----------------------------------------------------------
+  slack (MET)                                      1381.79
+
+
+1

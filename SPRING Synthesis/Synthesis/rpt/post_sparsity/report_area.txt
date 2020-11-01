@@ -1,0 +1,33 @@
+ 
+****************************************
+Report : area
+Design : post_sparsity
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 15:42:21 2018
+****************************************
+
+Information: Updating design information... (UID-85)
+Library(s) Used:
+
+    sg_338K (File: /home/yeyu/accelerator/Synthesis/library/sg_338K.db)
+
+Number of ports:                          710
+Number of nets:                          9705
+Number of cells:                         7933
+Number of combinational cells:           6884
+Number of sequential cells:              1049
+Number of macros/black boxes:               0
+Number of buf/inv:                       1906
+Number of references:                      14
+
+Combinational area:              62389.373164
+Buf/Inv area:                    16937.952137
+Noncombinational area:           63945.562248
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                126334.935412
+Total area:                 undefined
+
+Information: This design contains unmapped logic. (RPT-7)
+1

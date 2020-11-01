@@ -1,0 +1,103 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : sparsity
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 15:37:21 2018
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: TYPICAL   Library: sg_338K
+Wire Load Model Mode: top
+
+  Startpoint: shifter_0/pointer_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: shifter_0/oi_7_reg[0]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  sparsity           1K                    sg_338K
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  shifter_0/pointer_reg[1]/CP (dff_sg)                    0.00 #     0.00 r
+  shifter_0/pointer_reg[1]/Q (dff_sg)                    13.90      13.90 f
+  U54091/X (inv_x2_sg)                                   15.44      29.34 r
+  U58507/X (inv_x4_sg)                                   17.22      46.56 f
+  U74734/X (inv_x8_sg)                                   84.15     130.71 r
+  U74731/X (inv_x8_sg)                                   51.06     181.77 f
+  U60544/X (nand_x4_sg)                                  34.10     215.87 r
+  U39760/X (inv_x4_sg)                                   17.36     233.23 f
+  U74020/X (inv_x8_sg)                                   54.93     288.17 r
+  U60338/X (inv_x8_sg)                                   27.39     315.55 f
+  U74763/X (nand_x8_sg)                                  24.24     339.79 r
+  U74219/X (inv_x8_sg)                                  351.85     691.64 f
+  U74764/X (nand_x8_sg)                                 136.30     827.94 r
+  U74765/X (nor_x2_sg)                                   37.72     865.66 f
+  U40720/X (inv_x4_sg)                                   21.31     886.98 r
+  U40721/X (inv_x8_sg)                                   13.69     900.67 f
+  U74766/X (nand_x8_sg)                                  28.05     928.72 r
+  U74339/X (inv_x8_sg)                                   34.49     963.22 f
+  U74332/X (inv_x8_sg)                                  163.95    1127.17 r
+  U74325/X (inv_x8_sg)                                   63.23    1190.40 f
+  U74300/X (inv_x8_sg)                                  116.79    1307.19 r
+  U61243/X (nor_x1_sg)                                   33.79    1340.98 f
+  U47022/X (inv_x1_sg)                                   18.72    1359.70 r
+  U47021/X (nand_x1_sg)                                  22.18    1381.87 f
+  shifter_0/oi_7_reg[0]/D (dff_sg)                        0.00    1381.87 f
+  data arrival time                                               1381.87
+
+  clock clk (rise edge)                                1429.00    1429.00
+  clock network delay (ideal)                             0.00    1429.00
+  clock uncertainty                                     -50.00    1379.00
+  shifter_0/oi_7_reg[0]/CP (dff_sg)                       0.00    1379.00 r
+  library setup time                                      3.15    1382.15
+  data required time                                              1382.15
+  --------------------------------------------------------------------------
+  data required time                                              1382.15
+  data arrival time                                              -1381.87
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.27
+
+
+  Startpoint: state_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: state[1] (output port)
+  Path Group: default
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  sparsity           1K                    sg_338K
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  state_reg[1]/CP (dff_sg)                 0.00 #     0.00 r
+  state_reg[1]/Q (dff_sg)                 11.68      11.68 f
+  U40256/X (inv_x1_sg)                    16.84      28.51 r
+  U40257/X (inv_x2_sg)                    14.62      43.14 f
+  U57301/X (inv_x4_sg)                    14.25      57.39 r
+  U57302/X (inv_x8_sg)                    15.19      72.58 f
+  state[1] (out)                           0.00      72.58 f
+  data arrival time                                  72.58
+
+  max_delay                             1429.00    1429.00
+  output external delay                    0.00    1429.00
+  data required time                               1429.00
+  -----------------------------------------------------------
+  data required time                               1429.00
+  data arrival time                                 -72.58
+  -----------------------------------------------------------
+  slack (MET)                                      1356.42
+
+
+1

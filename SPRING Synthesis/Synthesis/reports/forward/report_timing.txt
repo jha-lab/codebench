@@ -1,0 +1,87 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : forward
+Version: I-2013.12-SP4
+Date   : Thu Dec 20 04:21:21 2018
+****************************************
+
+Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire
+Wire Load Model Mode: top
+
+  Startpoint: sqrt_0/index_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: sqrt_0/out_reg[6]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    14nm_sg_345K_maxfan4_wire
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  sqrt_0/index_reg[1]/CP (dff_sg)          0.00       0.00 r
+  sqrt_0/index_reg[1]/Q (dff_sg)          41.88      41.88 f
+  U194002/X (inv_x1_sg)                   31.18      73.06 r
+  U296250/X (nand_x1_sg)                  50.92     123.97 f
+  U182580/X (inv_x1_sg)                   10.21     134.19 r
+  U296248/X (nand_x1_sg)                  68.07     202.26 f
+  U264712/X (inv_x1_sg)                   19.67     221.93 r
+  U264711/X (nand_x1_sg)                  55.44     277.36 f
+  U182853/X (inv_x1_sg)                   28.78     306.14 r
+  U194686/X (nor_x1_sg)                   15.23     321.38 f
+  U186040/X (inv_x1_sg)                   13.90     335.27 r
+  U186041/X (inv_x1_sg)                   12.44     347.71 f
+  U314171/X (nand_x1_sg)                   7.71     355.42 r
+  U227781/X (nand_x1_sg)                   7.00     362.42 f
+  sqrt_0/out_reg[6]/D (dff_sg)             0.00     362.42 f
+  data arrival time                                 362.42
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  sqrt_0/out_reg[6]/CP (dff_sg)            0.00    1379.00 r
+  library setup time                      -3.07    1375.93
+  data required time                               1375.93
+  -----------------------------------------------------------
+  data required time                               1375.93
+  data arrival time                                -362.42
+  -----------------------------------------------------------
+  slack (MET)                                      1013.51
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: state[0] (output port)
+  Path Group: default
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    14nm_sg_345K_maxfan4_wire
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 43.13      43.13 f
+  state[0] (out)                           0.00      43.13 f
+  data arrival time                                  43.13
+
+  max_delay                             1429.00    1429.00
+  output external delay                    0.00    1429.00
+  data required time                               1429.00
+  -----------------------------------------------------------
+  data required time                               1429.00
+  data arrival time                                 -43.13
+  -----------------------------------------------------------
+  slack (MET)                                      1385.87
+
+
+1

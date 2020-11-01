@@ -1,0 +1,33 @@
+ 
+****************************************
+Report : area
+Design : transposer
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 13:17:47 2018
+****************************************
+
+Information: Updating design information... (UID-85)
+Library(s) Used:
+
+    sg_338K (File: /home/yeyu/accelerator/Synthesis/library/sg_338K.db)
+
+Number of ports:                          646
+Number of nets:                          6820
+Number of cells:                         5216
+Number of combinational cells:           4254
+Number of sequential cells:               962
+Number of macros/black boxes:               0
+Number of buf/inv:                       1675
+Number of references:                      13
+
+Combinational area:              33366.467592
+Buf/Inv area:                    12782.328085
+Noncombinational area:           59069.138077
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                 92435.605669
+Total area:                 undefined
+
+Information: This design contains unmapped logic. (RPT-7)
+1

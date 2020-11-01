@@ -1,0 +1,97 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : transposer
+Version: I-2013.12-SP4
+Date   : Wed Dec 19 17:08:05 2018
+****************************************
+
+Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire
+Wire Load Model Mode: top
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: out_reg[0][0][6]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  transposer         1K                    14nm_sg_345K_maxfan4_wire
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 20.76      20.76 f
+  U10664/X (inv_x1_sg)                    22.61      43.38 r
+  U9059/X (nor_x1_sg)                     24.10      67.48 f
+  U8618/X (inv_x1_sg)                     19.36      86.84 r
+  U8619/X (inv_x1_sg)                     23.76     110.60 f
+  U8438/X (inv_x1_sg)                     31.82     142.42 r
+  U8601/X (inv_x1_sg)                     25.73     168.15 f
+  U9010/X (inv_x1_sg)                     25.08     193.23 r
+  U8462/X (inv_x1_sg)                     14.36     207.58 f
+  U8463/X (inv_x1_sg)                     29.96     237.54 r
+  U8578/X (inv_x1_sg)                     25.58     263.12 f
+  U8580/X (inv_x1_sg)                     32.12     295.24 r
+  U8827/X (inv_x1_sg)                     15.29     310.53 f
+  U8493/X (inv_x1_sg)                     24.96     335.49 r
+  U8494/X (inv_x1_sg)                     24.74     360.23 f
+  U8831/X (inv_x1_sg)                     31.96     392.19 r
+  U8410/X (inv_x1_sg)                     20.42     412.61 f
+  U8925/X (inv_x1_sg)                     33.70     446.31 r
+  U10023/X (nor_x1_sg)                    31.08     477.38 f
+  U9040/X (inv_x1_sg)                     25.26     502.64 r
+  U8731/X (inv_x1_sg)                     14.06     516.70 f
+  U10095/X (nand_x1_sg)                   10.24     526.94 r
+  U9066/X (nand_x1_sg)                     6.78     533.72 f
+  out_reg[0][0][6]/D (dff_sg)              0.00     533.72 f
+  data arrival time                                 533.72
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  out_reg[0][0][6]/CP (dff_sg)             0.00    1379.00 r
+  library setup time                      -3.05    1375.95
+  data required time                               1375.95
+  -----------------------------------------------------------
+  data required time                               1375.95
+  data arrival time                                -533.72
+  -----------------------------------------------------------
+  slack (MET)                                       842.23
+
+
+  Startpoint: state_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: state[1] (output port)
+  Path Group: default
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  transposer         1K                    14nm_sg_345K_maxfan4_wire
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  state_reg[1]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[1]/Q (dff_sg)                 43.13      43.13 f
+  state[1] (out)                           0.00      43.13 f
+  data arrival time                                  43.13
+
+  max_delay                             1429.00    1429.00
+  output external delay                    0.00    1429.00
+  data required time                               1429.00
+  -----------------------------------------------------------
+  data required time                               1429.00
+  data arrival time                                 -43.13
+  -----------------------------------------------------------
+  slack (MET)                                      1385.87
+
+
+1

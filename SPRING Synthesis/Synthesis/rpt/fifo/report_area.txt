@@ -1,0 +1,31 @@
+ 
+****************************************
+Report : area
+Design : fifo
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 13:21:24 2018
+****************************************
+
+Information: Updating design information... (UID-85)
+Library(s) Used:
+
+    sg_338K (File: /home/yeyu/accelerator/Synthesis/library/sg_338K.db)
+
+Number of ports:                           46
+Number of nets:                          3873
+Number of cells:                         3849
+Number of combinational cells:           3417
+Number of sequential cells:               432
+Number of macros/black boxes:               0
+Number of buf/inv:                       1155
+Number of references:                      13
+
+Combinational area:              30860.945607
+Buf/Inv area:                     9391.176072
+Noncombinational area:           39747.457397
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                 70608.403004
+Total area:                 undefined
+1

@@ -1,0 +1,56 @@
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: Design has unannotated primary inputs. (PWR-414)
+Warning: Design has unannotated sequential cell outputs. (PWR-415)
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : fifo
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 13:21:24 2018
+****************************************
+
+
+Library(s) Used:
+
+    sg_338K (File: /home/yeyu/accelerator/Synthesis/library/sg_338K.db)
+
+
+Operating Conditions: TYPICAL   Library: sg_338K
+Wire Load Model Mode: top
+
+Design        Wire Load Model            Library
+------------------------------------------------
+fifo                   1K                sg_338K
+
+
+Global Operating Voltage = 0.9  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000ff
+    Time Units = 1ps
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1nW
+
+
+  Cell Internal Power  =  41.2326 uW   (25%)
+  Net Switching Power  = 122.8319 uW   (75%)
+                         ---------
+Total Dynamic Power    = 164.0645 uW  (100%)
+
+Cell Leakage Power     =  69.3418 uW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
+register       6.8603e-03        8.3548e-04        2.6154e+04        3.3850e-02  (  14.50%)
+sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
+combinational  3.4372e-02            0.1220        4.3188e+04            0.1996  (  85.50%)
+--------------------------------------------------------------------------------------------------
+Total          4.1233e-02 mW         0.1228 mW     6.9342e+04 nW         0.2334 mW
+1

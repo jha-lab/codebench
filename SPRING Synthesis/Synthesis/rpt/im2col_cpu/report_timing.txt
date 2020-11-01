@@ -1,0 +1,50 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : im2col_cpu
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 17:07:22 2018
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: TYPICAL   Library: sg_338K
+Wire Load Model Mode: top
+
+  Startpoint: ap_CS_fsm_reg[74]
+              (rising edge-triggered flip-flop)
+  Endpoint: ap_done (output port)
+  Path Group: default
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  im2col_cpu         1K                    sg_338K
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  ap_CS_fsm_reg[74]/CP (dff_sg)            0.00 #     0.00 r
+  ap_CS_fsm_reg[74]/Q (dff_sg)            11.68      11.68 f
+  U64221/X (inv_x1_sg)                    16.84      28.51 r
+  U64451/X (inv_x2_sg)                    14.62      43.14 f
+  U107712/X (inv_x4_sg)                   14.25      57.39 r
+  U126105/X (inv_x8_sg)                  284.93     342.32 f
+  U108963/X (nand_x4_sg)                 108.07     450.39 r
+  U80423/X (inv_x1_sg)                    26.25     476.64 f
+  ap_done (out)                            0.00     476.64 f
+  data arrival time                                 476.64
+
+  max_delay                             1429.00    1429.00
+  output external delay                    0.00    1429.00
+  data required time                               1429.00
+  -----------------------------------------------------------
+  data required time                               1429.00
+  data arrival time                                -476.64
+  -----------------------------------------------------------
+  slack (MET)                                       952.36
+
+
+1

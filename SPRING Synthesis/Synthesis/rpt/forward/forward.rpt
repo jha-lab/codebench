@@ -1,0 +1,2222 @@
+ 
+****************************************
+Report : compile_options
+Design : forward
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 17:04:48 2018
+****************************************
+
+Design                                   Compile Option         Value
+--------------------------------------------------------------------------------
+forward                                  flatten                false
+                                         structure              true
+                                         structure_boolean      false
+                                         structure_timing       true
+                                         fix_multiple_port_nets feedthroughs
+                                                                outputs
+                                                                constants
+                                         isolate_port           disabled
+--------------------------------------------------------------------------------
+1
+ 
+****************************************
+Report : constraint
+        -all_violators
+        -verbose
+Design : forward
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 17:04:48 2018
+****************************************
+
+
+    Design: forward
+
+    max_leakage_power          0.00
+  - Current Leakage Power  2927207.00
+  ----------------------------------
+    Slack                  -2927207.00  (VIOLATED)
+
+
+1
+ 
+****************************************
+Report : timing
+        -path end
+        -delay min
+        -max_paths 15
+Design : forward
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 17:04:50 2018
+****************************************
+
+Operating Conditions: TYPICAL   Library: sg_338K
+Wire Load Model Mode: top
+
+Endpoint                         Path Delay     Path Required     Slack
+------------------------------------------------------------------------
+sqrt_0/reg_in_reg[1]/D (dff_sg)    78.55 r           50.00        28.55
+state_reg[1]/D (dff_sg)            80.06 r           50.00        30.06
+reg_batch_reg[15][8]/D (dff_sg)    80.51 r           50.00        30.51
+reg_batch_reg[14][8]/D (dff_sg)    80.51 r           50.00        30.51
+reg_batch_reg[12][2]/D (dff_sg)    80.51 r           50.00        30.51
+reg_batch_reg[9][6]/D (dff_sg)     80.51 r           50.00        30.51
+reg_batch_reg[4][10]/D (dff_sg)    80.51 r           50.00        30.51
+reg_batch_reg[4][8]/D (dff_sg)     80.51 r           50.00        30.51
+reg_batch_reg[3][19]/D (dff_sg)    80.51 r           50.00        30.51
+reg_batch_reg[3][7]/D (dff_sg)     80.51 r           50.00        30.51
+reg_batch_reg[2][4]/D (dff_sg)     80.51 r           50.00        30.51
+reg_batch_reg[1][4]/D (dff_sg)     80.51 r           50.00        30.51
+reg_batch_reg[0][9]/D (dff_sg)     80.51 r           50.00        30.51
+reg_batch_reg[0][4]/D (dff_sg)     80.51 r           50.00        30.51
+reg_num_reg[2]/D (dff_sg)          80.51 r           50.00        30.51
+
+1
+ 
+****************************************
+Report : timing
+        -path end
+        -delay max
+        -max_paths 15
+Design : forward
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 17:04:50 2018
+****************************************
+
+Operating Conditions: TYPICAL   Library: sg_338K
+Wire Load Model Mode: top
+
+Endpoint                         Path Delay     Path Required     Slack
+------------------------------------------------------------------------
+reg_batch_reg[11][12]/D (dff_sg)
+                                 1296.93 f         1386.73        89.81
+reg_batch_reg[10][14]/D (dff_sg)
+                                 1296.93 f         1386.73        89.81
+reg_batch_reg[4][7]/D (dff_sg)   1296.93 f         1386.73        89.81
+reg_batch_reg[4][6]/D (dff_sg)   1296.93 f         1386.73        89.81
+reg_batch_reg[4][5]/D (dff_sg)   1296.93 f         1386.73        89.81
+reg_batch_reg[4][2]/D (dff_sg)   1296.93 f         1386.73        89.81
+reg_batch_reg[4][1]/D (dff_sg)   1296.93 f         1386.73        89.81
+reg_batch_reg[4][0]/D (dff_sg)   1296.93 f         1386.73        89.81
+reg_batch_reg[3][19]/D (dff_sg)  1296.93 f         1386.73        89.81
+reg_batch_reg[3][17]/D (dff_sg)  1296.93 f         1386.73        89.81
+reg_batch_reg[6][10]/D (dff_sg)  1296.93 f         1386.88        89.95
+reg_batch_reg[5][5]/D (dff_sg)   1296.93 f         1386.88        89.95
+reg_batch_reg[0][15]/D (dff_sg)  1296.93 f         1386.88        89.95
+reg_batch_reg[0][11]/D (dff_sg)  1296.93 f         1386.88        89.95
+reg_batch_reg[0][4]/D (dff_sg)   1296.93 f         1386.88        89.95
+
+1
+ 
+****************************************
+Report : timing
+        -path full_clock
+        -delay min
+        -input_pins
+        -nets
+        -max_paths 15
+Design : forward
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 17:04:50 2018
+****************************************
+
+Operating Conditions: TYPICAL   Library: sg_338K
+Wire Load Model Mode: top
+
+  Startpoint: sqrt_0/reg_in_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: sqrt_0/reg_in_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  sqrt_0/reg_in_reg[1]/CP (dff_sg)         0.00       0.00 r
+  sqrt_0/reg_in_reg[1]/Q (dff_sg)          9.94       9.94 r
+  sqrt_0/reg_in[1] (net)         1         0.00       9.94 r
+  U197883/A (inv_x2_sg)                    0.00       9.94 r
+  U197883/X (inv_x2_sg)                   13.53      23.47 f
+  n188602 (net)                  1         0.00      23.47 f
+  U245383/A (inv_x4_sg)                    0.00      23.47 f
+  U245383/X (inv_x4_sg)                   12.12      35.59 r
+  n188603 (net)                  2         0.00      35.59 r
+  U304613/A (nand_x1_sg)                   0.00      35.59 r
+  U304613/X (nand_x1_sg)                  17.78      53.37 f
+  n165874 (net)                  1         0.00      53.37 f
+  U239979/B (nand_x1_sg)                   0.00      53.37 f
+  U239979/X (nand_x1_sg)                  25.18      78.55 r
+  sqrt_0/n293 (net)              1         0.00      78.55 r
+  sqrt_0/reg_in_reg[1]/D (dff_sg)          0.00      78.55 r
+  data arrival time                                  78.55
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  sqrt_0/reg_in_reg[1]/CP (dff_sg)         0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -78.55
+  -----------------------------------------------------------
+  slack (MET)                                        28.55
+
+
+  Startpoint: done_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: state_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  done_reg/CP (dff_sg)                     0.00       0.00 r
+  done_reg/Q (dff_sg)                      9.94       9.94 r
+  n224814 (net)                  1         0.00       9.94 r
+  U192883/A (inv_x2_sg)                    0.00       9.94 r
+  U192883/X (inv_x2_sg)                   13.53      23.47 f
+  n185767 (net)                  1         0.00      23.47 f
+  U201943/A (inv_x4_sg)                    0.00      23.47 f
+  U201943/X (inv_x4_sg)                   13.38      36.86 r
+  done (net)                     3         0.00      36.86 r
+  U304625/B (nand_x1_sg)                   0.00      36.86 r
+  U304625/X (nand_x1_sg)                  18.04      54.89 f
+  n165973 (net)                  1         0.00      54.89 f
+  U240935/B (nand_x1_sg)                   0.00      54.89 f
+  U240935/X (nand_x1_sg)                  25.17      80.06 r
+  n166673 (net)                  1         0.00      80.06 r
+  state_reg[1]/D (dff_sg)                  0.00      80.06 r
+  data arrival time                                  80.06
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  state_reg[1]/CP (dff_sg)                 0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.06
+  -----------------------------------------------------------
+  slack (MET)                                        30.06
+
+
+  Startpoint: reg_batch_reg[15][8]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[15][8]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[15][8]/CP (dff_sg)         0.00       0.00 r
+  reg_batch_reg[15][8]/Q (dff_sg)          9.94       9.94 r
+  reg_batch[15][8] (net)         1         0.00       9.94 r
+  U244671/A (inv_x2_sg)                    0.00       9.94 r
+  U244671/X (inv_x2_sg)                   13.53      23.47 f
+  n189478 (net)                  1         0.00      23.47 f
+  U248125/A (inv_x4_sg)                    0.00      23.47 f
+  U248125/X (inv_x4_sg)                   13.67      37.15 r
+  n189479 (net)                  2         0.00      37.15 r
+  U240903/A (nand_x1_sg)                   0.00      37.15 r
+  U240903/X (nand_x1_sg)                  18.10      55.25 f
+  n166614 (net)                  1         0.00      55.25 f
+  U240901/B (nand_x1_sg)                   0.00      55.25 f
+  U240901/X (nand_x1_sg)                  25.26      80.51 r
+  n7863 (net)                    1         0.00      80.51 r
+  reg_batch_reg[15][8]/D (dff_sg)          0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[15][8]/CP (dff_sg)         0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[14][8]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[14][8]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[14][8]/CP (dff_sg)         0.00       0.00 r
+  reg_batch_reg[14][8]/Q (dff_sg)          9.94       9.94 r
+  reg_batch[14][8] (net)         1         0.00       9.94 r
+  U241520/A (inv_x2_sg)                    0.00       9.94 r
+  U241520/X (inv_x2_sg)                   13.53      23.47 f
+  n188562 (net)                  1         0.00      23.47 f
+  U245330/A (inv_x4_sg)                    0.00      23.47 f
+  U245330/X (inv_x4_sg)                   13.67      37.15 r
+  n188563 (net)                  2         0.00      37.15 r
+  U240846/A (nand_x1_sg)                   0.00      37.15 r
+  U240846/X (nand_x1_sg)                  18.10      55.25 f
+  n166574 (net)                  1         0.00      55.25 f
+  U240844/B (nand_x1_sg)                   0.00      55.25 f
+  U240844/X (nand_x1_sg)                  25.26      80.51 r
+  n7883 (net)                    1         0.00      80.51 r
+  reg_batch_reg[14][8]/D (dff_sg)          0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[14][8]/CP (dff_sg)         0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[12][2]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[12][2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[12][2]/CP (dff_sg)         0.00       0.00 r
+  reg_batch_reg[12][2]/Q (dff_sg)          9.94       9.94 r
+  reg_batch[12][2] (net)         1         0.00       9.94 r
+  U242098/A (inv_x2_sg)                    0.00       9.94 r
+  U242098/X (inv_x2_sg)                   13.53      23.47 f
+  n190369 (net)                  1         0.00      23.47 f
+  U251856/A (inv_x4_sg)                    0.00      23.47 f
+  U251856/X (inv_x4_sg)                   13.67      37.15 r
+  n190370 (net)                  2         0.00      37.15 r
+  U240715/B (nand_x1_sg)                   0.00      37.15 r
+  U240715/X (nand_x1_sg)                  18.10      55.25 f
+  n166482 (net)                  1         0.00      55.25 f
+  U240713/B (nand_x1_sg)                   0.00      55.25 f
+  U240713/X (nand_x1_sg)                  25.26      80.51 r
+  n7929 (net)                    1         0.00      80.51 r
+  reg_batch_reg[12][2]/D (dff_sg)          0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[12][2]/CP (dff_sg)         0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[9][6]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[9][6]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[9][6]/CP (dff_sg)          0.00       0.00 r
+  reg_batch_reg[9][6]/Q (dff_sg)           9.94       9.94 r
+  reg_batch[9][6] (net)          1         0.00       9.94 r
+  U241513/A (inv_x2_sg)                    0.00       9.94 r
+  U241513/X (inv_x2_sg)                   13.53      23.47 f
+  n188548 (net)                  1         0.00      23.47 f
+  U245323/A (inv_x4_sg)                    0.00      23.47 f
+  U245323/X (inv_x4_sg)                   13.67      37.15 r
+  n188549 (net)                  2         0.00      37.15 r
+  U240558/A (nand_x1_sg)                   0.00      37.15 r
+  U240558/X (nand_x1_sg)                  18.10      55.25 f
+  n166370 (net)                  1         0.00      55.25 f
+  U240556/B (nand_x1_sg)                   0.00      55.25 f
+  U240556/X (nand_x1_sg)                  25.26      80.51 r
+  n7985 (net)                    1         0.00      80.51 r
+  reg_batch_reg[9][6]/D (dff_sg)           0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[9][6]/CP (dff_sg)          0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[4][10]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[4][10]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[4][10]/CP (dff_sg)         0.00       0.00 r
+  reg_batch_reg[4][10]/Q (dff_sg)          9.94       9.94 r
+  reg_batch[4][10] (net)         1         0.00       9.94 r
+  U243027/A (inv_x2_sg)                    0.00       9.94 r
+  U243027/X (inv_x2_sg)                   13.53      23.47 f
+  n188496 (net)                  1         0.00      23.47 f
+  U245297/A (inv_x4_sg)                    0.00      23.47 f
+  U245297/X (inv_x4_sg)                   13.67      37.15 r
+  n188497 (net)                  2         0.00      37.15 r
+  U240287/B (nand_x1_sg)                   0.00      37.15 r
+  U240287/X (nand_x1_sg)                  18.10      55.25 f
+  n166178 (net)                  1         0.00      55.25 f
+  U240285/B (nand_x1_sg)                   0.00      55.25 f
+  U240285/X (nand_x1_sg)                  25.26      80.51 r
+  n8081 (net)                    1         0.00      80.51 r
+  reg_batch_reg[4][10]/D (dff_sg)          0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[4][10]/CP (dff_sg)         0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[4][8]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[4][8]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[4][8]/CP (dff_sg)          0.00       0.00 r
+  reg_batch_reg[4][8]/Q (dff_sg)           9.94       9.94 r
+  reg_batch[4][8] (net)          1         0.00       9.94 r
+  U243046/A (inv_x2_sg)                    0.00       9.94 r
+  U243046/X (inv_x2_sg)                   13.53      23.47 f
+  n188526 (net)                  1         0.00      23.47 f
+  U245312/A (inv_x4_sg)                    0.00      23.47 f
+  U245312/X (inv_x4_sg)                   13.67      37.15 r
+  n188527 (net)                  2         0.00      37.15 r
+  U240281/B (nand_x1_sg)                   0.00      37.15 r
+  U240281/X (nand_x1_sg)                  18.10      55.25 f
+  n166174 (net)                  1         0.00      55.25 f
+  U240279/B (nand_x1_sg)                   0.00      55.25 f
+  U240279/X (nand_x1_sg)                  25.26      80.51 r
+  n8083 (net)                    1         0.00      80.51 r
+  reg_batch_reg[4][8]/D (dff_sg)           0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[4][8]/CP (dff_sg)          0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[3][19]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[3][19]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[3][19]/CP (dff_sg)         0.00       0.00 r
+  reg_batch_reg[3][19]/Q (dff_sg)          9.94       9.94 r
+  reg_batch[3][19] (net)         1         0.00       9.94 r
+  U177725/A (inv_x2_sg)                    0.00       9.94 r
+  U177725/X (inv_x2_sg)                   13.53      23.47 f
+  n192194 (net)                  1         0.00      23.47 f
+  U177925/A (inv_x4_sg)                    0.00      23.47 f
+  U177925/X (inv_x4_sg)                   13.67      37.15 r
+  n192193 (net)                  2         0.00      37.15 r
+  U240254/A (nand_x1_sg)                   0.00      37.15 r
+  U240254/X (nand_x1_sg)                  18.10      55.25 f
+  n166156 (net)                  1         0.00      55.25 f
+  U240252/B (nand_x1_sg)                   0.00      55.25 f
+  U240252/X (nand_x1_sg)                  25.26      80.51 r
+  n8092 (net)                    1         0.00      80.51 r
+  reg_batch_reg[3][19]/D (dff_sg)          0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[3][19]/CP (dff_sg)         0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[3][7]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[3][7]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[3][7]/CP (dff_sg)          0.00       0.00 r
+  reg_batch_reg[3][7]/Q (dff_sg)           9.94       9.94 r
+  reg_batch[3][7] (net)          1         0.00       9.94 r
+  U243051/A (inv_x2_sg)                    0.00       9.94 r
+  U243051/X (inv_x2_sg)                   13.53      23.47 f
+  n190265 (net)                  1         0.00      23.47 f
+  U251804/A (inv_x4_sg)                    0.00      23.47 f
+  U251804/X (inv_x4_sg)                   13.67      37.15 r
+  n190266 (net)                  2         0.00      37.15 r
+  U240221/A (nand_x1_sg)                   0.00      37.15 r
+  U240221/X (nand_x1_sg)                  18.10      55.25 f
+  n166132 (net)                  1         0.00      55.25 f
+  U240219/B (nand_x1_sg)                   0.00      55.25 f
+  U240219/X (nand_x1_sg)                  25.26      80.51 r
+  n8104 (net)                    1         0.00      80.51 r
+  reg_batch_reg[3][7]/D (dff_sg)           0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[3][7]/CP (dff_sg)          0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[2][4]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[2][4]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[2][4]/CP (dff_sg)          0.00       0.00 r
+  reg_batch_reg[2][4]/Q (dff_sg)           9.94       9.94 r
+  reg_batch[2][4] (net)          1         0.00       9.94 r
+  U244687/A (inv_x2_sg)                    0.00       9.94 r
+  U244687/X (inv_x2_sg)                   13.53      23.47 f
+  n190363 (net)                  1         0.00      23.47 f
+  U251853/A (inv_x4_sg)                    0.00      23.47 f
+  U251853/X (inv_x4_sg)                   13.67      37.15 r
+  n190364 (net)                  2         0.00      37.15 r
+  U240155/B (nand_x1_sg)                   0.00      37.15 r
+  U240155/X (nand_x1_sg)                  18.10      55.25 f
+  n166086 (net)                  1         0.00      55.25 f
+  U240153/B (nand_x1_sg)                   0.00      55.25 f
+  U240153/X (nand_x1_sg)                  25.26      80.51 r
+  n8127 (net)                    1         0.00      80.51 r
+  reg_batch_reg[2][4]/D (dff_sg)           0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[2][4]/CP (dff_sg)          0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[1][4]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[1][4]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[1][4]/CP (dff_sg)          0.00       0.00 r
+  reg_batch_reg[1][4]/Q (dff_sg)           9.94       9.94 r
+  reg_batch[1][4] (net)          1         0.00       9.94 r
+  U244652/A (inv_x2_sg)                    0.00       9.94 r
+  U244652/X (inv_x2_sg)                   13.53      23.47 f
+  n190271 (net)                  1         0.00      23.47 f
+  U251807/A (inv_x4_sg)                    0.00      23.47 f
+  U251807/X (inv_x4_sg)                   13.67      37.15 r
+  n190272 (net)                  2         0.00      37.15 r
+  U240099/A (nand_x1_sg)                   0.00      37.15 r
+  U240099/X (nand_x1_sg)                  18.10      55.25 f
+  n166046 (net)                  1         0.00      55.25 f
+  U240097/B (nand_x1_sg)                   0.00      55.25 f
+  U240097/X (nand_x1_sg)                  25.26      80.51 r
+  n8147 (net)                    1         0.00      80.51 r
+  reg_batch_reg[1][4]/D (dff_sg)           0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[1][4]/CP (dff_sg)          0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[0][9]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[0][9]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[0][9]/CP (dff_sg)          0.00       0.00 r
+  reg_batch_reg[0][9]/Q (dff_sg)           9.94       9.94 r
+  reg_batch[0][9] (net)          1         0.00       9.94 r
+  U242046/A (inv_x2_sg)                    0.00       9.94 r
+  U242046/X (inv_x2_sg)                   13.53      23.47 f
+  n190227 (net)                  1         0.00      23.47 f
+  U251785/A (inv_x4_sg)                    0.00      23.47 f
+  U251785/X (inv_x4_sg)                   13.67      37.15 r
+  n190228 (net)                  2         0.00      37.15 r
+  U240057/B (nand_x1_sg)                   0.00      37.15 r
+  U240057/X (nand_x1_sg)                  18.10      55.25 f
+  n166016 (net)                  1         0.00      55.25 f
+  U240055/B (nand_x1_sg)                   0.00      55.25 f
+  U240055/X (nand_x1_sg)                  25.26      80.51 r
+  n8162 (net)                    1         0.00      80.51 r
+  reg_batch_reg[0][9]/D (dff_sg)           0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[0][9]/CP (dff_sg)          0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_batch_reg[0][4]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[0][4]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_batch_reg[0][4]/CP (dff_sg)          0.00       0.00 r
+  reg_batch_reg[0][4]/Q (dff_sg)           9.94       9.94 r
+  reg_batch[0][4] (net)          1         0.00       9.94 r
+  U243066/A (inv_x2_sg)                    0.00       9.94 r
+  U243066/X (inv_x2_sg)                   13.53      23.47 f
+  n189540 (net)                  1         0.00      23.47 f
+  U248156/A (inv_x4_sg)                    0.00      23.47 f
+  U248156/X (inv_x4_sg)                   13.67      37.15 r
+  n189541 (net)                  2         0.00      37.15 r
+  U240042/B (nand_x1_sg)                   0.00      37.15 r
+  U240042/X (nand_x1_sg)                  18.10      55.25 f
+  n166006 (net)                  1         0.00      55.25 f
+  U240040/B (nand_x1_sg)                   0.00      55.25 f
+  U240040/X (nand_x1_sg)                  25.26      80.51 r
+  n8167 (net)                    1         0.00      80.51 r
+  reg_batch_reg[0][4]/D (dff_sg)           0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_batch_reg[0][4]/CP (dff_sg)          0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+  Startpoint: reg_num_reg[2]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_num_reg[2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  reg_num_reg[2]/CP (dff_sg)               0.00       0.00 r
+  reg_num_reg[2]/Q (dff_sg)                9.94       9.94 r
+  reg_num[2] (net)               1         0.00       9.94 r
+  U177444/A (inv_x2_sg)                    0.00       9.94 r
+  U177444/X (inv_x2_sg)                   13.53      23.47 f
+  n192164 (net)                  1         0.00      23.47 f
+  U177904/A (inv_x4_sg)                    0.00      23.47 f
+  U177904/X (inv_x4_sg)                   13.67      37.15 r
+  n192163 (net)                  2         0.00      37.15 r
+  U240021/A (nand_x1_sg)                   0.00      37.15 r
+  U240021/X (nand_x1_sg)                  18.10      55.25 f
+  n165992 (net)                  1         0.00      55.25 f
+  U240019/B (nand_x1_sg)                   0.00      55.25 f
+  U240019/X (nand_x1_sg)                  25.26      80.51 r
+  n8174 (net)                    1         0.00      80.51 r
+  reg_num_reg[2]/D (dff_sg)                0.00      80.51 r
+  data arrival time                                  80.51
+
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                       50.00      50.00
+  reg_num_reg[2]/CP (dff_sg)               0.00      50.00 r
+  library hold time                        0.00      50.00
+  data required time                                 50.00
+  -----------------------------------------------------------
+  data required time                                 50.00
+  data arrival time                                 -80.51
+  -----------------------------------------------------------
+  slack (MET)                                        30.51
+
+
+1
+ 
+****************************************
+Report : timing
+        -path full_clock
+        -delay max
+        -input_pins
+        -nets
+        -max_paths 15
+Design : forward
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 17:04:50 2018
+****************************************
+
+Operating Conditions: TYPICAL   Library: sg_338K
+Wire Load Model Mode: top
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[11][12]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240689/B (nand_x1_sg)                   0.02    1191.00 f
+  U240689/X (nand_x1_sg)                  73.71    1264.70 r
+  n166462 (net)                  1         0.00    1264.70 r
+  U240687/B (nand_x1_sg)                   0.00    1264.70 r
+  U240687/X (nand_x1_sg)                  32.23    1296.93 f
+  n7939 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[11][12]/D (dff_sg)         0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[11][12]/CP (dff_sg)        0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[10][14]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240637/A (nand_x1_sg)                   0.02    1191.00 f
+  U240637/X (nand_x1_sg)                  73.71    1264.70 r
+  n166426 (net)                  1         0.00    1264.70 r
+  U240635/B (nand_x1_sg)                   0.00    1264.70 r
+  U240635/X (nand_x1_sg)                  32.23    1296.93 f
+  n7957 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[10][14]/D (dff_sg)         0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[10][14]/CP (dff_sg)        0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[4][7]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240278/A (nand_x1_sg)                   0.02    1191.00 f
+  U240278/X (nand_x1_sg)                  73.71    1264.70 r
+  n166172 (net)                  1         0.00    1264.70 r
+  U240276/B (nand_x1_sg)                   0.00    1264.70 r
+  U240276/X (nand_x1_sg)                  32.23    1296.93 f
+  n8084 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[4][7]/D (dff_sg)           0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[4][7]/CP (dff_sg)          0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[4][6]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240275/A (nand_x1_sg)                   0.02    1191.00 f
+  U240275/X (nand_x1_sg)                  73.71    1264.70 r
+  n166170 (net)                  1         0.00    1264.70 r
+  U240273/B (nand_x1_sg)                   0.00    1264.70 r
+  U240273/X (nand_x1_sg)                  32.23    1296.93 f
+  n8085 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[4][6]/D (dff_sg)           0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[4][6]/CP (dff_sg)          0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[4][5]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240272/A (nand_x1_sg)                   0.02    1191.00 f
+  U240272/X (nand_x1_sg)                  73.71    1264.70 r
+  n166168 (net)                  1         0.00    1264.70 r
+  U240270/B (nand_x1_sg)                   0.00    1264.70 r
+  U240270/X (nand_x1_sg)                  32.23    1296.93 f
+  n8086 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[4][5]/D (dff_sg)           0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[4][5]/CP (dff_sg)          0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[4][2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240263/A (nand_x1_sg)                   0.02    1191.00 f
+  U240263/X (nand_x1_sg)                  73.71    1264.70 r
+  n166162 (net)                  1         0.00    1264.70 r
+  U240261/B (nand_x1_sg)                   0.00    1264.70 r
+  U240261/X (nand_x1_sg)                  32.23    1296.93 f
+  n8089 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[4][2]/D (dff_sg)           0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[4][2]/CP (dff_sg)          0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[4][1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240260/A (nand_x1_sg)                   0.02    1191.00 f
+  U240260/X (nand_x1_sg)                  73.71    1264.70 r
+  n166160 (net)                  1         0.00    1264.70 r
+  U240258/B (nand_x1_sg)                   0.00    1264.70 r
+  U240258/X (nand_x1_sg)                  32.23    1296.93 f
+  n8090 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[4][1]/D (dff_sg)           0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[4][1]/CP (dff_sg)          0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[4][0]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240257/A (nand_x1_sg)                   0.02    1191.00 f
+  U240257/X (nand_x1_sg)                  73.71    1264.70 r
+  n166158 (net)                  1         0.00    1264.70 r
+  U240255/B (nand_x1_sg)                   0.00    1264.70 r
+  U240255/X (nand_x1_sg)                  32.23    1296.93 f
+  n8091 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[4][0]/D (dff_sg)           0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[4][0]/CP (dff_sg)          0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[3][19]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240254/B (nand_x1_sg)                   0.02    1191.00 f
+  U240254/X (nand_x1_sg)                  73.71    1264.70 r
+  n166156 (net)                  1         0.00    1264.70 r
+  U240252/B (nand_x1_sg)                   0.00    1264.70 r
+  U240252/X (nand_x1_sg)                  32.23    1296.93 f
+  n8092 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[3][19]/D (dff_sg)          0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[3][19]/CP (dff_sg)         0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[3][17]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240248/B (nand_x1_sg)                   0.02    1191.00 f
+  U240248/X (nand_x1_sg)                  73.71    1264.70 r
+  n166152 (net)                  1         0.00    1264.70 r
+  U240246/B (nand_x1_sg)                   0.00    1264.70 r
+  U240246/X (nand_x1_sg)                  32.23    1296.93 f
+  n8094 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[3][17]/D (dff_sg)          0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[3][17]/CP (dff_sg)         0.00    1379.00 r
+  library setup time                       7.73    1386.73
+  data required time                               1386.73
+  -----------------------------------------------------------
+  data required time                               1386.73
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.81
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[6][10]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240401/A (nand_x1_sg)                   0.02    1191.00 f
+  U240401/X (nand_x1_sg)                  73.71    1264.70 r
+  n166258 (net)                  1         0.00    1264.70 r
+  U240399/B (nand_x1_sg)                   0.00    1264.70 r
+  U240399/X (nand_x1_sg)                  32.23    1296.93 f
+  n8041 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[6][10]/D (dff_sg)          0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[6][10]/CP (dff_sg)         0.00    1379.00 r
+  library setup time                       7.88    1386.88
+  data required time                               1386.88
+  -----------------------------------------------------------
+  data required time                               1386.88
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.95
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[5][5]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240329/B (nand_x1_sg)                   0.02    1191.00 f
+  U240329/X (nand_x1_sg)                  73.71    1264.70 r
+  n166208 (net)                  1         0.00    1264.70 r
+  U240327/B (nand_x1_sg)                   0.00    1264.70 r
+  U240327/X (nand_x1_sg)                  32.23    1296.93 f
+  n8066 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[5][5]/D (dff_sg)           0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[5][5]/CP (dff_sg)          0.00    1379.00 r
+  library setup time                       7.88    1386.88
+  data required time                               1386.88
+  -----------------------------------------------------------
+  data required time                               1386.88
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.95
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[0][15]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240074/A (nand_x1_sg)                   0.02    1191.00 f
+  U240074/X (nand_x1_sg)                  73.71    1264.70 r
+  n166028 (net)                  1         0.00    1264.70 r
+  U240072/B (nand_x1_sg)                   0.00    1264.70 r
+  U240072/X (nand_x1_sg)                  32.23    1296.93 f
+  n8156 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[0][15]/D (dff_sg)          0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[0][15]/CP (dff_sg)         0.00    1379.00 r
+  library setup time                       7.88    1386.88
+  data required time                               1386.88
+  -----------------------------------------------------------
+  data required time                               1386.88
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.95
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[0][11]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240063/A (nand_x1_sg)                   0.02    1191.00 f
+  U240063/X (nand_x1_sg)                  73.71    1264.70 r
+  n166020 (net)                  1         0.00    1264.70 r
+  U240061/B (nand_x1_sg)                   0.00    1264.70 r
+  U240061/X (nand_x1_sg)                  32.23    1296.93 f
+  n8160 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[0][11]/D (dff_sg)          0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[0][11]/CP (dff_sg)         0.00    1379.00 r
+  library setup time                       7.88    1386.88
+  data required time                               1386.88
+  -----------------------------------------------------------
+  data required time                               1386.88
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.95
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: reg_batch_reg[0][4]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  U241795/A (nor_x2_sg)                    0.00      75.97 f
+  U241795/X (nor_x2_sg)                   14.25      90.22 r
+  n166637 (net)                  1         0.00      90.22 r
+  U158867/A (nand_x8_sg)                   0.00      90.22 r
+  U158867/X (nand_x8_sg)                  11.41     101.63 f
+  n165980 (net)                  3         0.00     101.63 f
+  U177729/A (nor_x1_sg)                    0.00     101.63 f
+  U177729/X (nor_x1_sg)                   17.21     118.84 r
+  n165988 (net)                  1         0.00     118.84 r
+  U177728/A (inv_x2_sg)                    0.00     118.84 r
+  U177728/X (inv_x2_sg)                   14.85     133.69 f
+  n192085 (net)                  1         0.00     133.69 f
+  U177727/A (inv_x4_sg)                    0.00     133.69 f
+  U177727/X (inv_x4_sg)                   17.15     150.84 r
+  n192084 (net)                  2         0.00     150.84 r
+  U158863/A (nor_x2_sg)                    0.00     150.84 r
+  U158863/X (nor_x2_sg)                   15.37     166.21 f
+  n165987 (net)                  1         0.00     166.21 f
+  U308584/A (inv_x4_sg)                    0.00     166.21 f
+  U308584/X (inv_x4_sg)                   14.25     180.46 r
+  n192097 (net)                  1         0.00     180.46 r
+  U308583/A (inv_x8_sg)                    0.00     180.46 r
+  U308583/X (inv_x8_sg)                  483.98     664.45 f
+  n192096 (net)                 53         0.00     664.45 f
+  U308582/A (inv_x8_sg)                    0.04     664.48 f
+  U308582/X (inv_x8_sg)                  199.98     864.46 r
+  n192095 (net)                  9         0.00     864.46 r
+  U308576/A (inv_x8_sg)                    0.00     864.47 r
+  U308576/X (inv_x8_sg)                  326.51    1190.97 f
+  n192089 (net)                 32         0.00    1190.97 f
+  U240042/A (nand_x1_sg)                   0.02    1191.00 f
+  U240042/X (nand_x1_sg)                  73.71    1264.70 r
+  n166006 (net)                  1         0.00    1264.70 r
+  U240040/B (nand_x1_sg)                   0.00    1264.70 r
+  U240040/X (nand_x1_sg)                  32.23    1296.93 f
+  n8167 (net)                    1         0.00    1296.93 f
+  reg_batch_reg[0][4]/D (dff_sg)           0.00    1296.93 f
+  data arrival time                                1296.93
+
+  clock clk (rise edge)                 1429.00    1429.00
+  clock network delay (ideal)              0.00    1429.00
+  clock uncertainty                      -50.00    1379.00
+  reg_batch_reg[0][4]/CP (dff_sg)          0.00    1379.00 r
+  library setup time                       7.88    1386.88
+  data required time                               1386.88
+  -----------------------------------------------------------
+  data required time                               1386.88
+  data arrival time                               -1296.93
+  -----------------------------------------------------------
+  slack (MET)                                        89.95
+
+
+  Startpoint: state_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: state[0] (output port)
+  Path Group: default
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  state_reg[0]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[0]/Q (dff_sg)                 11.68      11.68 f
+  n224813 (net)                  1         0.00      11.68 f
+  U179536/A (inv_x1_sg)                    0.00      11.68 f
+  U179536/X (inv_x1_sg)                   16.84      28.51 r
+  n168536 (net)                  1         0.00      28.51 r
+  U179537/A (inv_x2_sg)                    0.00      28.51 r
+  U179537/X (inv_x2_sg)                   14.62      43.14 f
+  n168537 (net)                  1         0.00      43.14 f
+  U255323/A (inv_x4_sg)                    0.00      43.14 f
+  U255323/X (inv_x4_sg)                   18.37      61.51 r
+  n190522 (net)                  2         0.00      61.51 r
+  U255324/A (inv_x8_sg)                    0.00      61.51 r
+  U255324/X (inv_x8_sg)                   14.46      75.97 f
+  state[0] (net)                 4         0.00      75.97 f
+  state[0] (out)                           0.00      75.97 f
+  data arrival time                                  75.97
+
+  max_delay                             1429.00    1429.00
+  output external delay                    0.00    1429.00
+  data required time                               1429.00
+  -----------------------------------------------------------
+  data required time                               1429.00
+  data arrival time                                 -75.97
+  -----------------------------------------------------------
+  slack (MET)                                      1353.03
+
+
+  Startpoint: state_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: state[1] (output port)
+  Path Group: default
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  state_reg[1]/CP (dff_sg)                 0.00       0.00 r
+  state_reg[1]/Q (dff_sg)                 11.68      11.68 f
+  n224812 (net)                  1         0.00      11.68 f
+  U179538/A (inv_x1_sg)                    0.00      11.68 f
+  U179538/X (inv_x1_sg)                   16.84      28.51 r
+  n168538 (net)                  1         0.00      28.51 r
+  U179539/A (inv_x2_sg)                    0.00      28.51 r
+  U179539/X (inv_x2_sg)                   14.62      43.14 f
+  n168539 (net)                  1         0.00      43.14 f
+  U249809/A (inv_x4_sg)                    0.00      43.14 f
+  U249809/X (inv_x4_sg)                   14.25      57.39 r
+  n189838 (net)                  1         0.00      57.39 r
+  U249810/A (inv_x8_sg)                    0.00      57.39 r
+  U249810/X (inv_x8_sg)                   13.82      71.21 f
+  state[1] (net)                 4         0.00      71.21 f
+  state[1] (out)                           0.00      71.21 f
+  data arrival time                                  71.21
+
+  max_delay                             1429.00    1429.00
+  output external delay                    0.00    1429.00
+  data required time                               1429.00
+  -----------------------------------------------------------
+  data required time                               1429.00
+  data arrival time                                 -71.21
+  -----------------------------------------------------------
+  slack (MET)                                      1357.79
+
+
+  Startpoint: done_reg (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: done (output port)
+  Path Group: default
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  forward            1K                    sg_338K
+
+  Point                        Fanout      Incr       Path
+  -----------------------------------------------------------
+  done_reg/CP (dff_sg)                     0.00       0.00 r
+  done_reg/Q (dff_sg)                     13.90      13.90 f
+  n224814 (net)                  1         0.00      13.90 f
+  U192883/A (inv_x2_sg)                    0.00      13.90 f
+  U192883/X (inv_x2_sg)                   15.44      29.34 r
+  n185767 (net)                  1         0.00      29.34 r
+  U201943/A (inv_x4_sg)                    0.00      29.34 r
+  U201943/X (inv_x4_sg)                   12.94      42.28 f
+  done (net)                     3         0.00      42.28 f
+  done (out)                               0.00      42.29 f
+  data arrival time                                  42.29
+
+  max_delay                             1429.00    1429.00
+  output external delay                    0.00    1429.00
+  data required time                               1429.00
+  -----------------------------------------------------------
+  data required time                               1429.00
+  data arrival time                                 -42.29
+  -----------------------------------------------------------
+  slack (MET)                                      1386.71
+
+
+1
+ 
+****************************************
+Report : clock_skew
+Design : forward
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 17:04:50 2018
+****************************************
+
+                 Rise      Fall  Min Rise  Min fall        Uncertainty
+Object          Delay     Delay     Delay     Delay     Plus      Minus
+--------------------------------------------------------------------------------
+clk                 -         -         -         -     50.00     50.00
+1
+Reporting Fanout
+
+================
+
+ 
+****************************************
+Report : net fanout
+        -high_fanout
+Design : forward
+Version: I-2013.12-SP4
+Date   : Tue Dec 11 17:04:50 2018
+****************************************
+
+
+Operating Conditions: TYPICAL   Library: sg_338K
+Wire Load Model Mode: top
+
+Design        Wire Load Model            Library
+------------------------------------------------
+forward                1K                sg_338K
+
+
+Attributes:
+   dr - drc disabled
+    c - annotated capacitance
+    d - dont_touch
+    i - ideal_net
+    I - ideal_network
+    p - includes pin load
+    r - annotated resistance
+    h - high fanout
+
+Net                 Fanout   Attributes   Capacitance   Driver
+--------------------------------------------------------------------------------
+1

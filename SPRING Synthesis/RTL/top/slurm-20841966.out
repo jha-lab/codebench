@@ -1,0 +1,86 @@
+                         Chronologic VCS (TM)
+         Version L-2016.06_Full64 -- Sat Dec  8 03:33:47 2018
+               Copyright (c) 1991-2016 by Synopsys Inc.
+                         ALL RIGHTS RESERVED
+
+This program is proprietary and confidential information of Synopsys Inc.
+and may be used and disclosed only as authorized in a license agreement
+controlling such use and disclosure.
+
+Parsing design file '../FIFO/FIFO.sv'
+Parsing design file '../batch_normalization/mean.sv'
+Parsing design file '../batch_normalization/sqrt_mul.sv'
+Parsing design file '../batch_normalization/forward.sv'
+Parsing design file '../batch_normalization/backward.sv'
+Parsing design file '../loss_functions/L1.sv'
+Parsing design file '../loss_functions/L2.sv'
+Parsing design file '../loss_functions/loss.sv'
+Parsing design file '../mac/LFSR.sv'
+Parsing design file '../mac/ReLU.sv'
+Parsing design file '../mac/add.sv'
+Parsing design file '../mac/adder_tree.sv'
+Parsing design file '../mac/mul.sv'
+Parsing design file '../mac/stochastic_rounding.sv'
+Parsing design file '../mac/mac_lane.sv'
+Parsing design file '../pooling/max_pooling.sv'
+Parsing design file '../pooling/mean_pooling.sv'
+Parsing design file '../pooling/min_pooling.sv'
+Parsing design file '../pooling/pooling.sv'
+Parsing design file '../post_sparsity/update_mask.sv'
+Parsing design file '../post_sparsity/update_output.sv'
+Parsing design file '../post_sparsity/post_sparsity.sv'
+Parsing design file '../pre_sparsity/mask.sv'
+Parsing design file '../pre_sparsity/filter.sv'
+Parsing design file '../pre_sparsity/shifter.sv'
+Parsing design file '../pre_sparsity/sparsity.sv'
+Parsing design file '../scalar/scalar.sv'
+Parsing design file '../transpose/transposer.sv'
+Parsing design file '../PE/PE.sv'
+Parsing design file '../dataflow/dataflow.sv'
+Parsing design file '../im2col/im2col_cpu.v'
+Parsing design file '../im2col/im2col_cpu_add_32bkb.v'
+Parsing design file '../im2col/im2col_cpu_add_32g8j.v'
+Parsing design file '../im2col/im2col_cpu_sdiv_3fYi.v'
+Parsing design file '../im2col/im2col_cpu_add_31hbi.v'
+Parsing design file '../im2col/im2col_cpu_add_32dEe.v'
+Parsing design file '../im2col/im2col_cpu_data_col.v'
+Parsing design file '../im2col/im2col_cpu_mul_32cud.v'
+Parsing design file '../im2col/im2col_cpu_sub_32eOg.v'
+Parsing design file './top.sv'
+Top Level Modules:
+       top
+TimeScale is 1 ns / 1 ps
+Starting vcs inline pass...
+
+24 unique modules to generate
+24 modules and 0 UDP read. 
+recompiling package std
+recompiling module fifo
+recompiling module mean
+recompiling module sqrt
+recompiling module forward
+recompiling module backward
+recompiling module loss
+recompiling module mac_lane
+recompiling module pooling
+recompiling module update_output
+recompiling module post_sparsity
+recompiling module sparsity
+recompiling module scalar
+recompiling module transposer
+recompiling module PE
+recompiling module dataflow
+recompiling module im2col_cpu
+recompiling module im2col_cpu_add_32bkb
+recompiling module im2col_cpu_add_32g8j
+recompiling module im2col_cpu_sdiv_3fYi
+recompiling module im2col_cpu_add_31hbi
+recompiling module im2col_cpu_add_32dEe
+recompiling module im2col_cpu_sub_32eOg
+recompiling module top
+All of 24 modules done
+rm -f _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+if [ -x ../simv ]; then chmod -x ../simv; fi
+g++  -o ../simv   -Wl,-rpath-link=./ -Wl,-rpath='$ORIGIN'/simv.daidir/ -Wl,-rpath=./simv.daidir/ -Wl,-rpath='$ORIGIN'/simv.daidir//scsim.db.dir  -rdynamic   amcQwB.o objs/amcQw_d.o   _23237_archive_1.so  SIM_l.o       rmapats_mop.o rmapats.o rmar.o  rmar_llvm_0_1.o rmar_llvm_0_0.o          /usr/licensed/synopsys/vcs_mx_vL-2016.06/linux64/lib/libzerosoft_rt_stubs.so /usr/licensed/synopsys/vcs_mx_vL-2016.06/linux64/lib/libvirsim.so /usr/licensed/synopsys/vcs_mx_vL-2016.06/linux64/lib/liberrorinf.so /usr/licensed/synopsys/vcs_mx_vL-2016.06/linux64/lib/libsnpsmalloc.so    /usr/licensed/synopsys/vcs_mx_vL-2016.06/linux64/lib/libvcsnew.so /usr/licensed/synopsys/vcs_mx_vL-2016.06/linux64/lib/libsimprofile.so /usr/licensed/synopsys/vcs_mx_vL-2016.06/linux64/lib/libuclinative.so   -Wl,-whole-archive /usr/licensed/synopsys/vcs_mx_vL-2016.06/linux64/lib/libvcsucli.so -Wl,-no-whole-archive          /usr/licensed/synopsys/vcs_mx_vL-2016.06/linux64/lib/vcs_save_restore_new.o -ldl  -lc -lm -lpthread -ldl 
+../simv up to date
+CPU time: 220.381 seconds to compile + 54.988 seconds to elab + 1.009 seconds to link

@@ -1,0 +1,31 @@
+ 
+****************************************
+Report : area
+Design : scalar
+Version: I-2013.12-SP4
+Date   : Thu Dec 20 20:30:36 2018
+****************************************
+
+Information: Updating design information... (UID-85)
+Library(s) Used:
+
+    14nm_sg_345K_maxfan4_wire (File: /home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db)
+
+Number of ports:                          968
+Number of nets:                        186588
+Number of cells:                       185942
+Number of combinational cells:         184979
+Number of sequential cells:               963
+Number of macros/black boxes:               0
+Number of buf/inv:                      57081
+Number of references:                      12
+
+Combinational area:              19076.351365
+Buf/Inv area:                     4230.581194
+Noncombinational area:             618.338432
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                 19694.689797
+Total area:                 undefined
+1

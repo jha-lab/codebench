@@ -1,0 +1,56 @@
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: Design has unannotated primary inputs. (PWR-414)
+Warning: Design has unannotated sequential cell outputs. (PWR-415)
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : fifo
+Version: I-2013.12-SP4
+Date   : Wed Dec 19 16:49:00 2018
+****************************************
+
+
+Library(s) Used:
+
+    14nm_sg_345K_maxfan4_wire (File: /home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db)
+
+
+Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire
+Wire Load Model Mode: top
+
+Design        Wire Load Model            Library
+------------------------------------------------
+fifo                   1K                14nm_sg_345K_maxfan4_wire
+
+
+Global Operating Voltage = 0.8  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000ff
+    Time Units = 1ps
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1nW
+
+
+  Cell Internal Power  =  35.1305 uW   (64%)
+  Net Switching Power  =  19.7817 uW   (36%)
+                         ---------
+Total Dynamic Power    =  54.9122 uW  (100%)
+
+Cell Leakage Power     =  16.8573 uW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
+register       3.9719e-03        7.4590e-04        6.5023e+03        1.1220e-02  (  15.63%)
+sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
+combinational  3.1159e-02        1.9036e-02        1.0355e+04        6.0549e-02  (  84.37%)
+--------------------------------------------------------------------------------------------------
+Total          3.5130e-02 mW     1.9782e-02 mW     1.6857e+04 nW     7.1769e-02 mW
+1

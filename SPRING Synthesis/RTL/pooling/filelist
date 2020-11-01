@@ -1,0 +1,6 @@
++incdir+./
+max_pooling.sv
+mean_pooling.sv
+min_pooling.sv
+pooling.sv
+pooling_tb.sv
