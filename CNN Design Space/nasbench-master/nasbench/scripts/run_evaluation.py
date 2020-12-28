@@ -220,7 +220,7 @@ class Evaluator(object):
       if filename not in files_to_keep:
         full_filename = os.path.join(model_dir, filename)
         if tf.gfile.IsDirectory(full_filename):
-          shutil.rmtree(full_filename)
+          shutil.rmtree(full_filename, ignore_errors=True)
           # try:
           #   shutil.rmtree(full_filename)
           # except:
