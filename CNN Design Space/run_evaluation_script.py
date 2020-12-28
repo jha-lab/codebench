@@ -48,7 +48,8 @@ evaluator = run_evaluation.Evaluator(
 
 evaluator.run_evaluation()
 
-for root, dirname, filename in os.walk(FLAGS.output_dir):
-    if dirname.startswith('eval'):
-        print('Deleting directory: {dirname}')
-        os.rmdir(dirname)
+for root, dirnames, filenames in os.walk(FLAGS.output_dir):
+    for dirname in dirnames:
+    	if dirname.startswith('eval')
+	        print('Deleting directory: {os.path.join(root, dirname)}')
+	        os.rmdir(os.path.join(root, dirname))
