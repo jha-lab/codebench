@@ -21,7 +21,7 @@ FLAGS = flags.FLAGS
 
 # Change default flag values
 # Those flag values define in command line take precedence
-FLAGS.module_vertices = 5
+FLAGS.module_vertices = 2
 FLAGS.use_tpu = False # For training on single CPU/GPU per worker
 FLAGS.train_epochs = 4
 
