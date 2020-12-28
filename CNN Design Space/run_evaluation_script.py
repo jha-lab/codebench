@@ -7,7 +7,10 @@ if './nasbench-master/' not in sys.path:
 	sys.path.append('./nasbench-master/')
 
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+import tensorflow as tf
+tf.logging.set_verbosity(tf.logging.ERROR)  # or any {DEBUG, INFO, WARN, ERROR, FATAL} 
 
 from absl import flags
 from absl import app

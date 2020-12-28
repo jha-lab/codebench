@@ -198,7 +198,7 @@ class _TrainAndEvaluator(object):
   def _compute_sample_metrics(self):
     """Computes the metrics on a fixed batch."""
     sample_metrics = self.estimator.predict(
-        input_fn=self.input_sample.input_fn, yield_single_examples=False).next()
+        input_fn=self.input_sample.input_fn, yield_single_examples=False).__next__()
 
     # Fix the extra batch dimension added by PREDICT
     for metric in sample_metrics:
