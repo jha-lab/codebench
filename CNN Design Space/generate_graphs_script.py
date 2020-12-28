@@ -15,7 +15,7 @@ FLAGS = flags.FLAGS
 
 # Change default flag values
 # Those flag values define in command line take precedence
-FLAGS.max_vertices = 5
+FLAGS.max_vertices = 3
 
 # Parse flags before access
 FLAGS(sys.argv)
