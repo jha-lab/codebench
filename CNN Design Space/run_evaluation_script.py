@@ -1,9 +1,6 @@
 # Generates graphs and trains on multiple workers
 # Author :  Shikhar Tuli
 
-import warnings
-warnings.simplefilter("ignore")
-
 import sys
 
 if './nasbench-master/' not in sys.path:
