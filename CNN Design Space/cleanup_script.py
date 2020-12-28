@@ -21,6 +21,5 @@ f.close()
 for root, dirnames, filenames in os.walk(model_dir):
     for dirname in dirnames:
     	if dirname.startswith('eval'):
-	        print('Deleting directory: {os.path.join(root, dirname)}')
-	        print(os.listdir(os.path.join(root, dirname)))
+	        print(f'Deleting directory: {os.path.join(root, dirname)}')
 	        shutil.rmtree(os.path.join(root, dirname))
