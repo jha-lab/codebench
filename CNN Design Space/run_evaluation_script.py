@@ -50,9 +50,6 @@ evaluator = run_evaluation.Evaluator(
 
 evaluator.run_evaluation()
 
-for root, dirnames, filenames in os.walk(FLAGS.output_dir):
-    for dirname in dirnames:
-    	if dirname.startswith('eval'):
-	        print('Deleting directory: {os.path.join(root, dirname)}')
-	        print(os.listdir(os.path.join(root, dirname)))
-	        shutil.rmtree(os.path.join(root, dirname))
+f = open('model_dir.txt', 'w')
+f.write(FLAGS.output_dir)
+f.close()
