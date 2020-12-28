@@ -47,3 +47,8 @@ evaluator = run_evaluation.Evaluator(
   model_id_regex=FLAGS.model_id_regex)
 
 evaluator.run_evaluation()
+
+for root, dirname, filename in os.walk(FLAGS.output_dir):
+    if dirname.startswith('eval'):
+        print('Deleting directory: {dirname}')
+        os.rmdir(dirname)
