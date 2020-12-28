@@ -122,7 +122,7 @@ class _TrainAndEvaluator(object):
         else:
           timing = training_time.limit(None)
 
-        evaluations = map(float, self.config['intermediate_evaluations'])
+        evaluations = list(map(float, self.config['intermediate_evaluations']))
         if not evaluations or evaluations[-1] != 1.0:
           evaluations.append(1.0)
         assert evaluations == sorted(evaluations)
