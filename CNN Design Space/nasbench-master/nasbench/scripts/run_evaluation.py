@@ -222,7 +222,7 @@ class Evaluator(object):
           try:
             tf.gfile.DeleteRecursively(full_filename)
           except:
-            print(f'Directory: {full_filename} could not be deleted')
+            print(f'Could not delete directory: {full_filename}')
         else:
           tf.gfile.Remove(full_filename)
 
