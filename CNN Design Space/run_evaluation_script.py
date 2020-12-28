@@ -17,6 +17,8 @@ from absl import app
 
 from nasbench.scripts import run_evaluation
 
+import shutil
+
 FLAGS = flags.FLAGS
 
 # Change default flag values
@@ -53,4 +55,4 @@ for root, dirnames, filenames in os.walk(FLAGS.output_dir):
     	if dirname.startswith('eval'):
 	        print('Deleting directory: {os.path.join(root, dirname)}')
 	        print(os.listdir(os.path.join(root, dirname)))
-	        os.rmdir(os.path.join(root, dirname))
+	        shutil.rmtree(os.path.join(root, dirname))
