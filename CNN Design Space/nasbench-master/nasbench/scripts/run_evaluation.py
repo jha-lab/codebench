@@ -55,6 +55,7 @@ from nasbench.lib import model_metrics_pb2
 from nasbench.lib import model_spec
 import numpy as np
 import tensorflow as tf
+import shutil
 
 
 flags.DEFINE_string('models_file', '',
@@ -220,7 +221,8 @@ class Evaluator(object):
         full_filename = os.path.join(model_dir, filename)
         if tf.gfile.IsDirectory(full_filename):
           try:
-            tf.gfile.DeleteRecursively(full_filename)
+            # tf.gfile.DeleteRecursively(full_filename)
+            shutil.rmtree(full_filename)
           except:
             print(f'Could not delete directory: {full_filename}')
         else:
