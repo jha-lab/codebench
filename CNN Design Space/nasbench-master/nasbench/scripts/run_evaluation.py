@@ -219,7 +219,10 @@ class Evaluator(object):
       if filename not in files_to_keep:
         full_filename = os.path.join(model_dir, filename)
         if tf.gfile.IsDirectory(full_filename):
-          tf.gfile.DeleteRecursively(full_filename)
+          try:
+            tf.gfile.DeleteRecursively(full_filename)
+          except:
+            print(f'Director: {full_filename} could not be deleted')
         else:
           tf.gfile.Remove(full_filename)
 
