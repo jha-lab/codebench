@@ -171,7 +171,7 @@ class _TimingRunHook(tf.compat.v1.train.SessionRunHook):
       run_context.request_stop()
 
 
-class _TimingSaverListener(tf.train.CheckpointSaverListener):
+class _TimingSaverListener(tf.compat.v1.train.CheckpointSaverListener):
   """Saving listener to store the train time up to the last checkpoint save."""
 
   def begin(self):
