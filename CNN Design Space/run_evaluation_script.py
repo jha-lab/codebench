@@ -6,11 +6,11 @@ import sys
 if './nasbench-master/' not in sys.path:
 	sys.path.append('./nasbench-master/')
 
+# Do not show warnings of deprecated functions
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
 import tensorflow as tf
-tf.logging.set_verbosity(tf.logging.ERROR)  # or any {DEBUG, INFO, WARN, ERROR, FATAL} 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)  # or any {DEBUG, INFO, WARN, ERROR, FATAL} 
 
 from absl import flags
 from absl import app
