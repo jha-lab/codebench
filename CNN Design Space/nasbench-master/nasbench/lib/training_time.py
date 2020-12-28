@@ -127,7 +127,7 @@ _TimingVars = collections.namedtuple(  # pylint: disable=g-bad-name
     ])
 
 
-class _TimingRunHook(tf.train.SessionRunHook):
+class _TimingRunHook(tf.compat.v1.train.SessionRunHook):
   """Hook to stop the training after a certain amount of time."""
 
   def __init__(self, max_train_secs=None):
