@@ -260,6 +260,21 @@ def _create_estimator(spec, config, model_dir,
   # Estimator will save a checkpoint at the end of every train() call. Disable
   # automatic checkpoints by setting the time interval between checkpoints to
   # a very large value.
+  run_config = tf.estimator.RunConfig(
+    model_dir=model_dir,
+    keep_checkpoint_max=3,    # Keeps ckpt at start, halfway, and end
+    save_checkpoints_secs=2**30,
+    session_config=tf.ConfigProto(gpu_options=tf.GPUOptions(
+      visible_device_list=f'{FLAGS.worker_id % len(tf.config.experimental.list_physical_devices('GPU'))}')))
+
+  estimator = tf.estimator.Estimator(
+      model_fn=model_builder.build_model_fn(
+          spec, config, num_train_images),
+      config=run_config,
+      params={'batch_size': config['batch_size']})
+
+  # For TPU training
+  '''
   run_config = tf.contrib.tpu.RunConfig(
       model_dir=model_dir,
       keep_checkpoint_max=3,    # Keeps ckpt at start, halfway, and end
@@ -267,6 +282,7 @@ def _create_estimator(spec, config, model_dir,
       tpu_config=tf.contrib.tpu.TPUConfig(
           iterations_per_loop=config['tpu_iterations_per_loop'],
           num_shards=config['tpu_num_shards']))
+
 
   # This is a hack to allow PREDICT on a fixed batch on TPU. By replicating the
   # batch by the number of shards, this ensures each TPU core operates on the
@@ -282,6 +298,7 @@ def _create_estimator(spec, config, model_dir,
       train_batch_size=config['batch_size'],
       eval_batch_size=config['batch_size'],
       predict_batch_size=num_sample_images)
+  '''
 
   return estimator
 
