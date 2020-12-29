@@ -25,7 +25,7 @@ For example, for 3 models, each with 3 repeats, and 4 total workers:
 Model Number     ||  1  2  3  1  2  3  1  2  3
 Repeat Number    ||  1  1  1  2  2  2  3  3  3
 Work Unit Index  ||  0  1  2  3  4  5  6  7  8
-Assigned Worker  ||  0  1  2  3  0  1  2  3  1
+Assigned Worker  ||  0  1  2  3  0  1  2  3  0
 
 i.e. worker_id 0 will compute [model1-repeat1, model2-repeat2, model3-repeat3],
 worker_id 1 will compute [model2-repeat1, model3-repeat2], etc...
