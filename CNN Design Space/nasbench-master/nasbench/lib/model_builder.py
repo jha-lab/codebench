@@ -218,7 +218,7 @@ def build_model_fn(spec, config, num_train_images):
       with tf.control_dependencies(update_ops):
         train_op = optimizer.minimize(loss, global_step)
 
-      return tf.contrib.tpu.TPUEstimatorSpec(
+      return tf.estimator.EstimatorSpec(
           mode=mode,
           loss=loss,
           train_op=train_op)
@@ -232,7 +232,7 @@ def build_model_fn(spec, config, num_train_images):
 
       eval_metrics = (metric_fn, [labels, logits])
 
-      return tf.contrib.tpu.TPUEstimatorSpec(
+      return tf.estimator.EstimatorSpec(
           mode=mode,
           loss=loss,
           eval_metrics=eval_metrics)
