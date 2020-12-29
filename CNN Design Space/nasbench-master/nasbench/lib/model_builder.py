@@ -230,12 +230,13 @@ def build_model_fn(spec, config, num_train_images):
 
         return {'accuracy': accuracy}
 
-      eval_metrics = (metric_fn, [labels, logits])
+      # eval_metrics = (metric_fn, [labels, logits])
+      eval_metrics = metric_fn(labels, logits)
 
       return tf.estimator.EstimatorSpec(
           mode=mode,
           loss=loss,
-          eval_metrics=eval_metrics)
+          eval_metric_ops=eval_metrics)
 
   return model_fn
 

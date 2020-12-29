@@ -25,6 +25,7 @@ from nasbench.lib import model_builder
 from nasbench.lib import training_time
 import numpy as np
 import tensorflow as tf
+from absl import flags
 
 VALID_EXCEPTIONS = (
     tf.train.NanLossDuringTrainingError,  # NaN loss
@@ -32,6 +33,8 @@ VALID_EXCEPTIONS = (
     tf.errors.InvalidArgumentError,       # NaN gradient
     tf.errors.DeadlineExceededError,      # Timed out
 )
+
+FLAGS = flags.FLAGS
 
 
 class AbortError(Exception):
@@ -265,7 +268,7 @@ def _create_estimator(spec, config, model_dir,
     keep_checkpoint_max=3,    # Keeps ckpt at start, halfway, and end
     save_checkpoints_secs=2**30,
     session_config=tf.ConfigProto(gpu_options=tf.GPUOptions(
-      visible_device_list=f'{FLAGS.worker_id % len(tf.config.experimental.list_physical_devices('GPU'))}')))
+      visible_device_list=f'{FLAGS.worker_id % len(tf.config.experimental.list_physical_devices("GPU"))}')))
 
   estimator = tf.estimator.Estimator(
       model_fn=model_builder.build_model_fn(
@@ -317,7 +320,8 @@ def _get_param_count(model_dir):
   """Get trainable param count from the model directory."""
   tf.reset_default_graph()
   checkpoint = tf.train.get_checkpoint_state(model_dir)
-  with tf.Session() as sess:
+  with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions(
+      visible_device_list=f'{FLAGS.worker_id % len(tf.config.experimental.list_physical_devices("GPU"))}'))) as sess:
     saver = tf.train.import_meta_graph(
         checkpoint.model_checkpoint_path + '.meta')
     saver.restore(sess, checkpoint.model_checkpoint_path)
