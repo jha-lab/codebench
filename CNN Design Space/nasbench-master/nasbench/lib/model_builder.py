@@ -164,7 +164,7 @@ def build_model_fn(spec, config, num_train_images):
       predictions.update(param_gradient_norms)
       predictions.update(covariance_matrices)
 
-      return tf.contrib.tpu.TPUEstimatorSpec(mode=mode, predictions=predictions)
+      return tf.estimator.EstimatorSpec(mode=mode, predictions=predictions)
 
     if mode == tf.estimator.ModeKeys.TRAIN:
       global_step = tf.train.get_or_create_global_step()
