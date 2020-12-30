@@ -1,5 +1,0 @@
-I1230 06:27:57.327130 47491607801536 generate_graphs.py:96] Using 5 vertices, 3 op labels, max 9 edges
-I1230 06:27:57.327608 47491607801536 generate_graphs.py:133] Up to 2 vertices: 1 graphs (1 without hashing)
-I1230 06:27:57.328614 47491607801536 generate_graphs.py:133] Up to 3 vertices: 7 graphs (7 without hashing)
-I1230 06:27:57.340838 47491607801536 generate_graphs.py:133] Up to 4 vertices: 91 graphs (97 without hashing)
-I1230 06:27:58.079822 47491607801536 generate_graphs.py:133] Up to 5 vertices: 2532 graphs (3364 without hashing)

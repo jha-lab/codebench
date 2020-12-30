@@ -225,7 +225,10 @@ class Evaluator(object):
           except:
             print(f'Could not delete directory: {full_filename}')
         else:
-          tf.gfile.Remove(full_filename)
+          try:
+            tf.gfile.Remove(full_filename)
+          except:
+            print(f'Could not delete file: {full_filename}')
 
 
 def main(args):

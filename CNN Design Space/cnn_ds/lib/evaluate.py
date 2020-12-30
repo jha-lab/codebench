@@ -26,6 +26,7 @@ from cnn_ds.lib import training_time
 import numpy as np
 import tensorflow as tf
 from absl import flags
+import shutil
 
 VALID_EXCEPTIONS = (
     tf.train.NanLossDuringTrainingError,  # NaN loss
@@ -113,8 +114,8 @@ class _TrainAndEvaluator(object):
     while True:
       # Delete everything in the model dir at the start of each attempt
       try:
-        tf.gfile.DeleteRecursively(self.model_dir)
-      except tf.errors.NotFoundError:
+        shutil.rmtree(self.model_dir)
+      except:
         pass
       tf.gfile.MakeDirs(self.model_dir)
 
