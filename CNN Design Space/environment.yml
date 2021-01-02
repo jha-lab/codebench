@@ -1,0 +1,7 @@
+name: cnnbench
+channels:
+  - defaults
+dependencies:
+  - python=3.8.5
+  - tensorflow-gpu=2.2.0
+

@@ -95,14 +95,14 @@ echo "#!/bin/bash
 
 module purge
 module load anaconda3/2020.7
-conda activate acc-nn
+conda activate cnnbench
 
-python generate_graphs_script.py --max_vertices ${numVertices} --output_file '${modelDir}/generated_graphs_vertices_${numVertices}.json'
+python generate_graphs_script.py --max_vertices ${numVertices} --output_file '${modelDir}/generated_graphs.json'
 
 for i in {0..${numTask_end}}
 do
   python run_evaluation_script.py --worker_id \$i --total_workers ${numTasks} --module_vertices ${numVertices} \
-  --models_file '${modelDir}/generated_graphs_vertices_${numVertices}.json' \
+  --models_file '${modelDir}/generated_graphs.json' \
   --output_dir '${modelDir}/evaluation' &
 done
 

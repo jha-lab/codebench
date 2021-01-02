@@ -15,7 +15,7 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)  # or any {DEBUG,
 from absl import flags
 from absl import app
 
-from cnn_ds.scripts import run_evaluation
+from cnnbench.scripts import run_evaluation
 
 import shutil
 
@@ -30,8 +30,8 @@ FLAGS.train_epochs = 4
 # Parse flags before access
 FLAGS(sys.argv)
 
-# FLAGS.models_file = f'../results/vertices_{FLAGS.module_vertices}/generated_graphs.json'
-# FLAGS.output_dir = f'../results/vertices_{FLAGS.module_vertices}/evaluation'
+FLAGS.models_file = f'../results/vertices_{FLAGS.module_vertices}/generated_graphs.json'
+FLAGS.output_dir = f'../results/vertices_{FLAGS.module_vertices}/evaluation'
 
 FLAGS.train_data_files = ['../datasets/cifar10/train_{}.tfrecords'.format(i) for i in range(1, 5)]
 FLAGS.valid_data_file = '../datasets/cifar10/validation.tfrecords'

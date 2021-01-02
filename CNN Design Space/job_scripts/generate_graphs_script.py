@@ -15,7 +15,7 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)  # or any {DEBUG,
 from absl import flags
 from absl import app
 
-from cnn_ds.scripts.generate_graphs import main as graph_generator
+from cnnbench.scripts.generate_graphs import main as graph_generator
 
 FLAGS = flags.FLAGS
 
@@ -29,7 +29,7 @@ FLAGS(sys.argv)
 if not os.path.exists(f'../results/vertices_{FLAGS.max_vertices}'):
     os.makedirs(f'../results/vertices_{FLAGS.max_vertices}')
 
-FLAGS.output_file = f'../results/vertices_{FLAGS.max_vertices}/generated_graphs_vertices.json'
+FLAGS.output_file = f'../results/vertices_{FLAGS.max_vertices}/generated_graphs.json'
 
 # Generate graphs
 app.run(graph_generator)
