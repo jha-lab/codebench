@@ -10,12 +10,13 @@ if '../' not in sys.path:
 import os
 import tensorflow as tf
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)  # or any {DEBUG, INFO, WARN, ERROR, FATAL} 
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.WARN)  # or any {DEBUG, INFO, WARN, ERROR, FATAL} 
 
 from absl import flags
 from absl import app
 
 from cnnbench.scripts import run_evaluation
+from cnnbench.lib import config
 
 import shutil
 
@@ -33,10 +34,17 @@ FLAGS(sys.argv)
 FLAGS.models_file = f'../results/vertices_{FLAGS.module_vertices}/generated_graphs.json'
 FLAGS.output_dir = f'../results/vertices_{FLAGS.module_vertices}/evaluation'
 
+FLAGS.data_dir = '../datasets/'
+
 FLAGS.train_data_files = ['../datasets/cifar10/train_{}.tfrecords'.format(i) for i in range(1, 5)]
 FLAGS.valid_data_file = '../datasets/cifar10/validation.tfrecords'
 FLAGS.test_data_file = '../datasets/cifar10/test.tfrecords'
 FLAGS.sample_data_file = '../datasets/cifar10/sample.tfrecords'
+
+# FLAGS.train_data_files = ['../datasets/cifar10/3.0.2/cifar10-train.tfrecord-00000-of-00001']
+# FLAGS.valid_data_file = '../datasets/cifar10/3.0.2/cifar10-test.tfrecord-00000-of-00001'
+# FLAGS.test_data_file = '../datasets/cifar10/3.0.2/cifar10-test.tfrecord-00000-of-00001'
+# FLAGS.sample_data_file = '../datasets/cifar10/3.0.2/cifar10-test.tfrecord-00000-of-00001'
 
 # Run single worker evaluation
 worker_id = FLAGS.worker_id + FLAGS.worker_id_offset

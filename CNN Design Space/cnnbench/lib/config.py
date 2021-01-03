@@ -23,6 +23,9 @@ from absl import flags
 FLAGS = flags.FLAGS
 
 # Data flags (only required for generating the dataset)
+
+# Data files not needed with dataset defined
+
 flags.DEFINE_list(
     'train_data_files', [],
     'Training data files in TFRecord format. Multiple files can be passed in a'
@@ -34,10 +37,17 @@ flags.DEFINE_string(
     'test_data_file', '', 'Testing data in TFRecord format.')
 flags.DEFINE_string(
     'sample_data_file', '', 'Sampled batch data in TFRecord format.')
+
+
 flags.DEFINE_string(
     'data_format', 'channels_last',
     'Data format, one of [channels_last, channels_first] for NHWC and NCHW'
     ' tensor formats respectively.')
+flags.DEFINE_string(
+    'dataset', 'cifar10',
+    'Dataset name')
+flags.DEFINE_string(
+    'data_dir', '', 'Directory of datasets')
 flags.DEFINE_integer(
     'num_labels', 10, 'Number of input class labels.')
 
