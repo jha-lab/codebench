@@ -20,7 +20,7 @@ from __future__ import print_function
 
 import time
 
-from cnnbench.lib import cifar
+from cnnbench.lib import input_pipeline
 from cnnbench.lib import model_builder
 from cnnbench.lib import training_time
 import numpy as np
@@ -95,11 +95,11 @@ class _TrainAndEvaluator(object):
 
   def __init__(self, spec, config, model_dir):
     """Initialize evaluator. See train_and_evaluate docstring."""
-    self.input_train = cifar.CIFARInput('train', config)
-    self.input_train_eval = cifar.CIFARInput('train_eval', config)
-    self.input_valid = cifar.CIFARInput('valid', config)
-    self.input_test = cifar.CIFARInput('test', config)
-    self.input_sample = cifar.CIFARInput('sample', config)
+    self.input_train = input_pipeline.dataset_input('train', config)
+    self.input_train_eval = input_pipeline.dataset_input('train_eval', config)
+    self.input_valid = input_pipeline.dataset_input('valid', config)
+    self.input_test = input_pipeline.dataset_input('test', config)
+    self.input_sample = input_pipeline.dataset_input('sample', config)
     self.estimator = _create_estimator(spec, config, model_dir,
                                        self.input_train.num_images,
                                        self.input_sample.num_images)
@@ -220,7 +220,7 @@ class _TrainAndEvaluator(object):
 def _augment_and_evaluate_impl(spec, config, model_dir, epochs_per_eval=5):
   """Augment and evaluate implementation, see augment_and_evaluate docstring."""
   input_augment, input_test = [
-      cifar.CIFARInput(m, config)
+      input_pipeline.dataset_input(m, config)
       for m in ['augment', 'test']]
   estimator = _create_estimator(spec, config, model_dir,
                                 input_augment.num_images)

@@ -70,8 +70,19 @@ DATASET_PRESETS = {
     },
 }
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 def main(dataset, data_dir, tfds_manual_dir):
-  print(f'Seeting up dataset: {dataset} into directory: {data_dir}')
+  print(f'Setting up dataset: {dataset} into directory: {data_dir}')
   
   data_builder = tfds.builder(dataset, data_dir=data_dir)
   print(f'Dataset info:\n{data_builder.info}')
@@ -85,7 +96,7 @@ def main(dataset, data_dir, tfds_manual_dir):
   ds_info['image_shape'] = data_builder.info.features['image'].shape
   ds_info['num_classes'] = data_builder.info.features['label'].num_classes
 
-  print(f'Saved dataset info: {ds_info} to {data_dir}/{dataset}/ds_info.pt')
+  print(f"{bcolors.OKGREEN}Saved dataset info: \n\t{ds_info} \n\tto {data_dir}/{dataset}/ds_info.pt{bcolors.ENDC}")
 
   ds_file = open(os.path.join(data_dir, f'{dataset}/ds_info.pt'), 'wb')
   pickle.dump(ds_info, ds_file)

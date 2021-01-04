@@ -106,10 +106,11 @@ class dataset_input(object):
     else:
       raise ValueError('invalid mode')
 
-    data_builder = tfds.builder(config['dataset'], data_dir = self.config['data_dir'])
-    data = data_builder.as_dataset(split = self.split)
-
-    self.num_images = len(list(data))
+    self.num_images = len(
+      list(
+        tfds.builder(
+          config['dataset'], data_dir = self.config['data_dir']).as_dataset(
+          split = self.split)))
 
   def input_fn(self, params):
     """Returns a CIFAR tf.data.Dataset object.
@@ -127,14 +128,12 @@ class dataset_input(object):
     shuffle_buffer = MAX_IN_MEMORY
 
     data_builder = tfds.builder(self.config['dataset'], data_dir = self.config['data_dir'])
-    data = data_builder.as_dataset(split = self.split)
+    data = data_builder.as_dataset(split = self.split, as_supervised = True)
     
     with open(
       os.path.join(
         self.config['data_dir'], self.config['dataset'], 'ds_info.pt'), 'rb') as ds_file:
       ds_info = pickle.load(ds_file)
-
-    # data = data.map(lambda d: {'image': d['image'], 'label': d['label']})
 
     # Repeat dataset for training modes
     data = data.repeat(self.repeats)
@@ -142,8 +141,9 @@ class dataset_input(object):
       # Shuffle buffer with whole dataset to ensure full randomness per epoch
       data = data.shuffle(min(ds_info['train'], shuffle_buffer))
 
-    def _pp(data):
-      im = data['image']
+    def _pp(image, label):
+      im = image
+      image = tf.cast(image, tf.float32)
       if is_training:
         if INCEPTION_CROP:
           channels = im.shape[-1]
@@ -154,8 +154,8 @@ class dataset_input(object):
               min_object_covered=0,  # Don't enforce a minimum area.
               use_image_if_no_bounding_boxes=True)
           im = tf.slice(im, begin, size)
-          # Unfortunately, the above operation loses the depth-dimension. So we
-          # need to restore it the manual way.
+          # Unfortunately, the above operation loses the depth-dimension
+          # So I have to restore it the manual way
           im.set_shape([None, None, channels])
           im = tf.image.resize(im, [crop_size, crop_size])
         else:
@@ -166,15 +166,17 @@ class dataset_input(object):
         # Usage of crop_size here is intentional
         im = tf.image.resize(im, [crop_size, crop_size])
       im = (im - 127.5) / 127.5
-      label = tf.one_hot(data['label'], ds_info['num_classes'])  # pylint: disable=no-value-for-parameter
-      return {'image': im, 'label': label}
+      label = tf.cast(label, tf.int32)
+      # label = tf.one_hot(label, ds_info['num_classes'])
+      return image, label # {'image': im, 'label': label}
 
-    data = data.map(lambda d: {'image': d['image'], 'label': d['label']})
+    # Basic data augmentation  
     data = data.map(_pp, tf.data.experimental.AUTOTUNE)
 
+    # Batching the dataset
     data = data.batch(batch_size, drop_remainder=True)
 
-    # # Prefetch to overlap in-feed with training
+    # Prefetch to overlap in-feed with training
     data = data.prefetch(tf.data.experimental.AUTOTUNE)
 
     return data
