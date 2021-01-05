@@ -16,14 +16,14 @@ The code has been forked from [nasbench](https://github.com/google-research/nasb
 git clone https://github.com/JHA-Lab/accelerator_co-design.git
 cd accelerator_co-design/CNN \Design \Space/
 ```
-2. Setup python environment
+2. Setup python environment  
 **PIP**
 ```
 virtualenv cnnbench
 source cnnbench/bin/activate
 pip install -r requirements.txt
-```
-***CONDA***
+```  
+**CONDA**
 ```
 source env_setup.sh
 ```
@@ -43,7 +43,7 @@ cd cnnbenchs/scripts
 python generate_tfrecords.py
 ```
 
-_To use another dataset (among CIFAR-10, CIFAR-100, MNIST, or ImageNet) use input arguments. Check: `python generate_tfrecords.py --help`._
+_To use another dataset (among CIFAR-10, CIFAR-100, MNIST, or ImageNet) use input arguments. Check:_ `python generate_tfrecords.py --help`.
 
 2. Generate computational graphs
 ```
@@ -52,7 +52,7 @@ python generate_graphs_script.py
 ```
 This will create a `.json` file of all graphs at: `../results/vertices_2/generate_graphs.json`.
 
-_To generate graphs of upto 'n' vertices use: `python generate_graphs_script.py --max_vertices n`._
+_To generate graphs of upto 'n' vertices use:_ `python generate_graphs_script.py --max_vertices n`.
 
 3. Run evaluation over all the generated graphs
 ```
@@ -60,7 +60,7 @@ python run_evaluation.py
 ```
 This will save all the evaluated results and model checkpoints to `../results/vertices_2/evaluation`.
 
-_To run evaluation over graphs generate with 'n' vertices, use:`python run_evaluation.py --module_vertices n`. For more input arguments, check: `python run_evaluation.py -helpful`_
+_To run evaluation over graphs generate with 'n' vertices, use:_ `python run_evaluation.py --module_vertices n`. _For more input arguments, check:_ `python run_evaluation.py -helpful`.
 
 ## Job Scripts
 
