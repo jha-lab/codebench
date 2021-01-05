@@ -57,17 +57,17 @@ _To generate graphs of upto 'n' vertices use:_ `python generate_graphs_script.py
 
 3. Run evaluation over all the generated graphs
 ```
-python run_evaluation.py
+python run_evaluation_script.py
 ```
 This will save all the evaluated results and model checkpoints to `../results/vertices_2/evaluation`.
 
-_To run evaluation over graphs generate with 'n' vertices, use:_ `python run_evaluation.py --module_vertices n`. _For more input arguments, check:_ `python run_evaluation.py -helpful`.
+_To run evaluation over graphs generate with 'n' vertices, use:_ `python run_evaluation_script.py --module_vertices n`. _For more input arguments, check:_ `python run_evaluation_script.py -helpful`.
 
 ## Job Scripts
 
 To automate the above process, a slurm script is provided at: `job_scripts/job_test.slurm`. To run the tool on multiple nodes and utilize multiple GPUs, use `job_scripts/job_creator_script.sh`. 
 For more details on how to use this script, check: `source job_scripts/job_creator_script.sh -help`. Currently, these scripts only support running on **Adroit/Tiger clusters** at Princeton University. 
-More information canbe found at the [Princeton Research Computing website](https://researchcomputing.princeton.edu/systems-and-services/available-systems).
+More information can be found at the [Princeton Research Computing website](https://researchcomputing.princeton.edu/systems-and-services/available-systems).
 
 ## Todo
 
