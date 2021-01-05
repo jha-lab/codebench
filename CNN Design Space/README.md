@@ -17,13 +17,13 @@ git clone https://github.com/JHA-Lab/accelerator_co-design.git
 cd accelerator_co-design/CNN \Design \Space/
 ```
 2. Setup python environment  
-**PIP**
+* **PIP**
 ```
 virtualenv cnnbench
 source cnnbench/bin/activate
 pip install -r requirements.txt
 ```  
-**CONDA**
+* **CONDA**
 ```
 source env_setup.sh
 ```
