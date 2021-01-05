@@ -1,10 +1,11 @@
 # CNNBench: A CNN Design-Space generation tool and benchmark
 
-![version](https://img.shields.io/badge/python-v3.8-blue)
-![conda](https://img.shields.io/badge/conda%7Cconda--forge-v4.8.3-blue)
-![tensorflow](https://img.shields.io/badge/tensorflow--gpu-v2.2-orange)
-![commits_since_release](https://img.shields.io/github/commits-since/JHA-Lab/accelerator_co-design/v0.1/main)
-![tests](https://img.shields.io/badge/tests-passing-brightgreen)
+![Python Version](https://img.shields.io/badge/python-v3.8-blue)
+![Conda](https://img.shields.io/badge/conda%7Cconda--forge-v4.8.3-blue)
+![Tensorflow](https://img.shields.io/badge/tensorflow--gpu-v2.2-orange)
+![Commits Since Last Release](https://img.shields.io/github/commits-since/JHA-Lab/accelerator_co-design/v0.1/main)
+![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
+![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FJHA-Lab%2Faccelerator_co-design&count_bg=%23FFC401&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)
 
 This directory contains the tool **CNNBench** which can be used to generate and evaluate different Convolutional Neural Network (CNN) architectures pertinent to the domain of Machine-Learning Accelerators. 
 The code has been forked from [nasbench](https://github.com/google-research/nasbench) repository and then expanded to cover a larger set of CNN architectures.
