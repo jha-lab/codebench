@@ -22,12 +22,12 @@ class IssueQueue(object):
 			weight_data = weight_buffer.Split(weight)
 
 			flag = True
-			if not activation_buffer.Check(activation_data[0]):	# approximation: check the first entry to skip the for loop
+			if not activation_buffer.Check(activation_data[0]):	# approximation: check the first entry to skip the original for loop
 				flag = False
 			if flag:
 				activation = None
 			flag = True
-			if not weight_buffer.Check(weight_data[0]):	# approximation: check the first entry to skip the for loop
+			if not weight_buffer.Check(weight_data[0]):			# approximation: check the first entry to skip the original for loop
 				flag = False
 			if flag:
 				weight = None
@@ -43,12 +43,12 @@ class IssueQueue(object):
 			weight_data = weight_buffer.Split(weight)
 
 			flag = True
-			if not activation_buffer.Check(activation_data[0]):	# approximation: check the first entry to skip the for loop
+			if not activation_buffer.Check(activation_data[0]):	# approximation: check the first entry to skip the original for loop
 				flag = False
 			if flag:
 				activation = None
 			flag = True
-			if not weight_buffer.Check(weight_data[0]):	# approximation: check the first entry to skip the for loop
+			if not weight_buffer.Check(weight_data[0]):			# approximation: check the first entry to skip the original for loop
 				flag = False
 			if flag:
 				weight = None

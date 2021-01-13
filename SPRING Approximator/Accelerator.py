@@ -183,8 +183,7 @@ class Accelerator(object):
 			# in each cycle, self.ActivationBuffer.remaining_cycle -= 1 while self.cycle += 1
 			# self.ActivationBuffer.ready = True when self.ActivationBuffer.remaining_cycle = 0
 			# the same for WeightBuffer
-
-			# accumulate the remaining_cycles to the counters respectively and set the Buffer.ready directly to skip the non-calculation cycles
+			# accumulate the remaining_cycles to the counters respectively and set the Buffer.ready directly to skip the non-calculating cycles and speed up
 			ActivationBufferCount += self.ActivationBuffer.remaining_cycle
 			WeightBufferCount += self.WeightBuffer.remaining_cycle
 			self.ActivationBuffer.remaining_cycle = 0
@@ -192,7 +191,7 @@ class Accelerator(object):
 			self.WeightBuffer.remaining_cycle = 0
 			self.WeightBuffer.ready = True
 	
-		self.cycle += max(ActivationBufferCount, WeightBufferCount) # take the max of the accumulated counters as the total self.cycle
+		self.cycle += max(ActivationBufferCount, WeightBufferCount) # add up the max of the accumulated counters to the total self.cycle
 		print('\nDynamic energy:', self.dynamic_energy) 			# check result for the first while loop
 		print('Current cycle:', self.cycle, '\n') 					# check result for the first while loop
 
@@ -233,6 +232,8 @@ class Accelerator(object):
 
 			# in each cycle, Conv2D_cycle -= 1 and self.MacLane.remaining_cycle -= 1 while self.cycle += 1
 			# self.MacLane.ready = True when self.MacLane.remaining_cycle = 0
+			# enter the calculation only when Conv2D_cycle = 0 and self.MacLane.remaining_cycle = 0
+			# accumulate Conv2D_cycle and self.MacLane.remaining_cycle and skip the non-calculating loops to speed up 
 			if bool(self.Conv2DQueue.blocks):
 				if Conv2D_cycle == -1:
 					Conv2D_cycle, Conv2D_activation, Conv2D_weight = self.Conv2DQueue.RemainingCycle(self.ActivationBuffer, self.WeightBuffer)
@@ -240,10 +241,10 @@ class Accelerator(object):
 						self.InputMemoryLoadQueue.Insert(Conv2D_activation)
 					if Conv2D_weight != None:
 						self.WeightMemoryLoadQueue.Insert(Conv2D_weight)
-					# accumulate the self.MacLane.remaining_cycle and Conv2D_cycle and set self.MacLane.ready directly to skip the non-calculation loops
+					# accumulate the self.MacLane.remaining_cycle and Conv2D_cycle and set self.MacLane.ready directly to skip the non-calculating loops
 					MacLaneCount += self.MacLane.remaining_cycle + 2
-					self.MacLane.remaining_cycle = 0
-					self.MacLane.ready = True
+					self.MacLane.remaining_cycle = 0	# set the remaining_cycle to 0
+					self.MacLane.ready = True			# set self.MacLane.ready to skip calling the function self.MacLance.Process()
 					Conv2DCount += Conv2D_cycle
 					Conv2D_cycle = 0
 
@@ -268,8 +269,8 @@ class Accelerator(object):
 					if MatMul_weight != None:
 						self.WeightMemoryLoadQueue.Insert(MatMul_weight)
 					MacLaneCount += self.MacLane.remaining_cycle + 2
-					self.MacLane.remaining_cycle = 0
-					self.MacLane.ready = True
+					self.MacLane.remaining_cycle = 0	# set the remaining_cycle to 0
+					self.MacLane.ready = True       	# set self.MacLane.ready to skip calling the function self.MacLance.Process()
 					MatMulCount += MatMul_cycle
 					MatMul_cycle = 0
 
@@ -283,10 +284,12 @@ class Accelerator(object):
 					self.dynamic_energy += 1000 / defines.clk * self.MacLane.remaining_cycle * 1e-9 *\
 					(self.DataFlow.dynamic_power + self.FIFO.dynamic_power + self.PreSparsity.dynamic_power + self.PostSparsity.dynamic_power) * 1e-3
 
+			# self.MacLane.Process()
+
 			if not bool(self.InputMemoryLoadQueue.blocks) and not bool(self.WeightMemoryLoadQueue.blocks) and not bool(self.Conv2DQueue.blocks) and not bool(self.MatMulQueue.blocks):
 				break
 
-		# take the max of all the accumulated counters as the total cycles
+		# add up the max of all the accumulated counters to the total self.cycle
 		self.cycle += max(ActivationBufferCount, WeightBufferCount, Conv2DCount, MatMulCount, MacLaneCount)
 		self.dynamic_energy += (self.ActivationBuffer.total_energy + self.WeightBuffer.total_energy) * 1e-9
 		self.leakage_energy += 1000 / defines.clk * self.cycle * 1e-9 * self.leakage_power * 1e-3
@@ -296,6 +299,4 @@ class Accelerator(object):
 		print('Total execution time: ', 1000 / defines.clk * self.cycle * 1e-9)
 		print('Total area: ', self.area)
 		print('Dynamic energy consumption: ', self.dynamic_energy)
-		print('Leakage energy sonsumption: ', self.leakage_energy)
-		
-
+		print('Leakage energy consumption: ', self.leakage_energy)
