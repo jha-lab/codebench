@@ -2,7 +2,7 @@
 ---------- FinCACTI, Uniform Cache Access SRAM Model ----------
 
 Cache Parameters:
-    Total cache size (bytes): 12582912
+    Total cache size (bytes): 25165824
     Number of banks: 16
     Associativity: direct mapped
     Block size (bytes): 64
@@ -11,13 +11,13 @@ Cache Parameters:
     Write ports: 0
     Technology size (nm): 14
 
-    Access time (ns): 2.16618
-    Cycle time (ns):  1.13864
-    Total dynamic read energy per access (nJ): 0.275546
-    Total dynamic write energy per access (nJ): 0.273688
-    Total leakage power of a bank (mW): 185.939
-    Cache height x width (mm): 2.67517 x 1.36054
-    Cache area (mm2): 3.63967
+    Access time (ns): 3.08594
+    Cycle time (ns):  1.20133
+    Total dynamic read energy per access (nJ): 0.42123
+    Total dynamic write energy per access (nJ): 0.418051
+    Total leakage power of a bank (mW): 315.607
+    Cache height x width (mm): 5.18905 x 1.36025
+    Cache area (mm2): 7.05842
 
     Best Ndwl : 2
     Best Ndbl : 32
@@ -30,38 +30,38 @@ Cache Parameters:
 
 Time Components:
 
-  Data side (with Output driver) (ns): 2.16618
-	H-tree input delay (ns): 0.80864
-	Decoder + wordline delay (ns): 0.293064
-	Bitline delay (ns): 0.120864
+  Data side (with Output driver) (ns): 3.08594
+	H-tree input delay (ns): 1.22487
+	Decoder + wordline delay (ns): 0.321063
+	Bitline delay (ns): 0.174402
 	Sense Amplifier delay (ns): 0.00782875
-	H-tree output delay (ns): 0.255258
+	H-tree output delay (ns): 0.360296
 
 
 Power Components:
 
-  Data array: Total dynamic read energy/access  (nJ): 0.275546
-	Total leakage read/write power of a bank (mW): 185.939
-	Total energy in H-tree (that includes both address and data transfer) (nJ): 0.267038
-	Output Htree Energy (nJ): 0.0387241
-	Decoder (nJ): 2.56233e-05
+  Data array: Total dynamic read energy/access  (nJ): 0.42123
+	Total leakage read/write power of a bank (mW): 315.607
+	Total energy in H-tree (that includes both address and data transfer) (nJ): 0.406771
+	Output Htree Energy (nJ): 0.0709974
+	Decoder (nJ): 3.8133e-05
 	Wordline (nJ): 0.000171616
 	Bitline mux & associated drivers (nJ): 0.00011499
 	Sense amp mux & associated drivers (nJ): 0
-	Bitlines (nJ): 0.00378642
+	Bitlines (nJ): 0.00730623
 	Sense amplifier energy (nJ): 0.000229886
-	Sub-array output driver (nJ): 0.00308105
+	Sub-array output driver (nJ): 0.00549921
 
 
 Area Components:
 
-  Data array: Area (mm2): 3.63967
-	Height (mm): 2.67517
-	Width (mm): 1.36054
-	Area efficiency (Memory cell area/Total area) - 79.1439 %
-		MAT Height (mm): 0.0417995
-		MAT Length (mm): 0.340135
-		Subarray Height (mm): 0.0196224
+  Data array: Area (mm2): 7.05842
+	Height (mm): 5.18905
+	Width (mm): 1.36025
+	Area efficiency (Memory cell area/Total area) - 81.6211 %
+		MAT Height (mm): 0.0810789
+		MAT Length (mm): 0.340063
+		Subarray Height (mm): 0.0392448
 		Subarray Length (mm): 0.168
 
 Wire Properties:
@@ -122,10 +122,10 @@ Wire Properties:
 
 
 --------------------------- SUMMARY ---------------------------
-Access time                           : 2.16618 ns
-Cycle time                            : 1.13864 ns
-Total dynamic read energy per access  : 0.275546 nJ
-Total dynamic write energy per access : 0.273688 nJ
-Total leakage power of a bank         : 185.939 mW
-Cache height x width                  : 2.67517 mm x 1.36054 mm
-Cache area                            : 3.63967 mm2
+Access time                           : 3.08594 ns
+Cycle time                            : 1.20133 ns
+Total dynamic read energy per access  : 0.42123 nJ
+Total dynamic write energy per access : 0.418051 nJ
+Total leakage power of a bank         : 315.607 mW
+Cache height x width                  : 5.18905 mm x 1.36025 mm
+Cache area                            : 7.05842 mm2
