@@ -158,13 +158,13 @@ Transposer_leakage = Transposer_RTL_leakage * PE * Lane
 # access energy unit: nJ
 # leakage power unit: mW
 # area unit: mm^2
-Activation_energy = (0.42123 + 0.418051) / 2
-Activation_leakage = 315.607 * 16
-Activation_area = 7.05842
+Weight_energy = (0.42123 + 0.418051) / 2
+Weight_leakage = 315.607 * 16
+Weight_area = 7.05842
 
-Weight_energy = (0.275546 + 0.273688) / 2
-Weight_leakage = 185.939 * 16
-Weight_area = 3.63967
+Activation_energy = (0.275546 + 0.273688) / 2
+Activation_leakage = 185.939 * 16
+Activation_area = 3.63967
 
 Mask_energy = (0.164271 + 0.163756) / 2
 Mask_leakage = 119.098 * 8
