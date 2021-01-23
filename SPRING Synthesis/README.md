@@ -21,5 +21,6 @@ batch normalization reference: https://wiseodd.github.io/techblog/2016/07/04/bat
 3. For running the modules except dma, use `14nm_sg.tcl`. Modify the top module in `set top_module` to designate which module you want to run.
 4. For running the dma module, use `dma.tcl`.
 5. Then, execute `run.cmd`.  
+6. Check reports in `./Synthesis/reports`.
 
 * Ps. To generate reports, check the file `report.tcl` in the directory `./Synthesis/script`. Need to create the report file path `./Synthesis/reports` first, and then establish those files `report_*.txt` in the folder.
