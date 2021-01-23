@@ -3,38 +3,38 @@ import math
 # architecture spec
 # buffer size unit: MB
 # frequency unit: MHz
-PE = 64
-Lane = 72
-Mac = 16
-Weight_buffer = 24
-Activation_buffer = 12
-Mask_buffer = 4
-clk = 700
+PE = 64						      # number of PEs
+Lane = 72					      # number of MAC Lanes per PE
+Mac = 16					      # number of multipliers per MAC Lane
+Weight_buffer = 24			# weight buffer size
+Activation_buffer = 12	# activation buffer slze
+Mask_buffer = 4				  # mask buffer size
+clk = 700					      # clock rate
 
-IL = 4
-FL = 16
+IL = 4						      # bits for the integer portion
+FL = 16						      # bits for the fraction portion
 
 activation_sparsity = 0.5
 weight_sparsity = 0.5
 overlap_factor = 0.8
 
 
-Pib = 2
-Pix = 8
-Piy = 4
-Pif = 16
-Pof = 8
-Pkx = 3
-Pky = 3
+Pib = 2     # parallel computations of the batch size
+Pix = 8     # parallel computations of the width of the input feature map 
+Piy = 4     # parallel computations of the height of the input feature map 
+Pif = 16    # parallel computations of the input feature map channnels
+Pof = 8     # parallel computations of the output feature map channnels
+Pkx = 3     # parallel computations of the width of the kernel window
+Pky = 3     # parallel computations of the height of the kernel window
 Pmac = [Pib, Pix, Piy, Pif, Pof, Pkx, Pky]
 
-Tib = 4
-Tix = 64
-Tiy = 64
-Tif = 64
+Tib = 4     # loop tiling of the batch size
+Tix = 64    # loop tiling of the width of the input feature map
+Tiy = 64    # loop tiling of the height of the input feature map
+Tif = 64    # loop tiling of the input feature map channels
 Tile = [Tib, Tix, Tiy, Tif]
 
-batch_size = 32
+batch_size = 32   # batch size, 32 for training, 100 for inference
 
 # area unit: um^2
 # power unit: mW
