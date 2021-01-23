@@ -3,13 +3,13 @@ import math
 # architecture spec
 # buffer size unit: MB
 # frequency unit: MHz
-PE = 64						      # number of PEs
-Lane = 72					      # number of MAC Lanes per PE
-Mac = 16					      # number of multipliers per MAC Lane
-Weight_buffer = 24			# weight buffer size
-Activation_buffer = 12	# activation buffer slze
-Mask_buffer = 4				  # mask buffer size
-clk = 700					      # clock rate
+PE = 64                 # number of PEs
+Lane = 72               # number of MAC Lanes per PE
+Mac = 16                # number of multipliers per MAC Lane
+Weight_buffer = 24      # weight buffer size
+Activation_buffer = 12  # activation buffer slze
+Mask_buffer = 4	        # mask buffer size
+clk = 700               # clock rate
 
 IL = 4						      # bits for the integer portion
 FL = 16						      # bits for the fraction portion
