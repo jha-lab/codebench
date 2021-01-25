@@ -21,7 +21,9 @@ set search_path [concat $search_path $rtl_path $script_path]
 set sdc_path "./sdc"
 set ddc_path "./ddc"
 
+# the module that's gonna run
 set top_module "transposer"
+# the period of the clk input, unit: ps
 set period 1429
 set uncertainty 50
 set rpt_file "${top_module}.rpt"
