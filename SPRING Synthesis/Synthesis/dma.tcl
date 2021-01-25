@@ -22,6 +22,7 @@ set sdc_path "./sdc"
 set db_path "./ddc"
 
 set top_module "dma_axi64"
+# the period of the clk input, unit: ps
 set period 1429
 set uncertainty 50
 set rpt_file "${top_module}.rpt"
