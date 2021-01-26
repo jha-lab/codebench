@@ -41,12 +41,12 @@ def Pb2Ops(input_pb):
     pending = []
 
     for op in ops:
-        if len(op.inputs) == 0:
-            stream.append(op)
-            for out in op.outputs:
-                tensors.append(out)
+        if len(op.inputs) == 0:     # those operations without input
+            stream.append(op)       # appending those ops in stream
+            for out in op.outputs:  
+                tensors.append(out) # appending the outputs of those ops in tensors
         else:
-            pending.append(op)
+            pending.append(op)      # appending those ops with inputs in pending
 
     removed_num = 0
     while len(pending) > 0:
