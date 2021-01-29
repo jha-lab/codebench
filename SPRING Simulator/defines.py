@@ -50,9 +50,9 @@ DDR_bandwidth = 40000
 DRAM_bandwidth = DDR_bandwidth * 1024 * 1024 * 8 * 1000 / clk * 1e-9
 
 # Module RTL parameters
-MacLane_RTL_area = 8801.498079
-MacLane_RTL_dynamic = 4.7925
-MacLane_RTL_leakage = 0.297768
+MacLane_RTL_area = 8716.107541
+MacLane_RTL_dynamic = 4.9185
+MacLane_RTL_leakage = 0.2940754
 
 DataFlow_RTL_area =  75946.982008
 DataFlow_RTL_dynamic = 11.3711
