@@ -16,13 +16,13 @@ module forward
 	done
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter size = 16;
 parameter width = $clog2(size);
 
 input clk, reset;
 input signed [IL+FL-1:0] batch [size-1:0];
-input [4:0] num;
+input [3:0] num;
 input signed [IL+FL-1:0] gamma;
 input signed [IL+FL-1:0] beta;
 input input_ready;
@@ -36,7 +36,7 @@ output logic [1:0] state;
 output logic done;
 
 logic signed [IL+FL-1:0] reg_batch [size-1:0];
-logic [4:0] reg_num;
+logic [3:0] reg_num;
 logic signed [IL+FL-1:0] reg_gamma;
 logic signed [IL+FL-1:0] reg_beta;
 logic start_0;

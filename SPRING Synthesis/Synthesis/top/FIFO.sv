@@ -10,7 +10,7 @@ module fifo
     data_out
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter FIFO_DEPTH = 32;
 parameter IN_BUS_WIDTH = IL + FL;
 parameter FIFO_CNT_WIDTH = $clog2(FIFO_DEPTH);
@@ -24,7 +24,7 @@ output logic empty;
 output logic full;
 output logic [IN_BUS_WIDTH-1:0] data_out;
  
-logic [IN_BUS_WIDTH-1:0] [FIFO_DEPTH-1:0] buff_mem;
+logic [FIFO_DEPTH-1:0] [IN_BUS_WIDTH-1:0] buff_mem;
 logic [FIFO_CNT_WIDTH-1:0] rd_ptr, wr_ptr;
  
  

@@ -57,7 +57,7 @@ module PE
 	pooling_om
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter row = 4, col = 4;
 parameter length = 32;
 parameter p_length = $clog2(length);

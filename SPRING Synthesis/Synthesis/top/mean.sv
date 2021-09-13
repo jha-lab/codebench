@@ -6,12 +6,12 @@ module mean
 	out
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter size = 16;
 
 input start;
 input signed [IL+FL-1:0] batch [size-1:0];
-input [4:0] num;
+input [3:0] num;
 
 output logic signed [IL+FL-1:0] out;
 

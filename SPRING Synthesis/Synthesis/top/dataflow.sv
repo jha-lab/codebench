@@ -7,7 +7,7 @@ module dataflow
 	out
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter lane = 128;
 
 input clk, reset;

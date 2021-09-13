@@ -18,13 +18,13 @@ module backward
 	done
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter size = 16;
 parameter width = $clog2(size);
 
 input clk, reset;
 input signed [IL+FL-1:0] dout [size-1:0];
-input [4:0] num;
+input [3:0] num;
 input signed [IL+FL-1:0] batch [size-1:0];
 input signed [IL+FL-1:0] norm [size-1:0];
 input signed [IL+FL-1:0] mu;
@@ -33,14 +33,14 @@ input signed [IL+FL-1:0] gamma;
 input input_ready;
 input output_taken;
 
-output logic signed [IL+FL-1:0] dX;
+output logic signed [IL+FL-1:0] dX [size-1:0];
 output logic signed [IL+FL-1:0] dgamma;
 output logic signed [IL+FL-1:0] dbeta;
 output logic [1:0] state;
 output logic done;
 
 logic signed [IL+FL-1:0] reg_dout [size-1:0];
-logic [4:0] reg_num;
+logic [3:0] reg_num;
 logic signed [IL+FL-1:0] reg_batch [size-1:0];
 logic signed [IL+FL-1:0] reg_norm [size-1:0];
 logic signed [IL+FL-1:0] reg_mu;
@@ -167,7 +167,7 @@ always_comb begin
 	else begin
 		if (state == 2'b01) begin
 			varri = vari + 1;
-                        std_inv = (1 <<< FL) / (root+1);
+            std_inv = (1 <<< FL) / (root+1);
 			for (j = 0; j < reg_num; j = j + 1) begin
 				X_mu[j] = reg_batch[j] - reg_mu;
 				dX_norm[j] = reg_dout[j] * reg_gamma;			
@@ -177,7 +177,7 @@ always_comb begin
 			dvar = dvar_sum * -(1<<<(FL-1)) * std_inv * std_inv * std_inv;
 			dmu = dmu_sum + dvar * (-(1<<<(FL+1))) * mean;
 			for (k = 0; k < reg_num; k = k + 1) begin
-				dX[k] = dX_norm[k] * std_inv + (dvar<<<1)*X_mu[k]/reg_num + dmu / reg_num;
+				dX[k] = dX_norm[k] * std_inv + (dvar<<<1) * X_mu[k] / reg_num + dmu / reg_num;
 				dgamma = dgamma + dout[k] * reg_norm[k];
 				dbeta = dbeta + dout[k];
 			end

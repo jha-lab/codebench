@@ -6,7 +6,7 @@ module stochastic_rounding
 	f		//o
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 
 input clk, reset;
 input signed [4+(IL+FL)*2-1:0] i;
@@ -14,7 +14,7 @@ output logic signed [IL+FL-1:0] f;
 
 logic signed [4+(IL+FL)*2-1:0] bottom, upper;
 logic signed [IL+FL-1:0] r_bottom, r_upper, round;
-logic [14:0] random;
+logic [15:0] random;
 
 always_comb begin
 //	bottom = -{{(4+IL){1'b0}}, 1'b1, {(IL-1+FL*2){1'b0}}};

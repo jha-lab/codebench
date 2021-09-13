@@ -8,7 +8,7 @@ module mean_pooling
 	done
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter size = 4;
 parameter width = $clog2(size);
 

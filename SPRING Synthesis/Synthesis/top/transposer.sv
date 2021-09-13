@@ -9,7 +9,7 @@ module transposer
 	out
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter row = 4, col = 4;
 
 input clk, reset;

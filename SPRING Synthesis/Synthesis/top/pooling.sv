@@ -10,7 +10,7 @@ module pooling
 	state
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter size = 4;
 parameter width = $clog2(size);
 
@@ -44,10 +44,10 @@ always_ff @(posedge clk) begin
 		state <= 2'b00;
 	end
 	else begin
-		if (state == 2'b00 & input_ready == 1) begin
+		if (state == 2'b00 && input_ready == 1) begin
 			state <= 2'b01;
 		end
-		if (state == 2'b01 & done == 1) begin
+		if (state == 2'b01 && done == 1) begin
 			state <= 2'b10;
 		end
 		if (state == 2'b10 && output_taken == 1) begin
@@ -70,7 +70,7 @@ always_ff @(posedge clk) begin
 end
 
 always_ff @(posedge clk) begin
-	if (reset != 1 && state == 2'b00 & input_ready == 1) begin
+	if (reset != 1 && state == 2'b00 && input_ready == 1) begin
 		reg_input_ready <= 1;
 	end
 	else begin

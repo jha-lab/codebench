@@ -72,7 +72,7 @@ module shifter
 	input_taken
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 
 input clk, reset;
 input signed [IL+FL-1:0] i_0;

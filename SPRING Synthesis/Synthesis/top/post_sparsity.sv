@@ -11,7 +11,7 @@ module post_sparsity
 	state
 );
 
-parameter IL = 8, FL = 12;
+parameter IL = 4, FL = 16;
 parameter length = 32;
 parameter p_length = $clog2(length);
 

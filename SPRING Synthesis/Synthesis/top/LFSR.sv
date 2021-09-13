@@ -6,20 +6,20 @@ module LFSR
 );
 
 input clk, reset;
-output logic [14:0] data;
+output logic [15:0] data;
 
 logic feedback;
 
 always_comb begin
-	feedback = data[14] ^ data[0];
+	feedback = data[15] ^ data[0];
 end
 
 always_ff @(posedge clk) begin
 	if (reset == 1) begin
-		data <= 15'b111111111111111;
+		data <= 16'b111111111111111;
 	end
 	else begin
-		data <= {data[13:1], feedback, data[14]};
+		data <= {data[14:1], feedback, data[15]};
 	end
 end
 
