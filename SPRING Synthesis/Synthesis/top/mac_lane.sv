@@ -459,4 +459,12 @@ ReLU #(.IL(IL), .FL(FL)) ReLU_0
 	.f		(f)		//o
 );
 
+SiLU #(.IL(IL), .FL(FL)) SiLU_0
+(
+	.clk		(clk),		//i
+	.reset		(reset),	//i
+	.i		(reg_r_add),	//i
+	.f		(f)		//o
+);
+
 endmodule

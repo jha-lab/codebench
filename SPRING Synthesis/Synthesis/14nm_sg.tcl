@@ -2,7 +2,7 @@ remove_design -all
 #******************************************************************************
 # Set the design paths
 #******************************************************************************
-set LIBS /home/yeyu/accelerator/Synthesis/library
+set LIBS /u/chli/tools/Fisher/accelerator/Synthesis/library
 
 # Define the libraries and search path
 set search_path [concat $search_path ${LIBS}]
@@ -22,9 +22,9 @@ set sdc_path "./sdc"
 set ddc_path "./ddc"
 
 # the module that's gonna run
-set top_module "transposer"
+set top_module "mac_lane"
 # the period of the clk input, unit: ps
-set period 1429
+set period 1429	
 set uncertainty 50
 set rpt_file "${top_module}.rpt"
 set netlist_file "${top_module}.v"
@@ -35,7 +35,7 @@ set rpt_path [concat $rpt_path/$top_module]
 # Read RTL files
 #******************************************************************************
 
-analyze -library 14nm_sg -format sv {FIFO.sv ReLU.sv filter.sv im2col_cpu_add_32dEe.v im2col_cpu_sdiv_3fYi.v max_pooling.sv pooling.sv sqrt_mul.sv update_output.sv L1.sv add.sv forward.sv im2col_cpu_add_32g8j.v im2col_cpu_sub_32eOg.v mean.sv post_sparsity.sv stochastic_rounding.sv L2.sv adder_tree.sv im2col_cpu.v im2col_cpu_data_col.v loss.sv mean_pooling.sv scalar.sv LFSR.sv backward.sv im2col_cpu_add_31hbi.v mac_lane.sv min_pooling.sv shifter.sv transposer.sv PE.sv dataflow.sv im2col_cpu_add_32bkb.v im2col_cpu_mul_32cud.v mask.sv mul.sv sparsity.sv update_mask.sv top.sv} 
+analyze -library 14nm_sg -format sv {FIFO.sv ReLU.sv SiLU.sv filter.sv im2col_cpu_add_32dEe.v im2col_cpu_sdiv_3fYi.v max_pooling.sv pooling.sv sqrt_mul.sv update_output.sv L1.sv add.sv forward.sv im2col_cpu_add_32g8j.v im2col_cpu_sub_32eOg.v mean.sv post_sparsity.sv stochastic_rounding.sv L2.sv adder_tree.sv im2col_cpu.v im2col_cpu_data_col.v loss.sv mean_pooling.sv scalar.sv LFSR.sv backward.sv im2col_cpu_add_31hbi.v mac_lane.sv min_pooling.sv shifter.sv transposer.sv PE.sv dataflow.sv im2col_cpu_add_32bkb.v im2col_cpu_mul_32cud.v mask.sv mul.sv sparsity.sv update_mask.sv top.sv} 
 #-define FPGA_SYN
 #elaborate $top_module -architecture RTL -library work_asg_338K 
 elaborate $top_module -library 14nm_sg
@@ -43,7 +43,10 @@ elaborate $top_module -library 14nm_sg
 check_design
 
 set_max_delay -to [all_outputs] $period
-set_size_only
+
+#commented due to error: no "object list"
+#set_size_only
+
 # Make the blocks instantiated from the same reference unique
 uniquify
 

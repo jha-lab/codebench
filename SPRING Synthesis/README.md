@@ -8,7 +8,7 @@ batch normalization reference: https://wiseodd.github.io/techblog/2016/07/04/bat
 2. All files needed for synthesis and reports generated are in the `./Synthesis folder`.
 
 ### How to run the Design Compiler simulation and generate area and power reports?
-*Latest update by Vincent Li on 2021/1/23*
+*Latest update by Vincent Li on 2021/9/22*
 
 1. Go to the following website and source the source file. <https://researchcomputing.princeton.edu/faq/how-to-run-synopsys-and-c>
    * For tcsh or csh shell  
@@ -23,4 +23,4 @@ batch normalization reference: https://wiseodd.github.io/techblog/2016/07/04/bat
 5. Then, execute `run.cmd`.  
 6. Check reports in `./Synthesis/reports`.
 
-* Ps. To generate reports, check the file `report.tcl` in the directory `./Synthesis/script`. Need to create the report file path `./Synthesis/reports` first, and then establish those files `report_*.txt` in the folder.
+* Ps. To generate reports, check the file `report.tcl` in the directory `./Synthesis/script`. Need to create the report file path `./Synthesis/reports/{module_name}` first, and then establish those files `{module_name}.rpt` and `report_*.txt` in the folder.
