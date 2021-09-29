@@ -21,11 +21,11 @@ always_comb begin
     end
 	else begin
 		y=i;
+    end
 	z=y>>>2;
 	sum = z+20'b1111111111_0000000000;
 	sq = sum*sum;
 	sh = sq>>>1;
-    end
 	if(i[IL+FL-1]==1'b1) begin
 		f = sh;
 		f = f*i;
