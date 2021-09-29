@@ -16,7 +16,7 @@ end
 
 always_ff @(posedge clk) begin
 	if (reset == 1) begin
-		data <= 16'b111111111111111;
+		data <= 16'b1111111111111111;
 	end
 	else begin
 		data <= {data[14:1], feedback, data[15]};
