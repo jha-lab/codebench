@@ -1,5 +1,6 @@
 module mac_lane
 (
+    mode,   //i     //add
 	clk,	//i
 	reset,	//i
 	i_0,	//i
@@ -34,12 +35,12 @@ module mac_lane
 	w_13,	//i
 	w_14,	//i
 	w_15,	//i
-	f	//o
+	f	    //o
 );
 
 parameter IL = 4, FL = 16;
 
-input clk, reset;
+input mode, clk, reset;     //add
 input signed [IL+FL-1:0] i_0;
 input signed [IL+FL-1:0] i_1;
 input signed [IL+FL-1:0] i_2;
@@ -144,6 +145,9 @@ logic signed [4+(IL+FL)*2-1:0] out_add;
 logic signed [4+(IL+FL)*2-1:0] reg_add;
 logic signed [IL+FL-1:0] r_add;
 logic signed [IL+FL-1:0] reg_r_add;
+
+logic signed [IL+FL-1:0] f_R;   //add
+logic signed [IL+FL-1:0] f_S;   //add
 
 
 always_ff @(posedge clk) begin
@@ -451,20 +455,36 @@ always_ff @(posedge clk) begin
 	end
 end
 
+//add
+always_ff @(posedge clk) begin
+	if (reset == 1) begin
+		f <= {(IL+FL){1'b0}};
+	end
+	else begin
+        case (mode)
+            1'b1: f <= f_R;
+            1'b0: f <= f_S;
+        endcase
+	end
+end
+//
+
 ReLU #(.IL(IL), .FL(FL)) ReLU_0
 (
-	.clk		(clk),		//i
-	.reset		(reset),	//i
-	.i		(reg_r_add),	//i
-	.f		(f)		//o
+    .en         (mode),         //i     //add
+	.clk		(clk),		    //i
+	.reset		(reset),	    //i
+	.i		    (reg_r_add),    //i
+	.f		    (f_R)		    //o
 );
 
 SiLU #(.IL(IL), .FL(FL)) SiLU_0
 (
-	.clk		(clk),		//i
-	.reset		(reset),	//i
-	.i		(reg_r_add),	//i
-	.f		(f)		//o
+    .n_en       (mode),         //i     //add
+	.clk		(clk),		    //i
+	.reset		(reset),	    //i
+	.i		    (reg_r_add),	//i
+	.f		    (f_S)		    //o
 );
 
 endmodule

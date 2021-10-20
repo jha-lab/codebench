@@ -54,7 +54,13 @@ module PE
 	pooling_input_ready,
 	pooling_output_taken,
 	pooling_mode,
-	pooling_om
+	pooling_om,
+    global_avg_pooling_im,
+    global_avg_pooling_en,
+    global_avg_pooling_size,
+    global_avg_pooling_input_ready,
+    global_avg_pooling_om,
+    global_avg_pooling_done
 );
 
 parameter IL = 4, FL = 16;
@@ -117,6 +123,11 @@ input signed [IL+FL-1:0] pooling_im [number-1:0][pooling_size-1:0];
 input pooling_input_ready [number-1:0];
 input pooling_output_taken [number-1:0];
 input [1:0] pooling_mode;
+
+input signed [IL+FL-1:0] global_avg_pooling_im [number-1:0]
+input global_avg_pooling_en
+input [IL+FL-1:0] global_avg_pooling_size [number-1:0]
+input global_avg_pooling_input_ready [number-1:0]
 
 output logic signed [IL+FL-1:0] pooling_om [number-1:0];
 output logic signed [IL+FL-1:0] loss_out [number-1:0];
@@ -779,6 +790,16 @@ pooling  #(.IL(IL), .FL(FL), .size(pooling_size), .width(pooling_width))	pooling
         .state		(pooling_state[i])
 );
 
+global_avg_pooling  #(.IL(IL), .FL(FL))	global_avg_pooling_0
+(
+        .clk		    (clk),
+        .im		        (global_avg_pooling_im[i]),
+        .en             (global_avg_pooling_en),
+        .size           (global_avg_pooling_size[i]),
+        .input_ready	(global_avg_pooling_input_ready[i]),
+        .om		        (global_avg_pooling_om[i]),
+        .done		    (global_avg_pooling_done[i])
+);
 
 scalar  #(.IL(IL), .FL(FL), .size(size), .width(width))		scalar_0
 (
