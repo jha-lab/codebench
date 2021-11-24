@@ -1,3 +1,6 @@
 [submodule "boshnas"]
 	path = boshnas
 	url = https://github.com/JHA-Lab/boshnas.git
+[submodule "cnn_design-space"]
+	path = cnn_design-space
+	url = https://github.com/JHA-Lab/cnn_design-space.git
