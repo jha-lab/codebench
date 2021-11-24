@@ -1,0 +1,3 @@
+[submodule "boshnas"]
+	path = boshnas
+	url = https://github.com/JHA-Lab/boshnas.git
