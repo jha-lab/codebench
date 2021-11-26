@@ -5,11 +5,11 @@ Cycle-accurate python simulator for CoDesign project.
 
 ## Folders
 
-`NVMain` - Main memory simulator
-`SPRING Approximator` - Original SPRING approximator
-`SPRING Simulator` - Original SPRING simulator
-`cacti` - On-chip buffer simulator
-`AcceleratorBench` - Cycle-accurate accelerator simulator for co-design
+`NVMain` - Main memory simulator  
+`SPRING Approximator` - Original SPRING approximator  
+`SPRING Simulator` - Original SPRING simulator  
+`cacti` - On-chip buffer simulator  
+`AcceleratorBench` - Cycle-accurate accelerator simulator for co-design  
 
 ## Usage
 
