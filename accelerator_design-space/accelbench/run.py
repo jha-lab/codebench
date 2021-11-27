@@ -5,32 +5,54 @@ import os
 import time
 import math
 
+from six.moves import cPickle as pickle
+
 parser = argparse.ArgumentParser()
-parser.add_argument('model_name', type = str, help = 'The name of the model.\
-                     Should be one among [lenet, alexnet, vgg11, vgg13,\
-					  vgg16, vgg19, resnet18, resnet34,\
-					  resnet50, resnet101, resnet152,\
-					  shufflenet, mobilenet, googlenet,\
-					  inception, xception, efficientnet-b0,\
-					  efficientnet-b1, efficientnet-b2,\
-					  efficientnet-b3, efficientnet-b4,\
-					  efficientnet-b5, efficientnet-b6,\
-					  efficientnet-b7, efficientnet-l2]')
-parser.add_argument('-c', '--config_file', type = str, default = '../configs/CIFAR10/config.yaml', help = 'The path to the config file.')
-parser.add_argument('-e', '--embedding', type = float, nargs = '+', default = [2, 8, 4, 8, 3, 3, 1, 12, 24, 4, 1, 1],\
-                    help = "The vector embedding for accelerator hyperparameters.\
-                            The vector is corresponding to [Pib, Pix, Piy, Pof, Pkx, Pky, batch_size, activation_buffer, weight_buffer, mask_buffer, main_mem_type, main_mem_config].\
-                            For on-chip buffer size, the unit is in MB.\
-                            For main memory type, choose among 1: RRAM, 2: DRAM, and 3: HBM.\
-                            For main memory configuration, choose among \
-                            RRAM: 1: [16,2,2], 2: [8,2,4], 3: [4,2,8],  4: [2,2,16], 5: [32,2,1], 6: [1,2,32],\
-                            DRAM: 1: [16,2,2], 2: [8,2,4], 3: [32,2,1], 4: [16,4,1],\
-                             HMB: 1: [32,1,4].\
-                            The numbers corresponds to [#banks, #ranks, #channels].")
-
-#parser.add_argument('--clk', type = int, default = 700, dest = "clk", help = 'The clock rate of the accelerator.')
-
+parser.add_argument('--graphlib_file',
+    type=str,
+    default='../cnn_design-space/cnnbench/dataset/dataset_test.json',
+    help='path to load the CNN graphlib dataset')
+parser.add_argument('--cnn_model_hash',
+    type=str,
+    help='hash of the CNN model to be simulated')
+parser.add_argument('--config_file', 
+    type = str, 
+    default = '..cnn_design-space/cnnbench/configs/CIFAR10/config.yaml', 
+    help = 'path to the config file')
+parser.add_argument('--model_file', 
+    type = str,  
+    help = 'path to the save model results')
+parser.add_argument('--embedding', 
+    type = float, 
+    nargs = '+', 
+    default = [2, 8, 4, 8, 3, 3, 1, 12, 24, 4, 1, 1], 
+    help = "The vector embedding for accelerator hyperparameters.\
+            The vector is corresponding to [Pib, Pix, Piy, Pof, Pkx, Pky, batch_size, activation_buffer, weight_buffer, mask_buffer, main_mem_type, main_mem_config].\
+            For on-chip buffer size, the unit is in MB.\
+            For main memory type, choose among 1: RRAM, 2: DRAM, and 3: HBM.\
+            For main memory configuration, choose among \
+            RRAM: 1: [16,2,2], 2: [8,2,4], 3: [4,2,8],  4: [2,2,16], 5: [32,2,1], 6: [1,2,32],\
+            DRAM: 1: [16,2,2], 2: [8,2,4], 3: [32,2,1], 4: [16,4,1],\
+            HMB: 1: [32,1,4].\
+            The numbers corresponds to [#banks, #ranks, #channels].")
 '''
+
+parser.add_argument('model_name', 
+    type = str, 
+    help = 'The name of the model.\
+            Should be one among [lenet, alexnet, vgg11, vgg13,\
+            vgg16, vgg19, resnet18, resnet34,\
+            resnet50, resnet101, resnet152,\
+            shufflenet, mobilenet, googlenet,\
+            inception, xception, efficientnet-b0,\
+            efficientnet-b1, efficientnet-b2,\
+            efficientnet-b3, efficientnet-b4,\
+            efficientnet-b5, efficientnet-b6,\
+            efficientnet-b7, efficientnet-l2]')
+
+parser.add_argument('--clk', type = int, default = 700, dest = "clk", help = 'The clock rate of the accelerator.')
+
+
 parser.add_argument('--PE', type = int, default = 64, help = 'The number of PEs. Needs to be a multiple of 32.')
 parser.add_argument('--Lane', type = int, default = 1, help = 'The number of MacLanes per PE. Needs to be a multiple of 9.')
 parser.add_argument('--batch', type = int, default = 1, help = 'The number of batch size.')
@@ -115,7 +137,7 @@ def defines():
     DRAM_bandwidth = DDR_bandwidth * 1024 * 1024 * 8 * 1000 / clk * 1e-9
 
     # get the model ops to define the hardware
-    ops, conv_shapes, head_shapes = torch2blocks.CNNBenchModel2Ops(args.config_file, args.model_name, batch)
+    ops, conv_shapes, head_shapes = torch2blocks.CNNBenchModel2Ops(args.config_file, args.graphlib_file, args.cnn_model_hash, batch)
 
     ReLU = False
     SiLU = False
@@ -358,3 +380,17 @@ print(f'Dynamic energy consumption: \t{dynamic_energy}')
 print(f'Leakage energy sonsumption: \t{leakage_energy}')
 print()
 print('Simulation time:', time.time() - start_time)
+
+# Saving results to a pickle file
+pickle.dump({'bacthnorm_cycles': BatchNorm_cycle,
+    'loss_cycles': Loss_cycle,
+    'pool_cycles': Pooling_cycle,
+    'globalavgpool_cycles': GlobalAvgPooling_cycle,
+    'upsampling_cycles': Upsampling_cycle,
+    'memory_cycles': Memory_cycle,
+    'conv_cycles': ConvMat_cycle,
+    'total_cycles': total_cycles, 
+    'latency': latency, 
+    'area': area, 
+    'dynamic_energy': dynamic_energy, 
+    'leakage_energy': leakage_energy}, open(args.model_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
