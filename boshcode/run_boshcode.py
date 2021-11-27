@@ -40,37 +40,46 @@ UNC_PROB = 0.1
 DIV_PROB = 0.1
 
 
-def worker(config_file: str,
+def worker(cnn_config_file: str,
 	graphlib_file: str,
-	models_dir: str,
-	model_hash: str,
+	cnn_models_dir: str,
+	accel_models_dir: str,
+	cnn_model_hash: str,
 	chosen_neighbor_hash: str,
 	autotune: bool,
+	trained_cnn_hashes: list,
+	accel_emb: np.array,
+	accel_hash: str,
 	cluster: str,
 	id: str):
 	"""Worker to finetune or pretrain the given model
 	
 	Args:
-		config_file (str): path to the configuration file
-		graphlib_file (str): path the the graphLib dataset file
-		models_dir (str): path to "models" directory containing "pretrained" sub-directory
-		model_hash (str): hash of the given model
-		chosen_neighbor_hash (str): hash of the chosen neighbor
-		autotune (bool): to autotune the given model
-		cluster (str): name of the cluster - "adroit", "tiger" or "della"
-		id (str): PU-NetID that is used to run slurm commands
+	    cnn_config_file (str): path to the CNN configuration file
+	    graphlib_file (str): path the the graphLib dataset file
+	    cnn_models_dir (str): path to the CNN models directory
+	    accel_models_dir (str): path to the Accelerators directory
+	    cnn_model_hash (str): hash of the given CNN model
+	    chosen_neighbor_hash (str): hash of the chosen neighbor
+	    autotune (bool): to autotune the given model
+	    trained_cnn_hashes (list): list of all CNN hashes that have been trained
+	    accel_emb (np.array): embedding of the Accelerator to be simulated
+	    accel_hash (str): hash for the given CNN-Accelerator pair
+	    cluster (str): name of the cluster - "adroit", "tiger" or "della"
+	    id (str): PU-NetID that is used to run slurm commands
 	
 	Returns:
-		job_id, pretrain (str, bool): Job ID for the slurm scheduler and whether pretraining
-		is being performed
+	    job_id, scratch (str, bool): Job ID for the slurm scheduler and whether CNN model
+	    	is being trained from scratch.
 	"""
 	scratch = False
 
-	print(f'Training model with hash: {model_hash}.')
+	print(f'Training CNN model with hash: {cnn_model_hash}.')
+	print(f'Simulating on Accelerator with embedding: {accel_emb}.')
 
 	graphLib = GraphLib.load_from_dataset(graphlib_file)
 
-	with open(config_file) as file:
+	with open(cnn_config_file) as file:
 		try:
 			config = yaml.safe_load(file)
 		except yaml.YAMLError as exc:
@@ -79,25 +88,29 @@ def worker(config_file: str,
 	chosen_neighbor_path = None
 	if chosen_neighbor_hash is not None:
 		# Load weights of current model using the finetuned neighbor that was chosen
-		chosen_neighbor_path = os.path.join(models_dir, chosen_neighbor_hash, 'model.pt')
+		chosen_neighbor_path = os.path.join(cnn_models_dir, chosen_neighbor_hash, 'model.pt')
 		print(f'Weights copied from neighbor model with hash: {chosen_neighbor_hash}.')
 	else:
 		scratch = True
-		print('No neighbor found. Training model from scratch.')
+		print('No neighbor found for the CNN. Training model from scratch.')
 
-	args = ['--dataset', config['dataset']]
+	args = ['--dataset', cnn_config['dataset']]
 	args.extend(['--cluster', cluster])
 	args.extend(['--id', id])
 	args.extend(['--autotune', '1' if autotune else '0'])
-	args.extend(['--model_hash', model_hash])
-	args.extend(['--model_dir', os.path.join(models_dir, model_hash)])
-	args.extend(['--config_file', config_file])
+	args.extend(['--cnn_model_hash', cnn_model_hash])
+	args.extend(['--cnn_model_dir', os.path.join(cnn_models_dir, model_hash)])
+	args.extend(['--cnn_config_file', cnn_config_file])
 	args.extend(['--graphlib_file', graphlib_file])
+	args.extend(['--train_cnn', '1' if cnn_model_hash not in trained_cnn_hashes else '0'])
+	args.extend(['--accel_hash', accel_hash])
+	args.extend(['--accel_emb', str(accel_emb)])
+	args.extend(['--accel_model_file', os.path.join(accel_models_dir, accel_hash) + '.pkl'])
 
 	if chosen_neighbor_path is not None:
 		args.extend(['--neighbor_file', chosen_neighbor_path])
 	
-	slurm_stdout = subprocess.check_output(f'source ./job_scripts/job_train.sh {" ".join(args)}',
+	slurm_stdout = subprocess.check_output(f'source ./job_scripts/job_code.sh {" ".join(args)}',
 		shell=True, text=True)
 
 	return slurm_stdout.split()[-1], scratch
@@ -130,12 +143,12 @@ def print_jobs(model_jobs: list):
 	Args:
 		model_jobs (list): list of jobs
 	"""
-	header = ['MODEL HASH', 'JOB ID', 'TRAIN TYPE', 'START TIME', 'ELAPSED TIME', 'STATUS']
+	header = ['ACCEL HASH', 'JOB ID', 'TRAIN TYPE', 'START TIME', 'ELAPSED TIME', 'STATUS']
 
 	rows = []
 	for job in model_jobs:
 		start_time, elapsed_time, status = get_job_info(job['job_id'])
-		rows.append([job['model_hash'], job['job_id'], job['train_type'], start_time, elapsed_time, status])
+		rows.append([job['accel_hash'], job['job_id'], job['train_type'], start_time, elapsed_time, status])
 
 	print()
 	print(tabulate.tabulate(rows, header))
@@ -251,15 +264,10 @@ def main():
 		type=str,
 		help='path to load the CNN graphlib dataset',
 		default='../cnn_design-space/cnnbench/dataset/dataset_test.json')
-	parser.add_argument('--dataset',
+	parser.add_argument('--cnn_config_file',
 		metavar='',
 		type=str,
-		help='name of the dataset for training. Should match the one in the config file',
-		default='CIFAR10')
-	parser.add_argument('--config_file',
-		metavar='',
-		type=str,
-		help='path to the configuration file',
+		help='path to the CNN configuration file',
 		default='../cnn_design-space/configs/CIFAR10/config.yaml')
 	parser.add_argument('--accel_emdeddings_file',
 		metavar='',
@@ -322,17 +330,21 @@ def main():
 	# New dataset file for CNN library
 	new_graphlib_file = args.graphlib_file.split('.json')[0] + '_trained.json'
 
-	# Create CNN-Accelerator pairs dataset
+	# Create or load CNN-Accelerator pairs dataset
 	accel_dataset = {}
-	for accel_idx in range(accel_embeddings.shape[0]):
-		for cnn_idx in range(len(graphLib.library)):
-			accel_dataset[hashlib.sha256(str(accel_embeddings[accel_idx, :]) + graphLib.library[cnn_idx].hash)] = \
-				{'cnn_hash': graphLib.library[cnn_idx].hash, 'accel_emb': accel_embeddings[accel_idx, :], \
-				'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'dyn_energy': None, \
-				'leak_energy': None, 'area': None}
-	pickle.dump(accel_dataset, open(args.accel_dataset_file, 'wb+'))
+	if os.path.exists(args.accel_dataset_file):
+		accel_dataset = pickle.load(open(args.accel_dataset_file, 'rb'))
+	else:
+		for accel_idx in range(accel_embeddings.shape[0]):
+			for cnn_idx in range(len(graphLib.library)):
+				accel_dataset[hashlib.sha256(str(accel_embeddings[accel_idx, :]) + graphLib.library[cnn_idx].hash)] = \
+					{'cnn_hash': graphLib.library[cnn_idx].hash, 'accel_emb': accel_embeddings[accel_idx, :], \
+					'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'dyn_energy': None, \
+					'leak_energy': None, 'area': None}
+		pickle.dump(accel_dataset, open(args.accel_dataset_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
 	accel_hashes = list(accel_dataset.keys())
 
+	# Set autotune for every CNN model trained
 	autotune = True if args.autotune == 1 else False
 	
 	# Initialize a dictionary mapping the CNN or CNN-Accelerator hash to its corresponding job_id
@@ -341,11 +353,13 @@ def main():
 	if not os.path.exists(args.models_dir):
 		os.makedirs(args.models_dir)
 
-	cnn_config = yaml.safe_load(args.config_file)
+	cnn_config = yaml.safe_load(args.cnn_config_file)
 
+	# Set directories for training of CNN and Accelerator models
 	cnn_models_dir = os.path.join(args.models_dir, 'cnnbench_models', cnn_config['dataset'])
 	accel_models_dir = os.path.join(args.models_dir, 'accelbench_models')
 
+	# Get trained CNN models and Accelerator architectures
 	trained_cnn_hashes = os.listdir(cnn_models_dir)
 	trained_accel_hashes = os.listdir(accel_models_dir)
 
@@ -361,9 +375,10 @@ def main():
 			cnn_hash = accel_dataset[accel_hash]['cnn_hash']
 			accel_emb = accel_dataset['accel_emb']
 
-			job_id, scratch = worker(config_file=args.config_file, graphlib_file=args.graphlib_file,
+			job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
 				cnn_models_dir=cnn_models_dir, cnn_model_hash=cnn_hash, chosen_neighbor_hash=None,
-				autotune=autotune, cluster=args.cluster, id=args.id)
+				autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, accel_emb=accel_emb, 
+				accel_hash=accel_hash, cluster=args.cluster, id=args.id) # TODO: V
 			assert scratch is True
 
 			train_type = 'S' if scratch else 'WT'
