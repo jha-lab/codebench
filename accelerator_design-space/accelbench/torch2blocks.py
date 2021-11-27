@@ -2,15 +2,16 @@ import os
 import sys
 import Blocks
 
-sys.path.append(os.path.abspath('../'))
+sys.path.append(os.path.abspath('../../cnn_design-space/cnnbench/'))
 
 import torch
 import yaml
 import re
+from library import Graph, GraphLib
 from manual_models import get_manual_graph
 from model_builder import CNNBenchModel
 
-def CNNBenchModel2Ops(config_file = None, model_name = None, batch = 1):
+def CNNBenchModel2Ops(config_file = None, graphlib_file = None, model_hash = None, batch = 1):
     print('Loading config file and instantiating graphObject ...', file=sys.stderr)
 
     with open(config_file) as cfg:
@@ -19,7 +20,9 @@ def CNNBenchModel2Ops(config_file = None, model_name = None, batch = 1):
         except yaml.YAMLError as exc:
             print(exc)
 
-    graphObject = get_manual_graph(config, model_name)
+    # Getting graph object from CNNBench library
+    graphLib = GraphLib.load_from_dataset(graphlib_file)
+    graphObject = graphLib.get_graph(model_hash=model_hash)
 
     print('Instantiating the CNNBench model ...', file=sys.stderr)
     model = CNNBenchModel(config, graphObject)
