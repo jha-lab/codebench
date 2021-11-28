@@ -22,7 +22,7 @@ import torch
 
 from six.moves import cPickle as pickle
 
-from boshnas_2inp import BOSHNAS
+from boshnas_2inp import BOSHNAS as BOSHCODE
 from acq import gosh_acq as acq
 
 from library import GraphLib, Graph
@@ -38,6 +38,11 @@ ALEATORIC_QUERIES = 10 # Number of queries to be run with aleatoric uncertainty
 K = 10 # Number of parallel cold restarts for BOSHNAS
 UNC_PROB = 0.1
 DIV_PROB = 0.1
+
+MAX_LATENCY = 1 # Maximum latency in seconds
+MAX_AREA = 10 # Maximum area in mm^2
+MAX_DYNAMIC_ENERGY = 1 # Maximum dynamic energy in Joules
+MAX_LEAKAGE_ENERGY = 1 # Maximum leakage energy in Joules
 
 
 def worker(cnn_config_file: str,
@@ -186,59 +191,123 @@ def wait_for_jobs(model_jobs: list, running_limit: int = 4, patience: int = 1):
 		last_completed_jobs = completed_jobs 
 		time.sleep(1)
 
-# TODO: add support for CNN-Accelerator pairs
-def update_dataset(graphLib: 'GraphLib', models_dir: str, dataset_file: str):
+
+def update_dataset(graphLib: 'GraphLib', 
+	cnn_models_dir: str, 
+	accel_models_dir: str, 
+	graphlib_file: str, 
+	accel_dataset_file: str,
+	weights: list):
 	"""Update the dataset with all finetuned models
 	
 	Args:
-		graphLib (GraphLib): GraphLib opject to update
-		models_dir (str): directory with all trained models
-		dataset_file (str): path to the dataset file
+	    graphLib (GraphLib): GraphLib opject to update
+	    cnn_models_dir (str): directory with all trained CNN models
+	    accel_models_dir (str): directory with all simulated CNN-Accelerator pairs
+	    graphlib_file (str): path to the graphlib file
+	    accel_dataset_file (str): path to the co-design CNN-Accelerator dataset file
+	    weights (list): convex combination weights for performance calculation
+	
+	Returns:
+	    best_performance (float): best performance from the current trained CNN models and Accelerators
 	"""
-	count = 0
+	count_cnn = 0
+	count_accel = 0
 	best_performance = 0
-	for model_hash in os.listdir(models_dir):
-		checkpoint_path = os.path.join(models_dir, model_hash, 'model.pt')
+
+	assert len(weights) == 7, 'The weights list should be of size 7.'
+	assert sum(weights) == 1, 'Sum of weights should be equal to 1.'
+
+	# Updating CNN graphLib library 
+	for cnn_model_hash in os.listdir(cnn_models_dir):
+		checkpoint_path = os.path.join(cnn_models_dir, cnn_model_hash, 'model.pt')
 		if os.path.exists(checkpoint_path):
 			model_checkpoint = torch.load(checkpoint_path)
 			_, model_idx = graphLib.get_graph(model_hash=model_hash)
 			graphLib.library[model_idx].accuracies['train'] = model_checkpoint['train_accuracies'][-1]
 			graphLib.library[model_idx].accuracies['val'] = model_checkpoint['val_accuracies'][-1]
 			graphLib.library[model_idx].accuracies['test'] = model_checkpoint['test_accuracies'][-1]
-			if model_checkpoint['val_accuracies'][-1] > best_performance:
-				best_performance = model_checkpoint['val_accuracies'][-1]
-			count += 1
+			count_cnn += 1
 
-	graphLib.save_dataset(dataset_file)
+	graphLib.save_dataset(graphlib_file)
+
+	accel_dataset = pickle.load(open(accel_dataset_file, 'rb'))
+
+	# Updating co-design CNN-Accelerator library
+	for accel_hash in accel_dataset.keys():
+		accel_trained, cnn_trained = False, False
+		if os.path.exists(os.path.join(accel_models_dir, accel_hash) + '.pkl'):
+			accel_trained = True
+			results = pickle.load(open(os.path.join(accel_models_dir, accel_hash, '.pkl')))
+			accel_dataset[accel_hash]['latency'] = results['latency']
+			accel_dataset[accel_hash]['area'] = results['area']
+			accel_dataset[accel_hash]['dynamic_energy'] = results['dynamic_energy']
+			accel_dataset[accel_hash]['leakage_energy'] = results['leakage_energy']
+			count_accel += 1
+		if os.path.exists(os.path.join(cnn_models_dir, accel_dataset[accel_hash]['cnn_hash'], 'model.pt')):
+			cnn_trained = True
+			model_checkpoint = torch.load(os.path.join(cnn_models_dir, 
+				accel_dataset[accel_hash]['cnn_hash'], 'model.pt'))
+			accel_dataset[accel_hash]['train_acc'] = model_checkpoint['train_accuracies'][-1]
+			accel_dataset[accel_hash]['val_acc'] = model_checkpoint['val_accuracies'][-1]
+			accel_dataset[accel_hash]['test_acc'] = model_checkpoint['test_accuracies'][-1]
+		if accel_trained and cnn_trained:
+			performance = weights[0] * accel_dataset[accel_hash]['train_acc'] + \
+						  weights[1] * accel_dataset[accel_hash]['val_acc'] + \
+						  weights[2] * accel_dataset[accel_hash]['test_acc'] + \
+						  weights[3] * (1 - accel_dataset[accel_hash]['latency'] / MAX_LATENCY) + \
+						  weights[4] * (1 - accel_dataset[accel_hash]['area'] / MAX_AREA) + \
+						  weights[5] * (1 - accel_dataset[accel_hash]['dynamic_energy'] / MAX_DYNAMIC_ENERGY) + \
+						  weights[6] * (1 - accel_dataset[accel_hash]['leakage_energy'] / MAX_LEAKAGE_ENERGY)
+			if performance > best_performance:
+				best_performance = performance
+
+	pickle.dump(accel_dataset, open(args.accel_dataset_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
 
 	print()
-	print(f'{pu.bcolors.OKGREEN}Trained points in dataset:{pu.bcolors.ENDC} {count}\n' \
-		+ f'{pu.bcolors.OKGREEN}Best accuracy:{pu.bcolors.ENDC} {best_performance}')
+	print(f'{pu.bcolors.OKGREEN}Trained CNNs in dataset:{pu.bcolors.ENDC} {count_cnn}\n' \
+		+ f'{pu.bcolors.OKGREEN}Simulated CNN-Accelerator pairs:{pu.bcolors.ENDC} {count_accel}\n' \
+		+ f'{pu.bcolors.OKGREEN}Best performance:{pu.bcolors.ENDC} {best_performance}')
 	print()
 
-	# TODO: add support for convex combination of performance metrics
 	return best_performance
 
-# TODO: add support for CNN-Accelerator pairs
-def convert_to_tabular(graphLib: 'GraphLib'):
-	"""Convert the graphLib object to a tabular dataset from 
+
+def convert_to_tabular(accel_dataset: dict, graphLib: 'GraphLib', weights: list):
+	"""Convert the accel_dataset object to a tabular dataset from 
 	input encodings to the output loss
 	
 	Args:
-		graphLib (GraphLib): GraphLib object
+	    accel_dataset (dict): dataset of trained CNN-Accelerator pairs
+	    graphLib (GraphLib): GraphLib opject
+	    weights (list): convex combination weights for performance calculation
 	
 	Returns:
-		X, y (tuple): input embeddings and output loss
+	    X_cnn, X_accel, y (tuple): input embeddings and output loss
 	"""
-	X, y = [], []
-	for graph in graphLib.library:
-		if graph.accuracies['val']:
-			X.append(graph.embedding)
-			y.append(1 - graph.accuracies['val'])
+	X_cnn, X_accel, X_ds, y = [], [], [], []
 
-	X, y = np.array(X), np.array(y)
+	assert len(weights) == 7, 'The weights list should be of size 7.'
+	assert sum(weights) == 1, 'Sum of weights should be equal to 1.'
+	
+	for accel_hash in accel_dataset.keys():
+		performance = weights[0] * accel_dataset[accel_hash]['train_acc'] + \
+					  weights[1] * accel_dataset[accel_hash]['val_acc'] + \
+					  weights[2] * accel_dataset[accel_hash]['test_acc'] + \
+					  weights[3] * (1 - accel_dataset[accel_hash]['latency'] / MAX_LATENCY) + \
+					  weights[4] * (1 - accel_dataset[accel_hash]['area'] / MAX_AREA) + \
+					  weights[5] * (1 - accel_dataset[accel_hash]['dynamic_energy'] / MAX_DYNAMIC_ENERGY) + \
+					  weights[6] * (1 - accel_dataset[accel_hash]['leakage_energy'] / MAX_LEAKAGE_ENERGY)
+		cnn_graph = graphLib.get_graph(model_hash=accel_dataset[accel_hash]['cnn_hash'])
 
-	return X, y
+		X_cnn.append(cnn_graph.embedding)
+		X_accel.append(accel_dataset[accel_hash]['accel_emb'])
+		X_ds.append((cnn_graph.embedding, accel_dataset[accel_hash]['accel_emb']))
+		y.append(1 - performance)
+
+	X_cnn, X_accel, y = np.array(X_cnn), np.array(X_accel), np.array(y)
+
+	return X_cnn, X_accel, X_ds, y
 
 
 def get_neighbor_hash(model: 'Graph', trained_hashes: list):
@@ -289,6 +358,12 @@ def main():
 		type=str,
 		help='path to the directory where all models are trained',
 		default='/scratch/gpfs/stuli/accelerator_co-design')
+	parser.add_argument('--performance_weights',
+		metavar='',
+		type = float,
+		nargs = '+',
+		help='weights for taking convex combination of different performance values',
+		default=[0, 0.2, 0, 0.2, 0.1, 0.2, 0.3])
 	parser.add_argument('--num_init',
 		metavar='',
 		type=int,
@@ -339,8 +414,8 @@ def main():
 			for cnn_idx in range(len(graphLib.library)):
 				accel_dataset[hashlib.sha256(str(accel_embeddings[accel_idx, :]) + graphLib.library[cnn_idx].hash)] = \
 					{'cnn_hash': graphLib.library[cnn_idx].hash, 'accel_emb': accel_embeddings[accel_idx, :], \
-					'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'dyn_energy': None, \
-					'leak_energy': None, 'area': None}
+					'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'area': None, \
+					'dynamic_energy': None, 'leakage_energy': None}
 		pickle.dump(accel_dataset, open(args.accel_dataset_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
 	accel_hashes = list(accel_dataset.keys())
 
@@ -363,6 +438,8 @@ def main():
 	trained_cnn_hashes = os.listdir(cnn_models_dir)
 	trained_accel_hashes = os.listdir(accel_models_dir)
 
+	# TODO: check trained_accel_hashes have all respective CNNs trained
+
 	# Train randomly sampled models if total trained models is less than num_init
 	# TODO: Add skopt.sampler.Sobol points instead
 	while len(trained_accel_hashes) < args.num_init:
@@ -376,9 +453,9 @@ def main():
 			accel_emb = accel_dataset['accel_emb']
 
 			job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
-				cnn_models_dir=cnn_models_dir, cnn_model_hash=cnn_hash, chosen_neighbor_hash=None,
-				autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, accel_emb=accel_emb, 
-				accel_hash=accel_hash, cluster=args.cluster, id=args.id) # TODO: V
+				cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
+				chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
+				accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
 			assert scratch is True
 
 			train_type = 'S' if scratch else 'WT'
@@ -392,7 +469,8 @@ def main():
 	wait_for_jobs(model_jobs)
 
 	# Update dataset with newly trained models
-	old_best_performance = update_dataset(graphLib, args.models_dir, new_dataset_file) # TODO: new_graphlib_file
+	old_best_performance = update_dataset(graphLib, args.cnn_models_dir, args.accel_models_dir, 
+		new_graphlib_file, args.accel_dataset_file, args.performance_weights)
 
 	# Get entire dataset in embedding space
 	cnn_embeddings = []
@@ -403,8 +481,8 @@ def main():
 	min_cnn, max_cnn = np.min(cnn_embeddings, axis=0), np.max(cnn_embeddings, axis=0)
 	min_accel, max_accel = np.min(accel_embeddings, axis=0), np.max(accel_embeddings, axis=0)
 
-	# Initialize the BOSHNAS model
-	surrogate_model = BOSHNAS(input_dim1=cnn_embeddings.shape[1],
+	# Initialize the two-input BOSHNAS model
+	surrogate_model = BOSHCODE(input_dim1=cnn_embeddings.shape[1],
 							  inpu_dim2=accel_embeddings.shape[1],
 							  bounds1=(min_cnn, max_cnn),
 							  bounds2=(min_accel, max_accel),
@@ -416,7 +494,7 @@ def main():
 							  pretrained=False)
 
 	# Get initial dataset after finetuning num_init models
-	X_cnn, X_accel, y = convert_to_tabular(accel_dataset)
+	X_cnn, X_accel, X_ds, y = convert_to_tabular(accel_dataset)
 	max_loss = np.amax(y)
 
 	same_performance = 0
@@ -445,7 +523,7 @@ def main():
 		if method == 'optimization':
 			print(f'{pu.bcolors.OKBLUE}Running optimization step{pu.bcolors.ENDC}')
 			# Get current tabular dataset
-			X_cnn, X_accel, y = convert_to_tabular(accel_dataset)
+			X_cnn, X_accel, X_ds, y = convert_to_tabular(accel_dataset)
 			y = y/max_loss
 
 			# Train BOSHNAS model
@@ -461,7 +539,6 @@ def main():
 
 			# Get next queries
 			query_indices = surrogate_model.get_queries(x=X_ds, k=K, explore_type='ucb', use_al=use_al) 
-			# TODO: create X_ds from X_cnn, X_accel
 
 			# Run queries
 			for i in set(query_indices):
@@ -477,9 +554,10 @@ def main():
 
 				if chosen_neighbor_hash:
 					# Finetune model with the chosen neighbor
-					job_id, scratch = worker(config_file=args.config_file, graphlib_file=args.graphlib_file,
-						models_dir=args.models_dir, model_hash=model.hash, autotune=autotune, 
-						chosen_neighbor_hash=chosen_neighbor_hash, cluster=args.cluster, id=args.id)
+					job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
+						cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
+						chosen_neighbor_hash=chosen_neighbor_hash, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
+						accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id)
 					assert scratch is False
 				else:
 					# If no neighbor was found, proceed to next query model
@@ -508,9 +586,10 @@ def main():
 				cnn_model = graphLib.get_graph(model_hash=accel_dataset[accel_hash]['cnn_hash'])
 
 				# Train model
-				job_id, scratch = worker(config_file=args.config_file, graphlib_file=args.graphlib_file,
-					models_dir=args.models_dir, cnn_model_hash=cnn_model.hash, autotune=autotune, 
-					chosen_neighbor_hash=None, cluster=args.cluster, id=args.id)
+				job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
+					cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
+					chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
+					accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
 				assert scratch is True
 
 				train_type = 'S' if scratch else 'WT'
@@ -523,7 +602,7 @@ def main():
 		elif method == 'unc_sampling':
 			print(f'{pu.bcolors.OKBLUE}Running uncertainty sampling{pu.bcolors.ENDC}')
 
-			candidate_predictions = surrogate_model.predict(X_ds) # TODO: create X_ds from X_cnn, X_accel
+			candidate_predictions = surrogate_model.predict(X_ds) 
 
 			# Get model index with highest epistemic uncertainty
 			unc_prediction_idx = np.argmax([pred[1][0] for pred in candidate_predictions])
@@ -538,9 +617,10 @@ def main():
 				cnn_model = graphLib.get_graph(model_hash=accel_dataset[accel_hash]['cnn_hash'])
 
 				# Train model
-				job_id, scratch = worker(config_file=args.config_file, graphlib_file=args.graphlib_file,
-					models_dir=args.models_dir, cnn_model_hash=cnn_model.hash, autotune=autotune, 
-					chosen_neighbor_hash=None, cluster=args.cluster, id=args.id)
+				job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
+					cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
+					chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
+					accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
 				assert scratch is False
 
 				new_queries += 1
@@ -566,9 +646,10 @@ def main():
 			cnn_model = graphLib.get_graph(model_hash=accel_dataset[accel_hash]['cnn_hash'])
 
 			# Train sampled model
-			job_id, scratch = worker(config_file=args.config_file, graphlib_file=args.graphlib_file,
-				models_dir=args.models_dir, model_hash=cnn_model.hash, autotune=autotune, 
-				chosen_neighbor_hash=None, cluster=args.cluster, id=args.id)
+			job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
+				cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
+				chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
+				accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
 			assert scratch is False
 
 			new_queries += 1
@@ -584,7 +665,8 @@ def main():
 		wait_for_jobs(model_jobs)
 
 		# Update dataset with newly trained models
-		best_performance = update_dataset(graphLib, args.models_dir, new_dataset_file)
+		best_performance = update_dataset(graphLib, args.cnn_models_dir, args.accel_models_dir, 
+			new_graphlib_file, args.accel_dataset_file, args.performance_weights)
 
 		# Update same_performance to check convergence
 		if best_performance == old_best_performance and method == 'optimization':
@@ -596,7 +678,8 @@ def main():
 	wait_for_jobs(model_jobs, running_limit=0, patience=0)
 
 	# Update dataset with newly trained models
-	best_performance = update_dataset(graphLib, args.models_dir, new_dataset_file)
+	best_performance = update_dataset(graphLib, args.cnn_models_dir, args.accel_models_dir, 
+		new_graphlib_file, args.accel_dataset_file, args.performance_weights)
 
 	print(f'{pu.bcolors.OKGREEN}Convergence criterion reached!{pu.bcolors.ENDC}')
 
