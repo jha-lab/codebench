@@ -285,7 +285,7 @@ def convert_to_tabular(accel_dataset: dict, graphLib: 'GraphLib', weights: list)
 	Returns:
 	    X_cnn, X_accel, y (tuple): input embeddings and output loss
 	"""
-	X_cnn, X_accel, X_ds, y = [], [], [], []
+	X_cnn, X_accel, y = [], [], []
 
 	assert len(weights) == 7, 'The weights list should be of size 7.'
 	assert sum(weights) == 1, 'Sum of weights should be equal to 1.'
@@ -302,12 +302,11 @@ def convert_to_tabular(accel_dataset: dict, graphLib: 'GraphLib', weights: list)
 
 		X_cnn.append(cnn_graph.embedding)
 		X_accel.append(accel_dataset[accel_hash]['accel_emb'])
-		X_ds.append((cnn_graph.embedding, accel_dataset[accel_hash]['accel_emb']))
 		y.append(1 - performance)
 
 	X_cnn, X_accel, y = np.array(X_cnn), np.array(X_accel), np.array(y)
 
-	return X_cnn, X_accel, X_ds, y
+	return X_cnn, X_accel, y
 
 
 def get_neighbor_hash(model: 'Graph', trained_hashes: list):
@@ -328,6 +327,17 @@ def main():
 	parser = argparse.ArgumentParser(
 		description='Input parameters for generation of dataset library',
 		formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+	parser.add_argument('--fix',
+		metavar='',
+		type=str,
+		help='to fix one part of the search: "cnn" or "accel"',
+		default=None)
+	parser.add_argument('--index',
+		metavar='',
+		type=int,
+		help='index of the CNN or the Accelerator to fix for one-sided search',
+		default=None,
+		required='--fix' in sys.argv)
 	parser.add_argument('--graphlib_file',
 		metavar='',
 		type=str,
@@ -389,18 +399,29 @@ def main():
 		type=str,
 		help='PU-NetID that is used to run slurm commands',
 		default='stuli')
-	# TODO: add support for HW-aware NAS, CNN-aware Accelerator search.
 
 	args = parser.parse_args()
+
+	assert args.fix in ['cnn', 'accel', None], '--fix argument should be in ["cnn", "accel", None]'
 
 	random_seed = 0
 
 	# Initialize CNN library
 	graphLib = GraphLib.load_from_dataset(args.graphlib_file)
 
+	# Fix the design of CNN embeddings for one-sided search
+	if args.fix == 'cnn': 
+		print(f'{pu.bcolors.OKBLUE}Fixing CNN to:{pu.bcolors.ENDC}\n{graphLib.library[args.index]}')
+		graphLib.library = [graphLib.library[args.index]]
+
 	# Initialize Accelerator embeddings
 	accel_embeddings = pickle.load(open(args.accel_embeddings_file, 'rb'))
 	accel_embeddings = np.array(accel_embeddings)
+
+	# Fix the design space of Accelerator embeddings for one-sided search
+	if args.fix == 'accel': 
+		print(f'{pu.bcolors.OKBLUE}Fixing Accelerator to:{pu.bcolors.ENDC}\n{accel_embeddings[args.index, :]}')
+		accel_embeddings = accel_embeddings[args.index, :]
 
 	# New dataset file for CNN library
 	new_graphlib_file = args.graphlib_file.split('.json')[0] + '_trained.json'
@@ -438,7 +459,11 @@ def main():
 	trained_cnn_hashes = os.listdir(cnn_models_dir)
 	trained_accel_hashes = os.listdir(accel_models_dir)
 
-	# TODO: check trained_accel_hashes have all respective CNNs trained
+	# Check trained_accel_hashes have all respective CNNs trained
+	for accel_hash in trained_accel_hashes:
+		cnn_hash = accel_dataset[accel_hash]['cnn_hash']
+		assert cnn_hash in trained_cnn_hashes, \
+			f'CNN-Accelerator pair with hash: {accel_hash}, doesn\'t have respective CNN trained (with hash: {cnn_hash})'
 
 	# Train randomly sampled models if total trained models is less than num_init
 	# TODO: Add skopt.sampler.Sobol points instead
@@ -481,9 +506,14 @@ def main():
 	min_cnn, max_cnn = np.min(cnn_embeddings, axis=0), np.max(cnn_embeddings, axis=0)
 	min_accel, max_accel = np.min(accel_embeddings, axis=0), np.max(accel_embeddings, axis=0)
 
+	X_ds = []
+	for cnn_idx in cnn_embeddings.shape[0]:
+		for accel_idx in accel_embeddings.shape[0]:
+			X_ds.append((cnn_embeddings[cnn_idx, :], accel_embeddings[accel_idx, :]))
+
 	# Initialize the two-input BOSHNAS model
 	surrogate_model = BOSHCODE(input_dim1=cnn_embeddings.shape[1],
-							  inpu_dim2=accel_embeddings.shape[1],
+							  input_dim2=accel_embeddings.shape[1],
 							  bounds1=(min_cnn, max_cnn),
 							  bounds2=(min_accel, max_accel),
 							  trust_region=False,
@@ -494,7 +524,7 @@ def main():
 							  pretrained=False)
 
 	# Get initial dataset after finetuning num_init models
-	X_cnn, X_accel, X_ds, y = convert_to_tabular(accel_dataset)
+	X_cnn, X_accel, y = convert_to_tabular(accel_dataset)
 	max_loss = np.amax(y)
 
 	same_performance = 0
@@ -523,7 +553,7 @@ def main():
 		if method == 'optimization':
 			print(f'{pu.bcolors.OKBLUE}Running optimization step{pu.bcolors.ENDC}')
 			# Get current tabular dataset
-			X_cnn, X_accel, X_ds, y = convert_to_tabular(accel_dataset)
+			X_cnn, X_accel, y = convert_to_tabular(accel_dataset)
 			y = y/max_loss
 
 			# Train BOSHNAS model
@@ -575,7 +605,7 @@ def main():
 			if new_queries == 0:
 				# If no queries were found where weight transfer could be used, train the highest
 				# predicted model from scratch
-				query_embeddings = [X_ds[idx, :] for idx in query_indices] # TODO: create X_ds from X_cnn, X_accel
+				query_embeddings = [X_ds[idx, :] for idx in query_indices]
 				candidate_predictions = surrogate_model.predict(query_embeddings)
 
 				best_prediction_index = query_indices[np.argmax(acq([pred[0] for pred in candidate_predictions],
