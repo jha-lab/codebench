@@ -72,7 +72,7 @@ case "$1" in
         ;;
     -m | --cnn_model_hash)
         shift
-        model_hash=$1
+        cnn_model_hash=$1
         shift
         ;;
     -d | --cnn_model_dir)
@@ -150,49 +150,60 @@ echo "#!/bin/bash" >> $job_file
 echo "#SBATCH --job-name=code_${dataset}_${accel_hash}       # create a short name for your job" >> $job_file
 echo "#SBATCH --nodes=1                                      # node count" >> $job_file
 echo "#SBATCH --ntasks=1                                     # total number of tasks across all nodes" >> $job_file
-# echo "#SBATCH --cpus-per-task=20                             # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
-echo "#SBATCH --cpus-per-task=2                             # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
+echo "#SBATCH --cpus-per-task=24                             # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
+# echo "#SBATCH --cpus-per-task=2                              # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
 echo "#SBATCH --mem=128G                                     # memory per cpu-core (4G is default)" >> $job_file
-# if [[ $train_cnn == "1" ]]
-# then
-#     echo "#SBATCH --gres=${cluster_gpu}                      # number of gpus per node" >> $job_file
-#     # echo "#SBATCH --gres=gpu:1" >> $job_file
+if [[ $train_cnn == "1" ]]
+then
+    echo "#SBATCH --gres=${cluster_gpu}                      # number of gpus per node" >> $job_file
+    # echo "#SBATCH --gres=gpu:1" >> $job_file
+fi
 echo "#SBATCH --time=144:00:00                               # total run time limit (HH:MM:SS)" >> $job_file
+# echo "#SBATCH --time=4:00:00                               # total run time limit (HH:MM:SS)" >> $job_file
 # echo "#SBATCH --mail-type=all                                # send email" >> $job_file
 # echo "#SBATCH --mail-user=stuli@princeton.edu" >> $job_file
 echo "" >> $job_file
 echo "module purge" >> $job_file
 echo "module load anaconda3/2020.7" >> $job_file
+# echo "conda init bash" >> $job_file
 echo "conda activate cnnbench" >> $job_file
 echo "" >> $job_file
 echo "cd ../.." >> $job_file
-# echo "" >> $job_file
-# echo "python ../cnn_design-space/cnnbench/model_trainer.py --config_file ${cnn_config_file} \
-#   --graphlib_file ${graphlib_file} \
-#   --neighbor_file ${neighbor_file} \
-#   --model_dir ${cnn_model_dir} \
-#   --model_hash ${cnn_model_hash} \
-#   --autotune ${autotune} &" >> $job_file
+echo "" >> $job_file
 echo "export MKL_SERVICE_FORCE_INTEL=1" >> $job_file
-echo "python -c \"import time, torch, random, os, numpy; \
-    os.environ['MKL_SERVICE_FORCE_INTEL'] = '1'; \
-    acc = random.random(); \
-    ckpt = {'train_accuracies': [acc], 'val_accuracies': [acc], 'test_accuracies': [acc]}; \
-    os.makedirs('${cnn_model_dir}'); \
-    torch.save(ckpt, os.path.join('${cnn_model_dir}', 'model.pt'))\" &" >> $job_file
-# echo "python ../accelerator_design-space/accelbench/run.py --config_file ${config_file} \
-#     --graphlib_file ${graphlib_file} \
-#     --cnn_model_hash ${cnn_model_hash} \
-#     --embedding ${accel_emb} \
-#     --model_file ${accel_model_file}" >> $job_file
-echo "python -c \"import random, os; \
-    from six.moves import cPickle as pickle; \
-    latency = random.random(); \
-    area = 10 * random.random(); \
-    dynamic_energy = random.random(); \
-    leakage_energy = random.random(); \
-    pickle.dump({'latency': latency, 'area': area, 'dynamic_energy': dynamic_energy, 'leakage_energy': leakage_energy}, \
-    open('${accel_model_file}', 'wb+'), pickle.HIGHEST_PROTOCOL)\" &" >> $job_file
+if [[ $neighbor_file == "" ]]
+then
+    echo "python ../cnn_design-space/cnnbench/model_trainer.py --config_file ${cnn_config_file} \
+      --graphlib_file ${graphlib_file} \
+      --model_dir ${cnn_model_dir} \
+      --model_hash ${cnn_model_hash} \
+      --autotune ${autotune} &" >> $job_file
+else
+    echo "python ../cnn_design-space/cnnbench/model_trainer.py --config_file ${cnn_config_file} \
+      --graphlib_file ${graphlib_file} \
+      --neighbor_file ${neighbor_file} \
+      --model_dir ${cnn_model_dir} \
+      --model_hash ${cnn_model_hash} \
+      --autotune ${autotune} &" >> $job_file
+fi
+# echo "python -c \"import time, torch, random, os, numpy; \
+#     acc = random.random(); \
+#     ckpt = {'train_accuracies': [acc], 'val_accuracies': [acc], 'test_accuracies': [acc]}; \
+#     os.makedirs('${cnn_model_dir}'); \
+#     torch.save(ckpt, os.path.join('${cnn_model_dir}', 'model.pt'))\" &" >> $job_file
+echo "python ../accelerator_design-space/accelbench/run.py --config_file ${config_file} \
+    --graphlib_file ${graphlib_file} \
+    --cnn_model_hash ${cnn_model_hash} \
+    --embedding ${accel_emb} \
+    --model_file ${accel_model_file}" >> $job_file
+# echo "python -c \"import random, os; \
+#     from six.moves import cPickle as pickle; \
+#     latency = random.random(); \
+#     area = 10 * random.random(); \
+#     dynamic_energy = random.random(); \
+#     leakage_energy = random.random(); \
+#     pickle.dump({'latency': latency, 'area': area, 'dynamic_energy': dynamic_energy, 'leakage_energy': leakage_energy}, \
+#     open('${accel_model_file}', 'wb+'), pickle.HIGHEST_PROTOCOL)\" &" >> $job_file
 
 echo "wait" >> $job_file
 
