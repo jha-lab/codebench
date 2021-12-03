@@ -110,14 +110,15 @@ def worker(cnn_config_file: str,
 	args.extend(['--graphlib_file', graphlib_file])
 	args.extend(['--train_cnn', '1' if cnn_model_hash not in trained_cnn_hashes else '0'])
 	args.extend(['--accel_hash', accel_hash])
-	args.extend(['--accel_emb', '"' + str(accel_emb).replace('\n', '') + '"'])
+	args.extend(['--accel_emb', '\\"' + str(accel_emb).replace('\n', '') + '\\"'])
 	args.extend(['--accel_model_file', os.path.join(accel_models_dir, accel_hash) + '.pkl'])
 
 	if chosen_neighbor_path is not None:
 		args.extend(['--neighbor_file', chosen_neighbor_path])
 	
-	slurm_stdout = subprocess.check_output(f'source ./job_scripts/job_code.sh {" ".join(args)}',
-		shell=True, text=True)
+	slurm_stdout = subprocess.check_output(
+		f'ssh della-gpu "cd accelerator_co-design/boshcode; source ./job_scripts/job_worker.sh {" ".join(args)}"',
+		shell=True, text=True, executable="/bin/bash")
 
 	return slurm_stdout.split()[-1], scratch
 		
@@ -131,7 +132,7 @@ def get_job_info(job_id: int):
 	Returns:
 		start_time, elapsed_time, status (str, str, str): job details
 	"""
-	slurm_stdout = subprocess.check_output(f'slist {job_id}', shell=True, text=True)
+	slurm_stdout = subprocess.check_output(f'ssh della-gpu "slist {job_id}"', shell=True, text=True, executable="/bin/bash")
 	slurm_stdout = slurm_stdout.split('\n')[2].split()
 
 	if len(slurm_stdout) > 7:
