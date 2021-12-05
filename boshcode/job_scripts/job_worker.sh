@@ -82,7 +82,7 @@ case "$1" in
         ;;
     -f | --cnn_config_file)
         shift
-        config_file=$1
+        cnn_config_file=$1
         shift
         ;;
     -n | --neighbor_file)
@@ -191,10 +191,10 @@ fi
 #     ckpt = {'train_accuracies': [acc], 'val_accuracies': [acc], 'test_accuracies': [acc]}; \
 #     os.makedirs('${cnn_model_dir}'); \
 #     torch.save(ckpt, os.path.join('${cnn_model_dir}', 'model.pt'))\" &" >> $job_file
-echo "python ../accelerator_design-space/accelbench/run.py --config_file ${config_file} \
+echo "python ../accelerator_design-space/accelbench/run.py --config_file ${cnn_config_file} \
     --graphlib_file ${graphlib_file} \
     --cnn_model_hash ${cnn_model_hash} \
-    --embedding ${accel_emb} \
+    --embedding \"${accel_emb}\" \
     --model_file ${accel_model_file}" >> $job_file
 # echo "python -c \"import random, os; \
 #     from six.moves import cPickle as pickle; \
