@@ -194,7 +194,7 @@ fi
 echo "python ../accelerator_design-space/accelbench/run.py --config_file ${cnn_config_file} \
     --graphlib_file ${graphlib_file} \
     --cnn_model_hash ${cnn_model_hash} \
-    --embedding \"${accel_emb}\" \
+    --embedding ${accel_emb} \
     --model_file ${accel_model_file}" >> $job_file
 # echo "python -c \"import random, os; \
 #     from six.moves import cPickle as pickle; \
