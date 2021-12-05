@@ -110,7 +110,7 @@ def worker(cnn_config_file: str,
 	args.extend(['--graphlib_file', graphlib_file])
 	args.extend(['--train_cnn', '1' if cnn_model_hash not in trained_cnn_hashes else '0'])
 	args.extend(['--accel_hash', accel_hash])
-	args.extend(['--accel_emb', '\\"' + str(accel_emb).replace('\n', '') + '\\"'])
+	args.extend(['--accel_emb', str(accel_emb).replace('\n', '')[1:-1].replace(',', ' ')])
 	args.extend(['--accel_model_file', os.path.join(accel_models_dir, accel_hash) + '.pkl'])
 
 	if chosen_neighbor_path is not None:
