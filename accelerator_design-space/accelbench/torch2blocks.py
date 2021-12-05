@@ -22,7 +22,7 @@ def CNNBenchModel2Ops(config_file = None, graphlib_file = None, model_hash = Non
 
     # Getting graph object from CNNBench library
     graphLib = GraphLib.load_from_dataset(graphlib_file)
-    graphObject = graphLib.get_graph(model_hash=model_hash)
+    graphObject, _ = graphLib.get_graph(model_hash=model_hash)
 
     print('Instantiating the CNNBench model ...', file=sys.stderr)
     model = CNNBenchModel(config, graphObject)
