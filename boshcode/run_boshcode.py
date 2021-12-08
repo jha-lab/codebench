@@ -187,7 +187,8 @@ def wait_for_jobs(model_jobs: list, running_limit: int = 4, patience: int = 1):
 				running_jobs += 1
 			elif status == 'FAILED':
 				print_jobs(model_jobs)
-				raise RuntimeError('Some jobs failed.')
+				print(f'{pu.bcolors.FAIL}Some jobs failed{pu.bcolors.ENDC}')
+				# raise RuntimeError('Some jobs failed.')
 		if last_completed_jobs != completed_jobs:
 			print_jobs(model_jobs)
 		last_completed_jobs = completed_jobs 
