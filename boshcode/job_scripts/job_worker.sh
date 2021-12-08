@@ -177,14 +177,14 @@ then
       --graphlib_file ${graphlib_file} \
       --model_dir ${cnn_model_dir} \
       --model_hash ${cnn_model_hash} \
-      --autotune ${autotune} &" >> $job_file
+      --autotune ${autotune}" >> $job_file
 else
     echo "python ../cnn_design-space/cnnbench/model_trainer.py --config_file ${cnn_config_file} \
       --graphlib_file ${graphlib_file} \
       --neighbor_file ${neighbor_file} \
       --model_dir ${cnn_model_dir} \
       --model_hash ${cnn_model_hash} \
-      --autotune ${autotune} &" >> $job_file
+      --autotune ${autotune}" >> $job_file
 fi
 # echo "python -c \"import time, torch, random, os, numpy; \
 #     acc = random.random(); \
