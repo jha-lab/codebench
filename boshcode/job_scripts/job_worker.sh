@@ -171,6 +171,19 @@ echo "" >> $job_file
 echo "cd ../.." >> $job_file
 echo "" >> $job_file
 echo "export MKL_SERVICE_FORCE_INTEL=1" >> $job_file
+echo "python ../accelerator_design-space/accelbench/run.py --config_file ${cnn_config_file} \
+    --graphlib_file ${graphlib_file} \
+    --cnn_model_hash ${cnn_model_hash} \
+    --embedding ${accel_emb} \
+    --model_file ${accel_model_file} &" >> $job_file
+# echo "python -c \"import random, os; \
+#     from six.moves import cPickle as pickle; \
+#     latency = random.random(); \
+#     area = 10 * random.random(); \
+#     dynamic_energy = random.random(); \
+#     leakage_energy = random.random(); \
+#     pickle.dump({'latency': latency, 'area': area, 'dynamic_energy': dynamic_energy, 'leakage_energy': leakage_energy}, \
+#     open('${accel_model_file}', 'wb+'), pickle.HIGHEST_PROTOCOL)\" &" >> $job_file
 if [[ $neighbor_file == "" ]]
 then
     echo "python ../cnn_design-space/cnnbench/model_trainer.py --config_file ${cnn_config_file} \
@@ -191,19 +204,7 @@ fi
 #     ckpt = {'train_accuracies': [acc], 'val_accuracies': [acc], 'test_accuracies': [acc]}; \
 #     os.makedirs('${cnn_model_dir}'); \
 #     torch.save(ckpt, os.path.join('${cnn_model_dir}', 'model.pt'))\" &" >> $job_file
-echo "python ../accelerator_design-space/accelbench/run.py --config_file ${cnn_config_file} \
-    --graphlib_file ${graphlib_file} \
-    --cnn_model_hash ${cnn_model_hash} \
-    --embedding ${accel_emb} \
-    --model_file ${accel_model_file}" >> $job_file
-# echo "python -c \"import random, os; \
-#     from six.moves import cPickle as pickle; \
-#     latency = random.random(); \
-#     area = 10 * random.random(); \
-#     dynamic_energy = random.random(); \
-#     leakage_energy = random.random(); \
-#     pickle.dump({'latency': latency, 'area': area, 'dynamic_energy': dynamic_energy, 'leakage_energy': leakage_energy}, \
-#     open('${accel_model_file}', 'wb+'), pickle.HIGHEST_PROTOCOL)\" &" >> $job_file
+
 
 echo "wait" >> $job_file
 
