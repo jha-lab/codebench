@@ -79,9 +79,9 @@ class Accelerator(object):
 		block = Blocks.LossBlock(str(int(ops[-1][2])+1), 'Softmax', list(head_shapes[-1][-1])[-1] * batch_size, ops[-1][2])
 		block_dict[str(int(ops[-1][2])+1)].append(block)
 
-		print('### debug print ###')
-		print(list(head_shapes[-1][-1]), list(head_shapes[-1][-1])[-1])
-		print('###################')
+		#print('### debug print ###')
+		#print(list(head_shapes[-1][-1]), list(head_shapes[-1][-1])[-1])
+		#print('###################')
 
 		for key in block_dict:
 			for block in block_dict[key]:
@@ -197,11 +197,11 @@ class Accelerator(object):
 		Memory_cycle = 0
 
 		while bool(self.InputMemoryLoadQueue.blocks) or bool(self.WeightMemoryLoadQueue.blocks):
-			print('This is the first while loop.')
-			print('Cycle:', self.cycle, 'InputMemoryLoadQueue:', len(self.InputMemoryLoadQueue.blocks), 'WeightMemoryLoadQueue:', len(self.WeightMemoryLoadQueue.blocks),\
-			'Conv2DQueue:', len(self.Conv2DQueue.blocks), 'MatMulQueue:', len(self.MatMulQueue.blocks),\
-			'ActivationBuffer:', self.ActivationBuffer.remaining_cycle, 'WeightBuffer:', self.WeightBuffer.remaining_cycle, 'MacLane:', self.MacLane.remaining_cycle,\
-			'Conv2D_cycle:', Conv2D_cycle, 'MatMul_cycle:', MatMul_cycle)
+			#print('This is the first while loop.')
+			#print('Cycle:', self.cycle, 'InputMemoryLoadQueue:', len(self.InputMemoryLoadQueue.blocks), 'WeightMemoryLoadQueue:', len(self.WeightMemoryLoadQueue.blocks),\
+			#'Conv2DQueue:', len(self.Conv2DQueue.blocks), 'MatMulQueue:', len(self.MatMulQueue.blocks),\
+			#'ActivationBuffer:', self.ActivationBuffer.remaining_cycle, 'WeightBuffer:', self.WeightBuffer.remaining_cycle, 'MacLane:', self.MacLane.remaining_cycle,\
+			#'Conv2D_cycle:', Conv2D_cycle, 'MatMul_cycle:', MatMul_cycle)
 			# print('Act:', self.ActivationBuffer.data.keys())
 			# print('Wgt:', self.WeightBuffer.data.keys())
 			
@@ -247,11 +247,11 @@ class Accelerator(object):
 		ConvMat_cycle = 0
 		
 		while 1:
-			print('This is the second while loop.')
-			print('Cycle:', self.cycle, 'InputMemoryLoadQueue:', len(self.InputMemoryLoadQueue.blocks), 'WeightMemoryLoadQueue:', len(self.WeightMemoryLoadQueue.blocks),\
-			'Conv2DQueue:', len(self.Conv2DQueue.blocks), 'MatMulQueue:', len(self.MatMulQueue.blocks),\
-			'ActivationBuffer:', self.ActivationBuffer.remaining_cycle, 'WeightBuffer:', self.WeightBuffer.remaining_cycle, 'MacLane:', self.MacLane.remaining_cycle,\
-			'Conv2D_cycle:', Conv2D_cycle, 'MatMul_cycle:', MatMul_cycle)
+			#print('This is the second while loop.')
+			#print('Cycle:', self.cycle, 'InputMemoryLoadQueue:', len(self.InputMemoryLoadQueue.blocks), 'WeightMemoryLoadQueue:', len(self.WeightMemoryLoadQueue.blocks),\
+			#'Conv2DQueue:', len(self.Conv2DQueue.blocks), 'MatMulQueue:', len(self.MatMulQueue.blocks),\
+			#'ActivationBuffer:', self.ActivationBuffer.remaining_cycle, 'WeightBuffer:', self.WeightBuffer.remaining_cycle, 'MacLane:', self.MacLane.remaining_cycle,\
+			#'Conv2D_cycle:', Conv2D_cycle, 'MatMul_cycle:', MatMul_cycle)
 
 			if bool(self.InputMemoryLoadQueue.blocks):
 				if self.ActivationBuffer.ready:
