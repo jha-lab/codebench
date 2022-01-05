@@ -205,7 +205,7 @@ fi
 #     os.makedirs('${cnn_model_dir}'); \
 #     torch.save(ckpt, os.path.join('${cnn_model_dir}', 'model.pt'))\" &" >> $job_file
 
-
-echo "wait" >> $job_file
+# Commenting out "wait" since the AccelBench simulation should finish way before CNNBench
+# echo "wait" >> $job_file
 
 sbatch $job_file
