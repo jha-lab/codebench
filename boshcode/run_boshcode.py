@@ -45,6 +45,8 @@ MAX_AREA = 10 # Maximum area in mm^2
 MAX_DYNAMIC_ENERGY = 1 # Maximum dynamic energy in Joules
 MAX_LEAKAGE_ENERGY = 1 # Maximum leakage energy in Joules
 
+REMOVE_CUDA_ERROR_CNNS = True # Remove CNN-accelerator pairs for a CNN which throws CUDA errors
+
 
 def worker(cnn_config_file: str,
 	graphlib_file: str,
@@ -161,15 +163,26 @@ def print_jobs(model_jobs: list):
 	print(tabulate.tabulate(rows, header))
 
 
-def wait_for_jobs(model_jobs: list, running_limit: int = 4, patience: int = 1):
+def wait_for_jobs(model_jobs: list, accel_dataset: dict, cnn_config_file: str, running_limit: int = 4, patience: int = 1):
 	"""Wait for current jobs in queue to complete
 	
 	Args:
 		model_jobs (list): list of jobs
+		accel_dataset (dict): dictionary of CNN-accelerator pairs
+		cnn_config_file (str): path to the CNN configuration file
 		running_limit (int, optional): number of running jobs to limit
 		patience (int, optional): number of pending jobs to wait for
+
+	Returns:
+		accel_dataset (dict): new accel_dataset
 	"""
 	print_jobs(model_jobs)
+
+	with open(cnn_config_file) as file:
+		try:
+			cnn_config = yaml.safe_load(file)
+		except yaml.YAMLError as exc:
+			raise exc
 
 	completed_jobs = 0
 	last_completed_jobs = 0
@@ -189,10 +202,21 @@ def wait_for_jobs(model_jobs: list, running_limit: int = 4, patience: int = 1):
 				print_jobs(model_jobs)
 				print(f'{pu.bcolors.FAIL}Some jobs failed{pu.bcolors.ENDC}')
 				# raise RuntimeError('Some jobs failed.')
+				if REMOVE_CUDA_ERROR_CNNS:
+					if 'CUDA out of memory' in open('./job_scripts/' + cnn_config['dataset'] \
+							+ '/slurm-' + str(job['job_id']) + '.out', 'r').read():
+						cnn_hash = accel_dataset[job['accel_hash']]['cnn_hash']
+						accel_dataset_new = {}
+						for accel_hash in accel_dataset.keys():
+							if accel_dataset[accel_hash]['cnn_hash'] != cnn_hash: 
+								accel_dataset_new[accel_hash] = accel_dataset[accel_hash]
+						accel_dataset = accel_dataset_new
 		if last_completed_jobs != completed_jobs:
 			print_jobs(model_jobs)
 		last_completed_jobs = completed_jobs 
 		time.sleep(1)
+
+	return accel_dataset
 
 
 def update_dataset(graphLib: 'GraphLib', 
@@ -506,7 +530,7 @@ def main():
 				'train_type': train_type})
 
 	# Wait for jobs to complete
-	wait_for_jobs(model_jobs)
+	accel_dataset = wait_for_jobs(model_jobs, accel_dataset, args.cnn_config_file)
 
 	# Update dataset with newly trained models
 	old_best_performance = update_dataset(graphLib, accel_dataset, cnn_models_dir, accel_models_dir, 
@@ -709,7 +733,7 @@ def main():
 				'train_type': train_type})
 
 		# Wait for jobs to complete
-		wait_for_jobs(model_jobs)
+		wait_for_jobs(model_jobs, accel_dataset, args.cnn_config_file)
 
 		# Update dataset with newly trained models
 		best_performance = update_dataset(graphLib, accel_dataset, cnn_models_dir, accel_models_dir, 
@@ -722,7 +746,7 @@ def main():
 		old_best_performance = best_performance
 
 	# Wait for jobs to complete
-	wait_for_jobs(model_jobs, running_limit=0, patience=0)
+	wait_for_jobs(model_jobs, accel_dataset, args.cnn_config_file, running_limit=0, patience=0)
 
 	# Update dataset with newly trained models
 	best_performance = update_dataset(graphLib, accel_dataset, cnn_models_dir, accel_models_dir, 
