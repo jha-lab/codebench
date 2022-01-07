@@ -184,20 +184,23 @@ echo "python ../accelerator_design-space/accelbench/run.py --config_file ${cnn_c
 #     leakage_energy = random.random(); \
 #     pickle.dump({'latency': latency, 'area': area, 'dynamic_energy': dynamic_energy, 'leakage_energy': leakage_energy}, \
 #     open('${accel_model_file}', 'wb+'), pickle.HIGHEST_PROTOCOL)\" &" >> $job_file
-if [[ $neighbor_file == "" ]]
+if [[ $train_cnn == "1" ]]
 then
-    echo "python ../cnn_design-space/cnnbench/model_trainer.py --config_file ${cnn_config_file} \
-      --graphlib_file ${graphlib_file} \
-      --model_dir ${cnn_model_dir} \
-      --model_hash ${cnn_model_hash} \
-      --autotune ${autotune}" >> $job_file
-else
-    echo "python ../cnn_design-space/cnnbench/model_trainer.py --config_file ${cnn_config_file} \
-      --graphlib_file ${graphlib_file} \
-      --neighbor_file ${neighbor_file} \
-      --model_dir ${cnn_model_dir} \
-      --model_hash ${cnn_model_hash} \
-      --autotune ${autotune}" >> $job_file
+    if [[ $neighbor_file == "" ]]
+    then
+        echo "python ../cnn_design-space/cnnbench/model_trainer.py --config_file ${cnn_config_file} \
+          --graphlib_file ${graphlib_file} \
+          --model_dir ${cnn_model_dir} \
+          --model_hash ${cnn_model_hash} \
+          --autotune ${autotune}" >> $job_file
+    else
+        echo "python ../cnn_design-space/cnnbench/model_trainer.py --config_file ${cnn_config_file} \
+          --graphlib_file ${graphlib_file} \
+          --neighbor_file ${neighbor_file} \
+          --model_dir ${cnn_model_dir} \
+          --model_hash ${cnn_model_hash} \
+          --autotune ${autotune}" >> $job_file
+    fi
 fi
 # echo "python -c \"import time, torch, random, os, numpy; \
 #     acc = random.random(); \
