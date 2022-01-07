@@ -45,7 +45,7 @@ MAX_AREA = 10 # Maximum area in mm^2
 MAX_DYNAMIC_ENERGY = 1 # Maximum dynamic energy in Joules
 MAX_LEAKAGE_ENERGY = 1 # Maximum leakage energy in Joules
 
-REMOVE_CUDA_ERROR_CNNS = True # Remove CNN-accelerator pairs for a CNN which throws CUDA errors
+REMOVE_ERROR_CNN_ACCEL_PAIRS = True # Remove CNN-accelerator pairs that throw errors
 
 
 def worker(cnn_config_file: str,
@@ -202,15 +202,15 @@ def wait_for_jobs(model_jobs: list, accel_dataset: dict, cnn_config_file: str, r
 				print_jobs(model_jobs)
 				print(f'{pu.bcolors.FAIL}Some jobs failed{pu.bcolors.ENDC}')
 				# raise RuntimeError('Some jobs failed.')
-				if REMOVE_CUDA_ERROR_CNNS:
-					if 'CUDA out of memory' in open('./job_scripts/' + cnn_config['dataset'] \
-							+ '/slurm-' + str(job['job_id']) + '.out', 'r').read():
-						cnn_hash = accel_dataset[job['accel_hash']]['cnn_hash']
-						accel_dataset_new = {}
-						for accel_hash in accel_dataset.keys():
-							if accel_dataset[accel_hash]['cnn_hash'] != cnn_hash: 
-								accel_dataset_new[accel_hash] = accel_dataset[accel_hash]
-						accel_dataset = accel_dataset_new
+				if REMOVE_ERROR_CNN_ACCEL_PAIRS:
+					cnn_hash = accel_dataset[job['accel_hash']]['cnn_hash']
+					accel_emb = accel_dataset[job['accel_hash']]['accel_emb']
+					accel_dataset_new = {}
+					for accel_hash in accel_dataset.keys():
+						if accel_dataset[accel_hash]['cnn_hash'] != cnn_hash and \
+								not (accel_dataset[accel_hash]['accel_emb'] == accel_emb).all(): 
+							accel_dataset_new[accel_hash] = accel_dataset[accel_hash]
+					accel_dataset = accel_dataset_new
 		if last_completed_jobs != completed_jobs:
 			print_jobs(model_jobs)
 		last_completed_jobs = completed_jobs 
