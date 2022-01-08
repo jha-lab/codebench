@@ -161,13 +161,13 @@ def defines():
     # power unit: mW
     if Pif == 16:
         if ReLU and not SiLU:
-            MacLane_RTL_area = 8803.877125
-            MacLane_RTL_dynamic = 4.7566 / 700 * clk
-            MacLane_RTL_leakage = 0.2974811
+            MacLane_RTL_area = 8819.484999
+            MacLane_RTL_dynamic = 4.8926 / 700 * clk
+            MacLane_RTL_leakage = 0.3003308
         elif SiLU and not ReLU:
-            MacLane_RTL_area = 9391.040997
-            MacLane_RTL_dynamic = 5.0210 / 700 * clk
-            MacLane_RTL_leakage = 0.3157760
+            MacLane_RTL_area = 9418.667591
+            MacLane_RTL_dynamic = 5.1955 / 700 * clk
+            MacLane_RTL_leakage = 0.3189685
         elif ReLU and SiLU:
             MacLane_RTL_area = 9435.567886
             MacLane_RTL_dynamic = 5.3176 / 700 * clk
