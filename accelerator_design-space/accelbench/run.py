@@ -105,7 +105,7 @@ def defines():
     '''
     PE = Pib * Pix * Piy
     Lane = Pof * Pkx * Pky
-    Mac = 16
+    Mac = Pib
     IL = 4
     FL = 16
     activation_sparsity = 0.5
