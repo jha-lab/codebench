@@ -102,6 +102,7 @@ class Im2Col(Module):
 		self.remaining_cycle = 1
 		self.ready = False
 
+'''
 class Loss(Module):
 	def __init__(self, dynamic_power, leakage_power, area, width):
 		Module.__init__(self, 'Loss', dynamic_power, leakage_power, area)
@@ -110,6 +111,7 @@ class Loss(Module):
 	def Compute(self, block):
 		self.remaining_cycle = 1
 		self.ready = False
+'''
 
 class Pooling(Module):
 	def __init__(self, dynamic_power, leakage_power, area, depth):

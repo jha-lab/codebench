@@ -58,12 +58,14 @@ class UpsamplingBlock(object):
 		Block.__init__(self, block_name, 'Upsampling', number)
 		self.size = size
 
+'''
 class LossBlock(object):
 	def __init__(self, block_name, loss_type, num, input_name):
 		Block.__init__(self, block_name, 'Loss')
 		self.loss_type = loss_type
 		self.num = num
 		self.inputs_name = input_name
+'''
 
 class InstantBlock(object):
 	def __init__(self, block_name):

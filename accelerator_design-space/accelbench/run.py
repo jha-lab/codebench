@@ -25,9 +25,9 @@ parser.add_argument('--model_file',
 parser.add_argument('--embedding', 
     type = float, 
     nargs = '+', 
-    default = [2, 8, 4, 8, 3, 3, 1, 12, 24, 4, 1, 1], 
+    default = [2, 16, 8, 4, 8, 3, 3, 1, 12, 24, 4, 1, 1], 
     help = "The vector embedding for accelerator hyperparameters.\
-            The vector is corresponding to [Pib, Pix, Piy, Pof, Pkx, Pky, batch_size, activation_buffer, weight_buffer, mask_buffer, main_mem_type, main_mem_config].\
+            The vector is corresponding to [Pib, Pif, Pix, Piy, Pof, Pkx, Pky, batch_size, activation_buffer, weight_buffer, mask_buffer, main_mem_type, main_mem_config].\
             For on-chip buffer size, the unit is in MB.\
             For main memory type, choose among 1: RRAM, 2: DRAM, and 3: HBM.\
             For main memory configuration, choose among \
@@ -68,7 +68,7 @@ parser.add_argument('--mem_config', type = int, default = 1, help = 'The choice 
 '''
 args = parser.parse_args()
 
-assert len(args.embedding) == 12, "Some accelerator hyperparameters are missing."
+assert len(args.embedding) == 13, "Some accelerator hyperparameters are missing."
 assert args.embedding[10] in [1, 2, 3], "Memory type should be one of 1: RRAM, 2: DRAM, or 3: HBM."
 
 if args.embedding[10] == 1:
@@ -81,17 +81,18 @@ else:
 clk = 700   # clock frequency (MHz)
 
 Pib        = int(args.embedding[0])
-Pix        = int(args.embedding[1])
-Piy        = int(args.embedding[2])
-Pof        = int(args.embedding[3])
-Pkx        = int(args.embedding[4])
-Pky        = int(args.embedding[5])
-batch      = int(args.embedding[6])
-act        = int(args.embedding[7])  # activation buffer size (MB)
-wgt        = int(args.embedding[8])  # weight buffer size (MB)
-mask       = args.embedding[9]       # mask buffer size (MB)
-mem_type   = int(args.embedding[10])
-mem_config = int(args.embedding[11])
+Pif        = int(args.embedding[1])
+Pix        = int(args.embedding[2])
+Piy        = int(args.embedding[3])
+Pof        = int(args.embedding[4])
+Pkx        = int(args.embedding[5])
+Pky        = int(args.embedding[6])
+batch      = int(args.embedding[7])
+act        = int(args.embedding[8])  # activation buffer size (MB)
+wgt        = int(args.embedding[9])  # weight buffer size (MB)
+mask       = args.embedding[10]       # mask buffer size (MB)
+mem_type   = int(args.embedding[11])
+mem_config = int(args.embedding[12])
 
 ### define parameters (original defines.py)
 #def defines(clk, PE, Lane, Activation_buffer, Weight_buffer, Mask_buffer, Mem_type, Mem_config):
@@ -114,7 +115,7 @@ def defines():
     #Pib = 2
     #Pix = 8
     #Piy = 4
-    Pif = 16
+    #Pif = 16
     #Pof = 1
     #Pkx = 1
     #Pky = 1
@@ -152,22 +153,39 @@ def defines():
             Upsampling = True
         else:
             continue
+        if ReLU and SiLU and Upsampling:
+            break
 
     # Module RTL parameters
     # area unit: um^2
     # power unit: mW
-    if ReLU and not SiLU:
-        MacLane_RTL_area = 8803.877125
-        MacLane_RTL_dynamic = 4.7566 / 700 * clk
-        MacLane_RTL_leakage = 0.2974811
-    elif SiLU and not ReLU:
-        MacLane_RTL_area = 9391.040997
-        MacLane_RTL_dynamic = 5.0210 / 700 * clk
-        MacLane_RTL_leakage = 0.3157760
-    elif ReLU and SiLU:
-        MacLane_RTL_area = 9435.567886
-        MacLane_RTL_dynamic = 5.3176 / 700 * clk
-        MacLane_RTL_leakage = 0.3241016
+    if Pif == 16:
+        if ReLU and not SiLU:
+            MacLane_RTL_area = 8803.877125
+            MacLane_RTL_dynamic = 4.7566 / 700 * clk
+            MacLane_RTL_leakage = 0.2974811
+        elif SiLU and not ReLU:
+            MacLane_RTL_area = 9391.040997
+            MacLane_RTL_dynamic = 5.0210 / 700 * clk
+            MacLane_RTL_leakage = 0.3157760
+        elif ReLU and SiLU:
+            MacLane_RTL_area = 9435.567886
+            MacLane_RTL_dynamic = 5.3176 / 700 * clk
+            MacLane_RTL_leakage = 0.3241016
+
+    elif Pif == 1:
+        if ReLU and not SiLU:
+            MacLane_RTL_area = 597.964253
+            MacLane_RTL_dynamic = 0.2756146 / 700 * clk
+            MacLane_RTL_leakage = 0.0223711
+        elif SiLU and not ReLU:
+            MacLane_RTL_area = 1209.955838
+            MacLane_RTL_dynamic = 0.6705926 / 700 * clk
+            MacLane_RTL_leakage = 0.0419121
+        elif ReLU and SiLU:
+            MacLane_RTL_area = 1199.509430
+            MacLane_RTL_dynamic = 0.6896749 / 700 * clk
+            MacLane_RTL_leakage = 0.0415079
 
     DataFlow_RTL_area =  75946.982008
     DataFlow_RTL_dynamic = 11.3711 / 700 * clk
@@ -177,9 +195,9 @@ def defines():
     DMA_RTL_dynamic = 0.0335287 / 700 * clk
     DMA_RTL_leakage = 0.0063819
     
-    FIFO_RTL_area = 959.892356
-    FIFO_RTL_dynamic = 0.0794728 / 700 * clk
-    FIFO_RTL_leakage = 0.0277679
+    FIFO_RTL_area = 484.379110
+    FIFO_RTL_dynamic = 0.0563909 / 700 * clk
+    FIFO_RTL_leakage = 0.0140774
     
     BatchNorm_RTL_area = 14654.491357
     BatchNorm_RTL_dynamic = 8.3914 / 700 * clk
@@ -189,9 +207,11 @@ def defines():
     Im2Col_RTL_dynamic = 423.0658
     Im2Col_RTL_leakage = 0.3963450
     
+    '''
     Loss_RTL_area = 4223.411180
     Loss_RTL_dynamic = 0.9453281 / 700 * clk
     Loss_RTL_leakage = 0.1236274
+    '''
     
     Pooling_RTL_area = 3395.049675
     Pooling_RTL_dynamic = 1.1430 / 700 * clk
@@ -205,7 +225,7 @@ def defines():
     PostSparsity_RTL_dynamic = 0.2613971 / 700 * clk
     PostSparsity_RTL_leakage = 0.0324301
 
-    GlobalAvgPooling_RTL_area = 0     # upsampling module is used in pooling module to perform avg pooling, so the area is counted in pooling_RTL_area already
+    GlobalAvgPooling_RTL_area = 0     # GlobalAvgPooling module is used in pooling module to perform avg pooling, so the area is counted in pooling_RTL_area already
     GlobalAvgPooling_RTL_dynamic = 1.2148 / 700 * clk
     GlobalAvgPooling_RTL_leakage = 0.0848479
 
@@ -241,10 +261,12 @@ def defines():
     Im2Col_dynamic = Im2Col_RTL_dynamic * PE * Lane
     Im2Col_leakage = Im2Col_RTL_leakage * PE * Lane
     
+    '''
     Loss_area = Loss_RTL_area * PE
     Loss_dynamic = Loss_RTL_dynamic * PE
     Loss_leakage = Loss_RTL_leakage * PE
     Loss_width = Mac * PE       # width should scale with #PEs to reflect the increase in parallelism
+    '''
     
     Pooling_area = Pooling_RTL_area * PE
     Pooling_dynamic = Pooling_RTL_dynamic * PE
@@ -320,7 +342,7 @@ def defines():
     return(Pmac, Tile, MacLane_dynamic, MacLane_leakage, MacLane_area, DataFlow_dynamic, DataFlow_leakage, DataFlow_area,
            DMA_dynamic, DMA_leakage, DMA_area, DMA_bandwidth, FIFO_dynamic, FIFO_leakage, FIFO_area, FIFO_depth,
            BatchNorm_dynamic, BatchNorm_leakage, BatchNorm_area, BatchNorm_width, Im2Col_dynamic, Im2Col_leakage, Im2Col_area,
-           Loss_dynamic, Loss_leakage, Loss_area, Loss_width, Pooling_dynamic, Pooling_leakage, Pooling_area, Pooling_depth,
+           Pooling_dynamic, Pooling_leakage, Pooling_area, Pooling_depth,
            GlobalAvgPooling_dynamic, GlobalAvgPooling_leakage, GlobalAvgPooling_area, GlobalAvgPooling_depth,
            Upsampling_dynamic, Upsampling_leakage, Upsampling_area, Upsampling_depth,
            PreSparsity_dynamic, PreSparsity_leakage, PreSparsity_area, PreSparsity_width,
@@ -337,7 +359,7 @@ start_time = time.time()
 Pmac, Tile, MacLane_dynamic, MacLane_leakage, MacLane_area, DataFlow_dynamic, DataFlow_leakage, DataFlow_area,\
 DMA_dynamic, DMA_leakage, DMA_area, DMA_bandwidth, FIFO_dynamic, FIFO_leakage, FIFO_area, FIFO_depth,\
 BatchNorm_dynamic, BatchNorm_leakage, BatchNorm_area, BatchNorm_width, Im2Col_dynamic, Im2Col_leakage, Im2Col_area,\
-Loss_dynamic, Loss_leakage, Loss_area, Loss_width, Pooling_dynamic, Pooling_leakage, Pooling_area, Pooling_depth,\
+Pooling_dynamic, Pooling_leakage, Pooling_area, Pooling_depth,\
 GlobalAvgPooling_dynamic, GlobalAvgPooling_leakage, GlobalAvgPooling_area, GlobalAvgPooling_depth,\
 Upsampling_dynamic, Upsampling_leakage, Upsampling_area, Upsampling_depth,\
 PreSparsity_dynamic, PreSparsity_leakage, PreSparsity_area, PreSparsity_width,\
@@ -350,7 +372,7 @@ ops, conv_shapes, head_shapes = defines()
 chip = Accelerator.Accelerator(Pmac, MacLane_dynamic, MacLane_leakage, MacLane_area, DataFlow_dynamic, DataFlow_leakage, DataFlow_area,
                                DMA_dynamic, DMA_leakage, DMA_area, DMA_bandwidth, FIFO_dynamic, FIFO_leakage, FIFO_area, FIFO_depth,
                                BatchNorm_dynamic, BatchNorm_leakage, BatchNorm_area, BatchNorm_width, Im2Col_dynamic, Im2Col_leakage, Im2Col_area,
-                               Loss_dynamic, Loss_leakage, Loss_area, Loss_width, Pooling_dynamic, Pooling_leakage, Pooling_area, Pooling_depth,
+                               Pooling_dynamic, Pooling_leakage, Pooling_area, Pooling_depth,
                                GlobalAvgPooling_dynamic, GlobalAvgPooling_leakage, GlobalAvgPooling_area, GlobalAvgPooling_depth,
                                Upsampling_dynamic, Upsampling_leakage, Upsampling_area, Upsampling_depth,
                                PreSparsity_dynamic, PreSparsity_leakage, PreSparsity_area, PreSparsity_width,
@@ -359,13 +381,13 @@ chip = Accelerator.Accelerator(Pmac, MacLane_dynamic, MacLane_leakage, MacLane_a
                                wgt, Weight_area, Weight_energy, Weight_leakage, mask, Mask_area, Mask_energy, Mask_leakage,
                                activation_sparsity, weight_sparsity, overlap_factor, data_size, cube_size, matrix_size, DRAM_bandwidth, MainMem_energy, MainMem_leakage)
 chip.FillQueue(Tile, batch, ops, conv_shapes, head_shapes)
-BatchNorm_cycle, Loss_cycle, Pooling_cycle, GlobalAvgPooling_cycle, Upsampling_cycle = chip.PreProcess(clk)
+BatchNorm_cycle, Pooling_cycle, GlobalAvgPooling_cycle, Upsampling_cycle = chip.PreProcess(clk)
 Memory_cycle, ConvMat_cycle = chip.Process(clk)
 total_cycles, latency, area, dynamic_energy, leakage_energy = chip.Print(clk)
 #chip.Print()
 
 print(f'BatchNorm cycle: \t {BatchNorm_cycle}')
-print(f'Loss cycle: \t\t {Loss_cycle}')
+#print(f'Loss cycle: \t\t {Loss_cycle}')
 print(f'Pooling cycle: \t\t {Pooling_cycle}')
 print(f'GlobalAvgPooling cycle:  {GlobalAvgPooling_cycle}')
 print(f'Upsampling cycle: \t {Upsampling_cycle}')
@@ -383,7 +405,7 @@ print('Simulation time:', time.time() - start_time)
 
 # Saving results to a pickle file
 pickle.dump({'bacthnorm_cycles': BatchNorm_cycle,
-    'loss_cycles': Loss_cycle,
+    #'loss_cycles': Loss_cycle,
     'pool_cycles': Pooling_cycle,
     'globalavgpool_cycles': GlobalAvgPooling_cycle,
     'upsampling_cycles': Upsampling_cycle,

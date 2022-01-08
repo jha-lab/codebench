@@ -11,7 +11,8 @@ class Accelerator(object):
 	def __init__(self,Pmac, MacLane_dynamic, MacLane_leakage, MacLane_area, DataFlow_dynamic, DataFlow_leakage, DataFlow_area,\
 	DMA_dynamic, DMA_leakage, DMA_area, DMA_bandwidth, FIFO_dynamic, FIFO_leakage, FIFO_area, FIFO_depth,\
 	BatchNorm_dynamic, BatchNorm_leakage, BatchNorm_area, BatchNorm_width, Im2Col_dynamic, Im2Col_leakage, Im2Col_area,\
-	Loss_dynamic, Loss_leakage, Loss_area,	Loss_width, Pooling_dynamic, Pooling_leakage, Pooling_area, Pooling_depth,\
+	#Loss_dynamic, Loss_leakage, Loss_area,	Loss_width, 
+	Pooling_dynamic, Pooling_leakage, Pooling_area, Pooling_depth,\
 	GlobalAvgPooling_dynamic, GlobalAvgPooling_leakage, GlobalAvgPooling_area, GlobalAvgPooling_depth,\
         Upsampling_dynamic, Upsampling_leakage, Upsampling_area, Upsampling_depth,\
 	PreSparsity_dynamic, PreSparsity_leakage, PreSparsity_area, PreSparsity_width,\
@@ -26,7 +27,7 @@ class Accelerator(object):
 		self.FIFO = Hardware.FIFO(FIFO_dynamic, FIFO_leakage, FIFO_area, FIFO_depth)
 		self.BatchNorm = Hardware.BatchNorm(BatchNorm_dynamic, BatchNorm_leakage, BatchNorm_area, BatchNorm_width)
 		self.Im2Col = Hardware.Im2Col(Im2Col_dynamic, Im2Col_leakage, Im2Col_area)
-		self.Loss = Hardware.Loss(Loss_dynamic, Loss_leakage, Loss_area, Loss_width)
+		#self.Loss = Hardware.Loss(Loss_dynamic, Loss_leakage, Loss_area, Loss_width)
 		self.Pooling = Hardware.Pooling(Pooling_dynamic, Pooling_leakage, Pooling_area, Pooling_depth)
 		self.GlobalAvgPooling = Hardware.GlobalAvgPooling(GlobalAvgPooling_dynamic, GlobalAvgPooling_leakage, GlobalAvgPooling_area, GlobalAvgPooling_depth)
 		self.Upsampling = Hardware.Upsampling(Upsampling_dynamic, Upsampling_leakage, Upsampling_area, Upsampling_depth)
@@ -47,13 +48,13 @@ class Accelerator(object):
 		self.PoolingQueue = IssueQueue.IssueQueue('Pooling')
 		self.GlobalAvgPoolingQueue = IssueQueue.IssueQueue('GlobalAvgPooling')
 		self.UpsamplingQueue = IssueQueue.IssueQueue('Upsampling')
-		self.LossQueue = IssueQueue.IssueQueue('Loss')
+		#self.LossQueue = IssueQueue.IssueQueue('Loss')
 
 		self.cycle = 0
 		self.dynamic_energy = 0.0
 		self.leakage_energy = 0.0
 		self.area = self.MacLane.area + self.DataFlow.area + self.DMA.area + self.FIFO.area\
-		+ self.BatchNorm.area + self.Im2Col.area + self.Loss.area + self.Pooling.area\
+		+ self.BatchNorm.area + self.Im2Col.area + self.Pooling.area\
 		+ self.GlobalAvgPooling.area + self.Upsampling.area + self.PreSparsity.area\
 		+ self.PostSparsity.area
 		self.area *= 1e-6
@@ -61,7 +62,7 @@ class Accelerator(object):
 
 		self.leakage_power = self.MacLane.leakage_power + self.DataFlow.leakage_power\
 		+ self.DMA.leakage_power + self.FIFO.leakage_power + self.BatchNorm.leakage_power\
-		+ self.Im2Col.leakage_power + self.Loss.leakage_power + self.Pooling.leakage_power\
+		+ self.Im2Col.leakage_power + self.Pooling.leakage_power\
 		+ self.GlobalAvgPooling.leakage_power + self.Upsampling.leakage_power\
 		+ self.PreSparsity.leakage_power + self.PostSparsity.leakage_power\
 		+ self.ActivationBuffer.leakage_power + self.WeightBuffer.leakage_power\
@@ -74,10 +75,12 @@ class Accelerator(object):
 		for op in ops:
 			block_dict = torch2blocks.Op2Blocks(block_dict, op, conv_shapes, head_shapes, Tile, batch_size)
 
+		'''
 		# add softmax block
 		block_dict[str(int(ops[-1][2])+1)] = []
 		block = Blocks.LossBlock(str(int(ops[-1][2])+1), 'Softmax', list(head_shapes[-1][-1])[-1] * batch_size, ops[-1][2])
 		block_dict[str(int(ops[-1][2])+1)].append(block)
+		'''
 
 		#print('### debug print ###')
 		#print(list(head_shapes[-1][-1]), list(head_shapes[-1][-1])[-1])
@@ -103,8 +106,10 @@ class Accelerator(object):
 					self.GlobalAvgPoolingQueue.Enque(block)
 				elif type(block) == Blocks.UpsamplingBlock:
 					self.UpsamplingQueue.Enque(block)
+				'''
 				elif type(block) == Blocks.LossBlock:
 					self.LossQueue.Enque(block)
+				'''
 
 	def FillBlocks(self, blocks):
 		for block in blocks:
@@ -126,15 +131,17 @@ class Accelerator(object):
 				self.GlobalAvgPoolingQueue.Enque(block)
 			elif type(block) == Blocks.UpsamplingBlock:
 				self.UpsamplingQueue.Enque(block)
+			'''
 			elif type(block) == Blocks.LossBlock:
 				self.LossQueue.Enque(block)
+			'''
 
 	# Assuming only Conv2D, MatMul, and MemoryLoad blocks
 	# contribute to the total execution time
 	# rest of the blocks will be processed embedded in the pipeline
 	def PreProcess(self, clk):
 		BatchNorm_cycle = 0
-		Loss_cycle = 0
+		#Loss_cycle = 0
 		Pooling_cycle = 0
 		GlobalAvgPooling_cycle = 0
 		Upsampling_cycle = 0
@@ -175,6 +182,7 @@ class Accelerator(object):
 			self.cycle += cycle
 			Upsampling_cycle += cycle
 
+		'''
 		while bool(self.LossQueue.blocks):
 			block = self.LossQueue.Issue()
 			block.done = True
@@ -182,8 +190,9 @@ class Accelerator(object):
 			self.dynamic_energy += cycle * 1e-6 / clk * self.Loss.dynamic_power * 1e-3
 			self.cycle += cycle
 			Loss_cycle += cycle
+		'''
 
-		return BatchNorm_cycle, Loss_cycle, Pooling_cycle, GlobalAvgPooling_cycle, Upsampling_cycle
+		return BatchNorm_cycle, Pooling_cycle, GlobalAvgPooling_cycle, Upsampling_cycle
 
 
 	def Process(self, clk):
