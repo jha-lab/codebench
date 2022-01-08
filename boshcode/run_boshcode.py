@@ -467,7 +467,7 @@ def main():
 	else:
 		for accel_idx in range(accel_embeddings.shape[0]):
 			for cnn_idx in range(len(graphLib.library)):
-				accel_cnn_str = str(accel_embeddings[accel_idx, :]) + graphLib.library[cnn_idx].hash
+				accel_cnn_str = str(accel_embeddings[accel_idx, :]).replace('\n', '') + graphLib.library[cnn_idx].hash
 				accel_dataset[hashlib.sha256(accel_cnn_str.encode('utf-8')).hexdigest()] = \
 					{'cnn_hash': graphLib.library[cnn_idx].hash, 'accel_emb': accel_embeddings[accel_idx, :], \
 					'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'area': None, \
