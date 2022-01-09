@@ -69,14 +69,14 @@ parser.add_argument('--mem_config', type = int, default = 1, help = 'The choice 
 args = parser.parse_args()
 
 assert len(args.embedding) == 13, "Some accelerator hyperparameters are missing."
-assert args.embedding[10] in [1, 2, 3], "Memory type should be one of 1: RRAM, 2: DRAM, or 3: HBM."
+assert args.embedding[11] in [1, 2, 3], "Memory type should be one of 1: RRAM, 2: DRAM, or 3: HBM."
 
-if args.embedding[10] == 1:
-    assert args.embedding[11] in [1, 2, 3, 4, 5, 6], "Memory configuration should be among RRAM: 1: [16,2,2], 2: [8,2,4], 3: [4,2,8],  4: [2,2,16], 5: [32,2,1], 6: [1,2,32]"
-elif args.embedding[10] == 2:
-    assert args.embedding[11] in [1, 2, 3, 4], "Memory configuration should be among DRAM: 1: [16,2,2], 2: [8,2,4], 3: [32,2,1], 4: [16,4,1]"
+if args.embedding[11] == 1:
+    assert args.embedding[12] in [1, 2, 3, 4, 5, 6], "Memory configuration should be among RRAM: 1: [16,2,2], 2: [8,2,4], 3: [4,2,8],  4: [2,2,16], 5: [32,2,1], 6: [1,2,32]"
+elif args.embedding[11] == 2:
+    assert args.embedding[12] in [1, 2, 3, 4], "Memory configuration should be among DRAM: 1: [16,2,2], 2: [8,2,4], 3: [32,2,1], 4: [16,4,1]"
 else:
-    assert args.embedding[11] == 1, "Memory configuration should be HMB: 1: [32,1,4]"
+    assert args.embedding[12] == 1, "Memory configuration should be HMB: 1: [32,1,4]"
 
 clk = 700   # clock frequency (MHz)
 
