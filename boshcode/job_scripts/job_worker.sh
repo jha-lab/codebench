@@ -136,8 +136,8 @@ elif [[ $cluster == "della" ]]
 then
   cluster_gpu="gpu:2"
 else
-	echo "Unrecognized cluster"
-	return 1
+    echo "Unrecognized cluster"
+    return 1
 fi
 
 job_file="./job_${accel_hash}.slurm"
@@ -150,16 +150,17 @@ echo "#!/bin/bash" >> $job_file
 echo "#SBATCH --job-name=code_${dataset}_${accel_hash}       # create a short name for your job" >> $job_file
 echo "#SBATCH --nodes=1                                      # node count" >> $job_file
 echo "#SBATCH --ntasks=1                                     # total number of tasks across all nodes" >> $job_file
-echo "#SBATCH --cpus-per-task=24                             # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
-# echo "#SBATCH --cpus-per-task=2                              # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
-echo "#SBATCH --mem=128G                                     # memory per cpu-core (4G is default)" >> $job_file
+# echo "#SBATCH --cpus-per-task=24                             # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
+echo "#SBATCH --cpus-per-task=4                              # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
+# echo "#SBATCH --mem=128G                                     # memory per cpu-core (4G is default)" >> $job_file
+echo "#SBATCH --mem=32G                                     # memory per cpu-core (4G is default)" >> $job_file
 if [[ $train_cnn == "1" ]]
 then
     echo "#SBATCH --gres=${cluster_gpu}                      # number of gpus per node" >> $job_file
     # echo "#SBATCH --gres=gpu:1" >> $job_file
 fi
-echo "#SBATCH --time=144:00:00                               # total run time limit (HH:MM:SS)" >> $job_file
-# echo "#SBATCH --time=4:00:00                               # total run time limit (HH:MM:SS)" >> $job_file
+# echo "#SBATCH --time=144:00:00                               # total run time limit (HH:MM:SS)" >> $job_file
+echo "#SBATCH --time=36:00:00                               # total run time limit (HH:MM:SS)" >> $job_file
 # echo "#SBATCH --mail-type=all                                # send email" >> $job_file
 # echo "#SBATCH --mail-user=stuli@princeton.edu" >> $job_file
 echo "" >> $job_file
@@ -208,7 +209,13 @@ fi
 #     os.makedirs('${cnn_model_dir}'); \
 #     torch.save(ckpt, os.path.join('${cnn_model_dir}', 'model.pt'))\" &" >> $job_file
 
-# Commenting out "wait" since the AccelBench simulation should finish way before CNNBench
-# echo "wait" >> $job_file
+if [[ $train_cnn == "1" ]]
+then
+    # Commenting out "wait" since the AccelBench simulation should finish way before CNNBench
+    # echo "wait" >> $job_file
+    echo "" >> $job_file
+else
+    echo "wait" >> $job_file
+fi
 
 sbatch $job_file
