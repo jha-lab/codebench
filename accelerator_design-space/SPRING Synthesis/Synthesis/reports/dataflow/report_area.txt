@@ -3,14 +3,14 @@
 Report : area
 Design : dataflow
 Version: I-2013.12-SP4
-Date   : Thu Dec 20 02:40:26 2018
+Date   : Wed May 26 21:09:35 2021
 ****************************************
 
 Information: Updating design information... (UID-85)
 Warning: Design 'dataflow' contains 3 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
 Library(s) Used:
 
-    14nm_sg_345K_maxfan4_wire (File: /home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db)
+    14nm_sg_345K_maxfan4_wire (File: /u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db)
 
 Number of ports:                        81923
 Number of nets:                        301194

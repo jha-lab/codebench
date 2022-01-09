@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : scalar
 Version: I-2013.12-SP4
-Date   : Thu Dec 20 20:30:54 2018
+Date   : Wed May 26 10:11:30 2021
 ****************************************
 
 Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire

@@ -3,13 +3,13 @@
 Report : area
 Design : loss
 Version: I-2013.12-SP4
-Date   : Wed Dec 19 17:39:35 2018
+Date   : Tue May 25 14:23:58 2021
 ****************************************
 
 Information: Updating design information... (UID-85)
 Library(s) Used:
 
-    14nm_sg_345K_maxfan4_wire (File: /home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db)
+    14nm_sg_345K_maxfan4_wire (File: /u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db)
 
 Number of ports:                          671
 Number of nets:                         41623

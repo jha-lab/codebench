@@ -3,18 +3,18 @@
 Report : design
 Design : dataflow
 Version: I-2013.12-SP4
-Date   : Thu Dec 20 02:41:10 2018
+Date   : Wed May 26 21:10:13 2021
 ****************************************
 
 Design allows ideal nets on clock nets.
 
 Library(s) Used:
 
-    14nm_sg_345K_maxfan4_wire (File: /home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db)
+    14nm_sg_345K_maxfan4_wire (File: /u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db)
 
 Local Link Library:
 
-    {/home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db}
+    {/u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db}
 
 Flip-Flop Types:
 

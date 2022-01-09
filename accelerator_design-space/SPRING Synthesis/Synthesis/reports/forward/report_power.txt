@@ -7,13 +7,13 @@ Report : power
         -analysis_effort low
 Design : forward
 Version: I-2013.12-SP4
-Date   : Thu Dec 20 04:21:20 2018
+Date   : Sun Jun 20 17:15:45 2021
 ****************************************
 
 
 Library(s) Used:
 
-    14nm_sg_345K_maxfan4_wire (File: /home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db)
+    14nm_sg_345K_maxfan4_wire (File: /u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db)
 
 
 Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire
@@ -33,12 +33,12 @@ Power-specific unit information :
     Leakage Power Units = 1nW
 
 
-  Cell Internal Power  =   6.0497 mW   (63%)
-  Net Switching Power  =   3.6016 mW   (37%)
+  Cell Internal Power  =   5.2659 mW   (63%)
+  Net Switching Power  =   3.1255 mW   (37%)
                          ---------
-Total Dynamic Power    =   9.6513 mW  (100%)
+Total Dynamic Power    =   8.3914 mW  (100%)
 
-Cell Leakage Power     = 633.8611 uW
+Cell Leakage Power     = 532.3004 uW
 
 
                  Internal         Switching           Leakage            Total
@@ -48,9 +48,9 @@ io_pad             0.0000            0.0000            0.0000            0.0000 
 memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
 black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
 clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
-register       1.0953e-02        2.1975e-03        5.6077e+03        1.8758e-02  (   0.18%)
-sequential         0.0000        7.2198e-02            0.0000        7.2198e-02  (   0.70%)
-combinational      6.0385            3.5274        6.2825e+05           10.1943  (  99.12%)
+register       1.0926e-02        2.2898e-03        5.2902e+03        1.8506e-02  (   0.21%)
+sequential         0.0000        6.2328e-02            0.0000        6.2328e-02  (   0.70%)
+combinational      5.2549            3.0609        5.2701e+05            8.8428  (  99.09%)
 --------------------------------------------------------------------------------------------------
-Total              6.0495 mW         3.6017 mW     6.3386e+05 nW        10.2853 mW
+Total              5.2658 mW         3.1255 mW     5.3230e+05 nW         8.9236 mW
 1

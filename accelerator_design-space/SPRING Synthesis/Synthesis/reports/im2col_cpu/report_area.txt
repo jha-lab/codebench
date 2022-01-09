@@ -3,14 +3,14 @@
 Report : area
 Design : im2col_cpu
 Version: I-2013.12-SP4
-Date   : Wed Dec 19 20:17:20 2018
+Date   : Tue May 25 13:47:43 2021
 ****************************************
 
 Information: Updating design information... (UID-85)
 Warning: Design 'im2col_cpu' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
 Library(s) Used:
 
-    14nm_sg_345K_maxfan4_wire (File: /home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db)
+    14nm_sg_345K_maxfan4_wire (File: /u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db)
 
 Number of ports:                          358
 Number of nets:                         72735

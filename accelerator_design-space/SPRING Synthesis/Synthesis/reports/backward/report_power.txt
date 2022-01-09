@@ -1,0 +1,56 @@
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: Design has unannotated primary inputs. (PWR-414)
+Warning: Design has unannotated sequential cell outputs. (PWR-415)
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : backward
+Version: I-2013.12-SP4
+Date   : Mon Jun 21 04:51:05 2021
+****************************************
+
+
+Library(s) Used:
+
+    14nm_sg_345K_maxfan4_wire (File: /u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db)
+
+
+Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire
+Wire Load Model Mode: top
+
+Design        Wire Load Model            Library
+------------------------------------------------
+backward               1K                14nm_sg_345K_maxfan4_wire
+
+
+Global Operating Voltage = 0.8  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000ff
+    Time Units = 1ps
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1nW
+
+
+  Cell Internal Power  =   2.5559 mW   (64%)
+  Net Switching Power  =   1.4622 mW   (36%)
+                         ---------
+Total Dynamic Power    =   4.0181 mW  (100%)
+
+Cell Leakage Power     = 722.1396 uW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
+register       2.0992e-02        4.4669e-03        1.1113e+04        3.6572e-02  (   0.77%)
+sequential         0.0000        5.2314e-03            0.0000        5.2314e-03  (   0.11%)
+combinational      2.5348            1.4524        7.1103e+05            4.6983  (  99.12%)
+--------------------------------------------------------------------------------------------------
+Total              2.5558 mW         1.4621 mW     7.2214e+05 nW         4.7401 mW
+1

@@ -3,18 +3,18 @@
 Report : design
 Design : forward
 Version: I-2013.12-SP4
-Date   : Thu Dec 20 04:21:21 2018
+Date   : Sun Jun 20 17:15:46 2021
 ****************************************
 
 Design allows ideal nets on clock nets.
 
 Library(s) Used:
 
-    14nm_sg_345K_maxfan4_wire (File: /home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db)
+    14nm_sg_345K_maxfan4_wire (File: /u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db)
 
 Local Link Library:
 
-    {/home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db}
+    {/u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db}
 
 Flip-Flop Types:
 

@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : mac_lane
 Version: I-2013.12-SP4
-Date   : Wed Dec 19 18:58:00 2018
+Date   : Sat Jan  8 01:58:46 2022
 ****************************************
 
  # A fanout number of 1000 was used for high fanout net computations.
@@ -14,9 +14,9 @@ Date   : Wed Dec 19 18:58:00 2018
 Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire
 Wire Load Model Mode: top
 
-  Startpoint: reg_i_5_reg[5]
+  Startpoint: reg_w_1_reg[2]
               (rising edge-triggered flip-flop clocked by clk)
-  Endpoint: reg_mul_5_reg[39]
+  Endpoint: reg_mul_1_reg[39]
             (rising edge-triggered flip-flop clocked by clk)
   Path Group: clk
   Path Type: max
@@ -29,123 +29,125 @@ Wire Load Model Mode: top
   -----------------------------------------------------------
   clock clk (rise edge)                    0.00       0.00
   clock network delay (ideal)              0.00       0.00
-  reg_i_5_reg[5]/CP (dff_sg)               0.00 #     0.00 r
-  reg_i_5_reg[5]/Q (dff_sg)               29.91      29.91 f
-  U69673/X (nand_x1_sg)                    9.54      39.45 r
-  U69669/X (nand_x1_sg)                   30.36      69.81 f
-  U69667/X (nand_x1_sg)                   16.49      86.30 r
-  U69663/X (inv_x1_sg)                    23.22     109.51 f
-  U69670/X (inv_x1_sg)                    22.28     131.80 r
-  U69660/X (nand_x1_sg)                    8.88     140.67 f
-  U69656/X (nand_x1_sg)                   22.18     162.86 r
-  U69658/X (nor_x1_sg)                     9.76     172.61 f
-  U69657/X (inv_x1_sg)                     6.87     179.48 r
-  U69648/X (nand_x2_sg)                   16.16     195.64 f
-  U69650/X (nand_x4_sg)                   14.38     210.03 r
-  U69628/X (inv_x1_sg)                    13.20     223.22 f
-  U69644/X (nor_x1_sg)                    14.59     237.81 r
-  U69639/X (nand_x1_sg)                   15.40     253.20 f
-  U69638/X (nand_x2_sg)                   23.18     276.38 r
-  U69636/X (nor_x1_sg)                     6.21     282.59 f
-  U69634/X (nand_x1_sg)                    7.00     289.58 r
-  U69631/X (nand_x1_sg)                   24.33     313.92 f
-  U69625/X (nand_x2_sg)                   13.44     327.36 r
-  U69624/X (nand_x1_sg)                   24.44     351.80 f
-  U69629/X (nand_x2_sg)                   13.36     365.16 r
-  U69742/X (nand_x1_sg)                   17.12     382.29 f
-  U69740/X (inv_x1_sg)                    14.01     396.30 r
-  U69738/X (nor_x1_sg)                    11.29     407.59 f
-  U69735/X (nor_x1_sg)                    14.81     422.40 r
-  U69731/X (nor_x1_sg)                    17.04     439.45 f
-  U69730/X (inv_x1_sg)                     6.44     445.89 r
-  U69726/X (nand_x1_sg)                   30.64     476.53 f
-  U69724/X (nand_x1_sg)                   11.08     487.61 r
-  U69722/X (nand_x1_sg)                   24.34     511.95 f
-  U69716/X (nand_x2_sg)                   10.92     522.88 r
-  U69713/X (nand_x1_sg)                   21.88     544.76 f
-  U69711/X (nand_x1_sg)                   17.08     561.84 r
-  U69706/X (nand_x1_sg)                   25.22     587.06 f
-  U69703/X (nand_x2_sg)                   10.94     598.00 r
-  U69694/X (nand_x1_sg)                   24.45     622.44 f
-  U69690/X (nand_x2_sg)                   13.17     635.61 r
-  U69689/X (nand_x1_sg)                   10.50     646.11 f
-  U69684/X (nand_x2_sg)                    8.05     654.15 r
-  U69680/X (nand_x1_sg)                   31.02     685.17 f
-  U69686/X (nand_x1_sg)                   11.05     696.22 r
-  U69830/X (nand_x1_sg)                   24.34     720.56 f
-  U69827/X (nand_x2_sg)                   10.92     731.49 r
-  U69820/X (nand_x1_sg)                   21.99     753.48 f
-  U69815/X (nand_x1_sg)                   18.90     772.38 r
-  U69814/X (nand_x1_sg)                   10.37     782.76 f
-  U69810/X (nand_x2_sg)                   11.52     794.28 r
-  U69808/X (nand_x2_sg)                    6.21     800.48 f
-  U69806/X (nand_x1_sg)                    6.65     807.13 r
-  U69803/X (nand_x1_sg)                   30.86     837.99 f
-  U69798/X (nand_x1_sg)                   16.57     854.55 r
-  U69796/X (nand_x1_sg)                    8.08     862.63 f
-  U69795/X (nand_x1_sg)                    9.15     871.78 r
-  U69792/X (nand_x1_sg)                   30.86     902.64 f
-  U69790/X (nand_x1_sg)                   11.08     913.72 r
-  U69787/X (nand_x1_sg)                   21.99     935.71 f
-  U69783/X (nand_x1_sg)                   17.18     952.89 r
-  U69781/X (nand_x2_sg)                   16.92     969.81 f
-  U69778/X (nand_x4_sg)                    7.91     977.72 r
-  U69773/X (nand_x2_sg)                   16.50     994.22 f
-  U69770/X (nand_x4_sg)                    9.13    1003.35 r
-  U69767/X (nand_x4_sg)                    9.12    1012.48 f
-  U69765/X (nand_x4_sg)                    6.51    1018.99 r
-  U69763/X (nand_x4_sg)                   10.62    1029.61 f
-  U69761/X (nand_x1_sg)                   10.02    1039.63 r
-  U69756/X (nand_x2_sg)                   10.74    1050.37 f
-  U69754/X (nand_x1_sg)                   10.01    1060.38 r
-  U69752/X (nand_x2_sg)                   17.83    1078.21 f
-  U69758/X (nand_x1_sg)                    8.92    1087.13 r
-  U69910/X (nand_x1_sg)                   30.96    1118.09 f
-  U69908/X (nand_x1_sg)                   14.03    1132.12 r
-  U69905/X (nand_x2_sg)                   10.85    1142.98 f
-  U69903/X (nand_x1_sg)                   10.01    1152.99 r
-  U69900/X (nand_x2_sg)                   17.02    1170.00 f
-  U69896/X (nand_x4_sg)                    9.28    1179.28 r
-  U69890/X (nand_x4_sg)                   11.69    1190.97 f
-  U69889/X (nand_x2_sg)                    9.68    1200.66 r
-  U69886/X (nand_x4_sg)                    8.01    1208.67 f
-  U69884/X (nand_x2_sg)                    6.64    1215.31 r
-  U69881/X (nand_x2_sg)                   16.62    1231.93 f
-  U69878/X (nand_x4_sg)                    7.80    1239.73 r
-  U69873/X (nand_x2_sg)                   14.37    1254.10 f
-  U69867/X (nand_x2_sg)                    8.83    1262.93 r
-  U69865/X (nand_x1_sg)                   21.97    1284.91 f
-  U69862/X (nand_x1_sg)                   14.73    1299.64 r
-  U69856/X (nand_x1_sg)                   17.70    1317.34 f
-  U69854/X (nand_x1_sg)                    8.77    1326.11 r
-  U69852/X (nand_x1_sg)                   24.35    1350.46 f
-  U69847/X (nand_x2_sg)                   13.31    1363.77 r
-  U69845/X (nand_x1_sg)                   17.89    1381.66 f
-  U69843/X (nor_x1_sg)                    13.42    1395.08 r
-  U69839/X (nor_x1_sg)                    18.31    1413.39 f
-  U69841/X (nor_x1_sg)                    10.73    1424.12 r
-  U69840/X (inv_x1_sg)                     4.70    1428.82 f
-  U69836/X (nand_x1_sg)                   16.71    1445.54 r
-  U69835/X (nor_x1_sg)                     5.60    1451.14 f
-  reg_mul_5_reg[39]/D (dff_sg)             0.00    1451.14 f
-  data arrival time                                1451.14
+  reg_w_1_reg[2]/CP (dff_sg)               0.00 #     0.00 r
+  reg_w_1_reg[2]/Q (dff_sg)               30.62      30.62 f
+  U75075/X (inv_x1_sg)                    19.14      49.76 r
+  U75074/X (nand_x1_sg)                    7.83      57.59 f
+  U75070/X (nand_x1_sg)                   24.59      82.18 r
+  U75067/X (nand_x2_sg)                   10.30      92.48 f
+  U75060/X (nand_x1_sg)                   22.40     114.88 r
+  U75058/X (nand_x1_sg)                   19.37     134.24 f
+  U75052/X (nand_x2_sg)                   15.16     149.41 r
+  U75046/X (nand_x1_sg)                   17.05     166.45 f
+  U75045/X (nand_x1_sg)                   64.50     230.95 r
+  U75043/X (nor_x1_sg)                    17.35     248.31 f
+  U75039/X (nor_x1_sg)                    11.99     260.29 r
+  U75027/X (nand_x4_sg)                    8.81     269.10 f
+  U75029/X (nor_x1_sg)                     9.07     278.17 r
+  U75028/X (inv_x1_sg)                     4.80     282.97 f
+  U75024/X (nand_x1_sg)                   26.51     309.48 r
+  U75019/X (inv_x1_sg)                    15.51     325.00 f
+  U75021/X (nand_x1_sg)                   13.18     338.18 r
+  U75020/X (inv_x1_sg)                    11.24     349.41 f
+  U75015/X (nor_x1_sg)                    18.47     367.88 r
+  U75013/X (nor_x1_sg)                     9.14     377.03 f
+  U75016/X (inv_x1_sg)                     5.40     382.43 r
+  U75134/X (nand_x1_sg)                   21.49     403.92 f
+  U75131/X (nand_x1_sg)                   19.43     423.34 r
+  U75124/X (nand_x1_sg)                   23.45     446.79 f
+  U75119/X (nand_x1_sg)                   19.60     466.39 r
+  U75115/X (nand_x1_sg)                   18.16     484.55 f
+  U75112/X (inv_x1_sg)                    14.20     498.75 r
+  U75114/X (nand_x1_sg)                   12.79     511.54 f
+  U75113/X (inv_x1_sg)                    10.72     522.26 r
+  U75100/X (nor_x1_sg)                    18.71     540.97 f
+  U75108/X (nor_x1_sg)                    11.83     552.80 r
+  U75107/X (inv_x1_sg)                     4.76     557.56 f
+  U75103/X (nand_x1_sg)                   21.59     579.15 r
+  U75101/X (nand_x1_sg)                   17.50     596.65 f
+  U75095/X (nand_x1_sg)                   23.86     620.51 r
+  U75092/X (nand_x1_sg)                   19.01     639.52 f
+  U75086/X (nand_x1_sg)                   18.69     658.21 r
+  U75084/X (nand_x1_sg)                    8.53     666.74 f
+  U75081/X (nand_x1_sg)                   16.83     683.57 r
+  U75079/X (nand_x1_sg)                    8.63     692.20 f
+  U75082/X (nand_x1_sg)                   16.85     709.05 r
+  U75209/X (inv_x1_sg)                    14.13     723.18 f
+  U75211/X (nand_x1_sg)                   12.87     736.05 r
+  U75210/X (inv_x1_sg)                    10.83     746.88 f
+  U75204/X (nor_x1_sg)                    18.40     765.28 r
+  U75206/X (nor_x1_sg)                     9.15     774.43 f
+  U75205/X (inv_x1_sg)                     5.39     779.82 r
+  U75198/X (nand_x1_sg)                   23.96     803.78 f
+  U75200/X (nand_x2_sg)                   15.91     819.69 r
+  U75199/X (inv_x1_sg)                    10.73     830.42 f
+  U75194/X (nor_x1_sg)                    14.08     844.50 r
+  U75181/X (nand_x1_sg)                   12.31     856.81 f
+  U75189/X (nand_x1_sg)                   29.86     886.67 r
+  U75186/X (inv_x1_sg)                    15.54     902.22 f
+  U75182/X (nand_x1_sg)                    8.29     910.51 r
+  U75179/X (nand_x1_sg)                   30.86     941.37 f
+  U75177/X (nand_x1_sg)                   11.08     952.44 r
+  U75174/X (nand_x1_sg)                   21.99     974.43 f
+  U75170/X (nand_x1_sg)                   17.19     991.63 r
+  U75166/X (nand_x2_sg)                   18.50    1010.13 f
+  U75164/X (nand_x1_sg)                    8.92    1019.05 r
+  U75161/X (nand_x1_sg)                   33.42    1052.47 f
+  U75159/X (nand_x2_sg)                   13.83    1066.30 r
+  U75156/X (nand_x4_sg)                   10.67    1076.97 f
+  U75153/X (nand_x4_sg)                    6.79    1083.77 r
+  U75149/X (nand_x2_sg)                   14.06    1097.82 f
+  U75146/X (nand_x2_sg)                   10.11    1107.94 r
+  U75139/X (nand_x2_sg)                   13.49    1121.43 f
+  U75137/X (nand_x1_sg)                   15.24    1136.67 r
+  U75140/X (nand_x2_sg)                   17.69    1154.36 f
+  U75296/X (nand_x4_sg)                    7.80    1162.16 r
+  U75292/X (nand_x2_sg)                   14.37    1176.52 f
+  U75289/X (nand_x2_sg)                   10.08    1186.60 r
+  U75283/X (nand_x2_sg)                   13.49    1200.09 f
+  U75279/X (nand_x1_sg)                   12.75    1212.85 r
+  U75275/X (nand_x1_sg)                   31.59    1244.44 f
+  U75273/X (nand_x1_sg)                   14.05    1258.49 r
+  U75270/X (nand_x2_sg)                   17.83    1276.32 f
+  U75268/X (nand_x1_sg)                   11.49    1287.81 r
+  U75265/X (nand_x2_sg)                   10.74    1298.55 f
+  U75263/X (nand_x1_sg)                   10.05    1308.60 r
+  U75260/X (nand_x2_sg)                   17.02    1325.62 f
+  U75256/X (nand_x4_sg)                    7.80    1333.42 r
+  U75250/X (nand_x2_sg)                   18.81    1352.23 f
+  U75248/X (nand_x2_sg)                   11.15    1363.38 r
+  U75246/X (nand_x4_sg)                   10.25    1373.64 f
+  U75242/X (nand_x4_sg)                    6.95    1380.58 r
+  U75237/X (nand_x2_sg)                   18.81    1399.39 f
+  U75235/X (nand_x2_sg)                    8.42    1407.80 r
+  U75232/X (nand_x2_sg)                   14.26    1422.07 f
+  U75230/X (nand_x2_sg)                   12.76    1434.82 r
+  U75224/X (nand_x4_sg)                    9.29    1444.11 f
+  U75227/X (nand_x1_sg)                   12.10    1456.20 r
+  U75226/X (inv_x1_sg)                    11.45    1467.65 f
+  U75218/X (nor_x1_sg)                    14.23    1481.88 r
+  U75221/X (nor_x1_sg)                     8.61    1490.49 f
+  U75220/X (inv_x1_sg)                     5.54    1496.03 r
+  U75216/X (nand_x1_sg)                   16.74    1512.78 f
+  U75215/X (nor_x1_sg)                     8.95    1521.73 r
+  reg_mul_1_reg[39]/D (dff_sg)             0.00    1521.73 r
+  data arrival time                                1521.73
 
   clock clk (rise edge)                 1429.00    1429.00
   clock network delay (ideal)              0.00    1429.00
   clock uncertainty                      -50.00    1379.00
-  reg_mul_5_reg[39]/CP (dff_sg)            0.00    1379.00 r
-  library setup time                      -3.09    1375.91
-  data required time                               1375.91
+  reg_mul_1_reg[39]/CP (dff_sg)            0.00    1379.00 r
+  library setup time                      -0.51    1378.49
+  data required time                               1378.49
   -----------------------------------------------------------
-  data required time                               1375.91
-  data arrival time                               -1451.14
+  data required time                               1378.49
+  data arrival time                               -1521.73
   -----------------------------------------------------------
-  slack (VIOLATED)                                  -75.23
+  slack (VIOLATED)                                 -143.24
 
 
-  Startpoint: reg_r_add_reg[19]
-              (rising edge-triggered flip-flop clocked by clk)
-  Endpoint: f[1] (output port)
+  Startpoint: f_reg[0] (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: f[0] (output port)
   Path Group: default
   Path Type: max
 
@@ -155,22 +157,19 @@ Wire Load Model Mode: top
 
   Point                                    Incr       Path
   -----------------------------------------------------------
-  reg_r_add_reg[19]/CP (dff_sg)            0.00 #     0.00 r
-  reg_r_add_reg[19]/Q (dff_sg)            37.79      37.79 f
-  U76699/X (inv_x1_sg)                    20.61      58.40 r
-  U76702/X (inv_x1_sg)                    35.18      93.59 f
-  U144652/X (nor_x1_sg)                    9.02     102.61 r
-  f[1] (out)                               0.00     102.61 r
-  data arrival time                                 102.61
+  f_reg[0]/CP (dff_sg)                     0.00 #     0.00 r
+  f_reg[0]/Q (dff_sg)                      9.05       9.05 f
+  f[0] (out)                               0.00       9.05 f
+  data arrival time                                   9.05
 
   max_delay                             1429.00    1429.00
   output external delay                    0.00    1429.00
   data required time                               1429.00
   -----------------------------------------------------------
   data required time                               1429.00
-  data arrival time                                -102.61
+  data arrival time                                  -9.05
   -----------------------------------------------------------
-  slack (MET)                                      1326.39
+  slack (MET)                                      1419.95
 
 
 1

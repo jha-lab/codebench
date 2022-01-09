@@ -8,13 +8,13 @@ Report : power
         -analysis_effort low
 Design : dma_axi64
 Version: I-2013.12-SP4
-Date   : Wed Dec 19 17:01:31 2018
+Date   : Wed May 26 21:10:56 2021
 ****************************************
 
 
 Library(s) Used:
 
-    14nm_sg_345K_maxfan4_wire (File: /home/yeyu/accelerator/Synthesis/library/14nm_sg_345K.db)
+    14nm_sg_345K_maxfan4_wire (File: /u/chli/tools/Fisher/accelerator/Synthesis/library/14nm_sg_345K.db)
 
 
 Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire

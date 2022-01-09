@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : post_sparsity
 Version: I-2013.12-SP4
-Date   : Wed Dec 19 17:03:10 2018
+Date   : Tue May 25 14:38:48 2021
 ****************************************
 
 Operating Conditions: TYPICAL   Library: 14nm_sg_345K_maxfan4_wire

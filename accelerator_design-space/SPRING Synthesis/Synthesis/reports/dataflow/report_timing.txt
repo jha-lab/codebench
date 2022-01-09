@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : dataflow
 Version: I-2013.12-SP4
-Date   : Thu Dec 20 02:41:09 2018
+Date   : Wed May 26 21:10:13 2021
 ****************************************
 
  # A fanout number of 1000 was used for high fanout net computations.
