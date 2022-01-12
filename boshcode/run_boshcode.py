@@ -105,7 +105,10 @@ def worker(cnn_config_file: str,
 	args = ['--dataset', cnn_config['dataset']]
 	
 	args.extend(['--cluster', cluster])
-	
+	if cluster == 'della':
+		slurm_stdout = subprocess.check_output('squeue', shell=True, text=True)
+		if 'gpu-ee' not in slurm_stdout:
+			args.extend(['--partition', 'gpu-ee'])
 
 	args.extend(['--id', id])
 	args.extend(['--autotune', '1' if autotune else '0'])
