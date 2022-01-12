@@ -40,12 +40,12 @@ K = 10 # Number of parallel cold restarts for BOSHNAS
 UNC_PROB = 0.1
 DIV_PROB = 0.1
 
-MAX_LATENCY = 1 # Maximum latency in seconds
-MAX_AREA = 10 # Maximum area in mm^2
-MAX_DYNAMIC_ENERGY = 1 # Maximum dynamic energy in Joules
-MAX_LEAKAGE_ENERGY = 1 # Maximum leakage energy in Joules
+MAX_LATENCY = 1.0 # Maximum latency in seconds
+MAX_AREA = 1000.0 # Maximum area in mm^2
+MAX_DYNAMIC_ENERGY = 10.0 # Maximum dynamic energy in Joules
+MAX_LEAKAGE_ENERGY = 10.0 # Maximum leakage energy in Joules
 
-REMOVE_ERROR_CNN_ACCEL_PAIRS = True # Remove CNN-accelerator pairs that throw errors
+REMOVE_ERROR_CNN_ACCEL_PAIRS = False # Remove CNN-accelerator pairs that throw errors
 
 
 def worker(cnn_config_file: str,
@@ -103,7 +103,10 @@ def worker(cnn_config_file: str,
 		print('No neighbor found for the CNN. Training model from scratch.')
 
 	args = ['--dataset', cnn_config['dataset']]
+	
 	args.extend(['--cluster', cluster])
+	
+
 	args.extend(['--id', id])
 	args.extend(['--autotune', '1' if autotune else '0'])
 	args.extend(['--cnn_model_hash', cnn_model_hash])
@@ -279,9 +282,9 @@ def update_dataset(graphLib: 'GraphLib',
 			accel_dataset[accel_hash]['val_acc'] = model_checkpoint['val_accuracies'][-1]
 			accel_dataset[accel_hash]['test_acc'] = model_checkpoint['test_accuracies'][-1]
 		if accel_trained and cnn_trained:
-			performance = weights[0] * accel_dataset[accel_hash]['train_acc'] + \
-						  weights[1] * accel_dataset[accel_hash]['val_acc'] + \
-						  weights[2] * accel_dataset[accel_hash]['test_acc'] + \
+			performance = weights[0] * accel_dataset[accel_hash]['train_acc'] / 100.0 + \
+						  weights[1] * accel_dataset[accel_hash]['val_acc'] / 100.0 + \
+						  weights[2] * accel_dataset[accel_hash]['test_acc'] / 100.0 + \
 						  weights[3] * (1 - accel_dataset[accel_hash]['latency'] / MAX_LATENCY) + \
 						  weights[4] * (1 - accel_dataset[accel_hash]['area'] / MAX_AREA) + \
 						  weights[5] * (1 - accel_dataset[accel_hash]['dynamic_energy'] / MAX_DYNAMIC_ENERGY) + \
@@ -370,7 +373,7 @@ def main():
 		metavar='',
 		type=str,
 		help='path to load the CNN graphlib dataset',
-		default='../cnn_design-space/cnnbench/dataset/dataset_test.json')
+		default='../cnn_design-space/cnnbench/dataset/dataset_mini.json')
 	parser.add_argument('--cnn_config_file',
 		metavar='',
 		type=str,
@@ -380,12 +383,12 @@ def main():
 		metavar='',
 		type=str,
 		help='path to the accelerator embeddings file',
-		default='../accelerator_design-space/accelbench/embeddings/embeddings_test.pkl')
+		default='../accelerator_design-space/accelbench/embeddings/embeddings.pkl')
 	parser.add_argument('--accel_dataset_file',
 		metavar='',
 		type=str,
 		help='path to the co-design CNN-Accelerator dataset file',
-		default='./accel_dataset/accel_dataset_test.pkl')
+		default='./accel_dataset/accel_dataset_mini.pkl')
 	parser.add_argument('--surrogate_model_dir',
 		metavar='',
 		type=str,
@@ -411,7 +414,7 @@ def main():
 		metavar='',
 		type=int,
 		help='to autotune CNN models or not',
-		default=0)
+		default=1)
 	parser.add_argument('--n_jobs',
 		metavar='',
 		type=int,
