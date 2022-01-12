@@ -17,6 +17,7 @@ graphlib_file=""
 accel_hash=""
 accel_emb=""
 accel_model_file=""
+partition="gpu"
 
 YELLOW='\033[0;33m'
 GREEN='\033[0;32m'
@@ -31,6 +32,7 @@ Help()
    echo -e "Syntax: source ${CYAN}./job_scripts/job_train.sh${ENDC} [${YELLOW}flags${ENDC}]"
    echo "Flags:"
    echo -e "${YELLOW}-c${ENDC} | ${YELLOW}--cluster${ENDC} [default = ${GREEN}\"tiger\"${ENDC}] \t\t Selected cluster - adroit, tiger or della"
+   echo -e "${YELLOW}-p${ENDC} | ${YELLOW}--partition${ENDC} [default = ${GREEN}\"gpu\"${ENDC}] \t\t Selected partition if cluster is della"
    echo -e "${YELLOW}-i${ENDC} | ${YELLOW}--id${ENDC} [default = ${GREEN}\"stuli\"${ENDC}] \t\t\t Selected PU-NetID to email slurm updates"
    echo -e "${YELLOW}-a${ENDC} | ${YELLOW}--autotune${ENDC} [default = ${GREEN}\"0\"${ENDC}] \t\t To autotune the given CNN model"
    echo -e "${YELLOW}-t${ENDC} | ${YELLOW}--train_cnn${ENDC} [default = ${GREEN}\"0\"${ENDC}] \t\t To train the given CNN model"
@@ -53,6 +55,11 @@ case "$1" in
     -c | --cluster)
         shift
         cluster=$1
+        shift
+        ;;
+    -p | --partition)
+        shift
+        partition=$1
         shift
         ;;
     -i | --id)
@@ -148,19 +155,21 @@ cd "./job_scripts/${dataset}/"
 # Create SLURM job script to train CNN-Accelerator pair
 echo "#!/bin/bash" >> $job_file
 echo "#SBATCH --job-name=code_${dataset}_${accel_hash}       # create a short name for your job" >> $job_file
+if [[ $partition == "gpu-ee" ]]
+    echo "#SBATCH --partition gpu-ee                         # partition" >> $job_file
 echo "#SBATCH --nodes=1                                      # node count" >> $job_file
 echo "#SBATCH --ntasks=1                                     # total number of tasks across all nodes" >> $job_file
 # echo "#SBATCH --cpus-per-task=24                             # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
 echo "#SBATCH --cpus-per-task=4                              # cpu-cores per task (>1 if multi-threaded tasks)" >> $job_file
 # echo "#SBATCH --mem=128G                                     # memory per cpu-core (4G is default)" >> $job_file
-echo "#SBATCH --mem=32G                                     # memory per cpu-core (4G is default)" >> $job_file
+echo "#SBATCH --mem=32G                                      # memory per cpu-core (4G is default)" >> $job_file
 if [[ $train_cnn == "1" ]]
 then
     echo "#SBATCH --gres=${cluster_gpu}                      # number of gpus per node" >> $job_file
     # echo "#SBATCH --gres=gpu:1" >> $job_file
 fi
 # echo "#SBATCH --time=144:00:00                               # total run time limit (HH:MM:SS)" >> $job_file
-echo "#SBATCH --time=36:00:00                               # total run time limit (HH:MM:SS)" >> $job_file
+echo "#SBATCH --time=36:00:00                                # total run time limit (HH:MM:SS)" >> $job_file
 # echo "#SBATCH --mail-type=all                                # send email" >> $job_file
 # echo "#SBATCH --mail-user=stuli@princeton.edu" >> $job_file
 echo "" >> $job_file
