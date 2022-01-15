@@ -18,10 +18,12 @@ import subprocess
 import time
 import json
 import hashlib
+import random
 
 import torch
 
 from six.moves import cPickle as pickle
+from tqdm import tqdm
 
 from boshnas_2inp import BOSHNAS as BOSHCODE
 from acq import gosh_acq as acq
@@ -46,6 +48,9 @@ MAX_DYNAMIC_ENERGY = 10.0 # Maximum dynamic energy in Joules
 MAX_LEAKAGE_ENERGY = 10.0 # Maximum leakage energy in Joules
 
 REMOVE_ERROR_CNN_ACCEL_PAIRS = False # Remove CNN-accelerator pairs that throw errors
+RANDOM_SAMPLE_ACCEL_DATASET = 10000 # Train on a radomly sampled dataset of accelerators
+
+USE_GPU_EE = False # Use GPU-EE partition on della cluster
 
 
 def worker(cnn_config_file: str,
@@ -103,9 +108,9 @@ def worker(cnn_config_file: str,
 		print('No neighbor found for the CNN. Training model from scratch.')
 
 	args = ['--dataset', cnn_config['dataset']]
-	
+
 	args.extend(['--cluster', cluster])
-	if cluster == 'della':
+	if cluster == 'della' and USE_GPU_EE:
 		slurm_stdout = subprocess.check_output('squeue', shell=True, text=True)
 		if 'gpu-ee' not in slurm_stdout:
 			args.extend(['--partition', 'gpu-ee'])
@@ -125,7 +130,7 @@ def worker(cnn_config_file: str,
 		args.extend(['--neighbor_file', chosen_neighbor_path])
 	
 	slurm_stdout = subprocess.check_output(
-		f'ssh della-gpu "cd accelerator_co-design/boshcode; source ./job_scripts/job_worker.sh {" ".join(args)}"',
+		f'ssh della-gpu "cd /scratch/gpfs/stuli/accelerator_co-design/boshcode; source ./job_scripts/job_worker.sh {" ".join(args)}"',
 		shell=True, text=True, executable="/bin/bash")
 
 	return slurm_stdout.split()[-1], scratch
@@ -401,7 +406,7 @@ def main():
 		metavar='',
 		type=str,
 		help='path to the directory where all models are trained',
-		default='/scratch/gpfs/stuli/accelerator_co-design')
+		default='../models')
 	parser.add_argument('--performance_weights',
 		metavar='',
 		type = float,
@@ -456,6 +461,10 @@ def main():
 	if args.fix == 'accel': 
 		print(f'{pu.bcolors.OKBLUE}Fixing Accelerator to:{pu.bcolors.ENDC}\n{accel_embeddings[args.index, :]}')
 		accel_embeddings = accel_embeddings[args.index, :].reshape(1, -1)
+	# Take random sample of the massive Accelerator dataset
+	elif RANDOM_SAMPLE_ACCEL_DATASET:
+		print(f'{pu.bcolors.OKBLUE}Taking random sample of Accelerator embeddings:{pu.bcolors.ENDC} {RANDOM_SAMPLE_ACCEL_DATASET}')
+		accel_embeddings = accel_embeddings[random.sample(list(range(accel_embeddings.shape[0])), RANDOM_SAMPLE_ACCEL_DATASET), :]
 
 	# New dataset file for CNN library
 	new_graphlib_file = args.graphlib_file.split('.json')[0] + '_trained.json'
@@ -471,13 +480,15 @@ def main():
 			assert len(set([str(accel['accel_emb']) for _, accel in accel_dataset.items()])) == 1, \
 				'Stored Co-Design dataset has more than one Accelerator'
 	else:
-		for accel_idx in range(accel_embeddings.shape[0]):
+		for accel_idx in tqdm(range(accel_embeddings.shape[0]), desc='Generating accelerator dataset'):
 			for cnn_idx in range(len(graphLib.library)):
 				accel_cnn_str = str(accel_embeddings[accel_idx, :]).replace('\n', '') + graphLib.library[cnn_idx].hash
 				accel_dataset[hashlib.sha256(accel_cnn_str.encode('utf-8')).hexdigest()] = \
 					{'cnn_hash': graphLib.library[cnn_idx].hash, 'accel_emb': accel_embeddings[accel_idx, :], \
 					'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'area': None, \
 					'dynamic_energy': None, 'leakage_energy': None}
+
+		print(f'{pu.bcolors.OKBLUE}Size of the CNN-Accelerator dataset:{pu.bcolors.ENDC} {len(accel_dataset)}')
 		pickle.dump(accel_dataset, open(args.accel_dataset_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
 	accel_hashes = list(accel_dataset.keys())
 
@@ -503,6 +514,9 @@ def main():
 	# Check trained_accel_hashes have all respective CNNs trained
 	trained_accel_hashes_new = []
 	for accel_hash in trained_accel_hashes:
+		if accel_hash not in accel_hashes:
+			print(f'Trained CNN-Accelerator pair with hash: {accel_hash}, not in current dataset')
+			continue
 		cnn_hash = accel_dataset[accel_hash]['cnn_hash']
 		if cnn_hash not in trained_cnn_hashes:
 			print(f'CNN-Accelerator pair with hash: {accel_hash}, doesn\'t have respective CNN trained (with hash: {cnn_hash})')
