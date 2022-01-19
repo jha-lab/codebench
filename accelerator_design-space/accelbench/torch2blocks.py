@@ -2,7 +2,7 @@ import os
 import sys
 import Blocks
 
-sys.path.append(os.path.abspath('../../cnn_design-space/cnnbench/'))
+sys.path.append(os.path.abspath('/scratch/gpfs/stuli/accelerator_co-design/cnn_design-space/cnnbench'))
 
 import torch
 import yaml
