@@ -550,7 +550,7 @@ def main():
 				'train_type': train_type})
 
 	# Wait for jobs to complete
-	accel_dataset = wait_for_jobs(model_jobs, accel_dataset, args.cnn_config_file)
+	accel_dataset = wait_for_jobs(model_jobs, accel_dataset, args.cnn_config_file, running_limit=0)
 
 	# Update dataset with newly trained models
 	old_best_performance = update_dataset(graphLib, accel_dataset, cnn_models_dir, accel_models_dir, 
