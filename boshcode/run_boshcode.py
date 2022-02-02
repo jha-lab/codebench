@@ -199,7 +199,7 @@ def wait_for_jobs(model_jobs: list, accel_dataset: dict, cnn_config_file: str, r
 	last_completed_jobs = 0
 	running_jobs = np.inf
 	pending_jobs = np.inf
-	while running_jobs >= running_limit or pending_jobs > patience:
+	while running_jobs > running_limit or pending_jobs > patience:
 		completed_jobs, running_jobs, pending_jobs = 0, 0, 0
 		for job in model_jobs:
 			_, _, status = get_job_info(job['job_id'])
@@ -272,16 +272,21 @@ def update_dataset(graphLib: 'GraphLib',
 	graphLib.save_dataset(graphlib_file)
 
 	# Updating co-design CNN-Accelerator library
-	for accel_hash in accel_dataset.keys():
-		accel_trained, cnn_trained = False, False
-		if os.path.exists(os.path.join(accel_models_dir, accel_hash) + '.pkl'):
-			accel_trained = True
-			results = pickle.load(open(os.path.join(accel_models_dir, accel_hash + '.pkl'), 'rb'))
-			accel_dataset[accel_hash]['latency'] = results['latency']
-			accel_dataset[accel_hash]['area'] = results['area']
-			accel_dataset[accel_hash]['dynamic_energy'] = results['dynamic_energy']
-			accel_dataset[accel_hash]['leakage_energy'] = results['leakage_energy']
-			count_accel += 1
+	trained_accel_files = [accel_file for accel_file in os.listdir(accel_models_dir)]
+	for accel_file in trained_accel_files:
+		accel_hash = accel_file[:-4]
+		if accel_hash not in accel_dataset.keys(): continue
+
+		cnn_trained = False
+		accel_trained = True
+
+		results = pickle.load(open(os.path.join(accel_models_dir, accel_file), 'rb'))
+		accel_dataset[accel_hash]['latency'] = results['latency']
+		accel_dataset[accel_hash]['area'] = results['area']
+		accel_dataset[accel_hash]['dynamic_energy'] = results['dynamic_energy']
+		accel_dataset[accel_hash]['leakage_energy'] = results['leakage_energy']
+		count_accel += 1
+
 		if os.path.exists(os.path.join(cnn_models_dir, accel_dataset[accel_hash]['cnn_hash'], 'model.pt')):
 			cnn_trained = True
 			model_checkpoint = torch.load(os.path.join(cnn_models_dir, 
@@ -289,6 +294,7 @@ def update_dataset(graphLib: 'GraphLib',
 			accel_dataset[accel_hash]['train_acc'] = model_checkpoint['train_accuracies'][-1]
 			accel_dataset[accel_hash]['val_acc'] = model_checkpoint['val_accuracies'][-1]
 			accel_dataset[accel_hash]['test_acc'] = model_checkpoint['test_accuracies'][-1]
+
 		if accel_trained and cnn_trained:
 			performance = weights[0] * accel_dataset[accel_hash]['train_acc'] / 100.0 + \
 						  weights[1] * accel_dataset[accel_hash]['val_acc'] / 100.0 + \
@@ -417,7 +423,7 @@ def main():
 		metavar='',
 		type=int,
 		help='number of initial models to initialize the BOSHCODE surrogate model',
-		default=10)
+		default=2)
 	parser.add_argument('--autotune',
 		metavar='',
 		type=int,
@@ -457,15 +463,6 @@ def main():
 	accel_embeddings = pickle.load(open(args.accel_embeddings_file, 'rb'))
 	accel_embeddings = np.array(accel_embeddings)
 
-	# Fix the design space of Accelerator embeddings for one-sided search
-	if args.fix == 'accel': 
-		print(f'{pu.bcolors.OKBLUE}Fixing Accelerator to:{pu.bcolors.ENDC}\n{accel_embeddings[args.index, :]}')
-		accel_embeddings = accel_embeddings[args.index, :].reshape(1, -1)
-	# Take random sample of the massive Accelerator dataset
-	elif RANDOM_SAMPLE_ACCEL_DATASET:
-		print(f'{pu.bcolors.OKBLUE}Taking random sample of Accelerator embeddings:{pu.bcolors.ENDC} {RANDOM_SAMPLE_ACCEL_DATASET}')
-		accel_embeddings = accel_embeddings[random.sample(list(range(accel_embeddings.shape[0])), RANDOM_SAMPLE_ACCEL_DATASET), :]
-
 	# New dataset file for CNN library
 	new_graphlib_file = args.graphlib_file.split('.json')[0] + '_trained.json'
 
@@ -473,13 +470,28 @@ def main():
 	accel_dataset = {}
 	if os.path.exists(args.accel_dataset_file):
 		accel_dataset = pickle.load(open(args.accel_dataset_file, 'rb'))
+		print(f'{pu.bcolors.OKGREEN}Loaded Accelerator dataset{pu.bcolors.ENDC}')
 		if args.fix == 'cnn':
 			assert len(set([accel['cnn_hash'] for _, accel in accel_dataset.items()])) == 1, \
 				'Stored Co-Design dataset has more than one CNN'
 		elif args.fix == 'accel':
 			assert len(set([str(accel['accel_emb']) for _, accel in accel_dataset.items()])) == 1, \
 				'Stored Co-Design dataset has more than one Accelerator'
+
+		accel_embeddings = [accel['accel_emb'].tolist() for accel in accel_dataset.values()]
+		accel_embeddings_str = [str(elem) for elem in accel_embeddings]
+		accel_embeddings_set = [eval(elem) for elem in set(accel_embeddings_str)]
+		accel_embeddings = np.array(accel_embeddings_set)
 	else:
+		# Fix the design space of Accelerator embeddings for one-sided search
+		if args.fix == 'accel': 
+			print(f'{pu.bcolors.OKBLUE}Fixing Accelerator to:{pu.bcolors.ENDC}\n{accel_embeddings[args.index, :]}')
+			accel_embeddings = accel_embeddings[args.index, :].reshape(1, -1)
+		# Take random sample of the massive Accelerator dataset
+		elif RANDOM_SAMPLE_ACCEL_DATASET:
+			print(f'{pu.bcolors.OKBLUE}Taking random sample of Accelerator embeddings:{pu.bcolors.ENDC} {RANDOM_SAMPLE_ACCEL_DATASET}')
+			accel_embeddings = accel_embeddings[random.sample(list(range(accel_embeddings.shape[0])), RANDOM_SAMPLE_ACCEL_DATASET), :]
+
 		for accel_idx in tqdm(range(accel_embeddings.shape[0]), desc='Generating accelerator dataset'):
 			for cnn_idx in range(len(graphLib.library)):
 				accel_cnn_str = str(accel_embeddings[accel_idx, :]).replace('\n', '') + graphLib.library[cnn_idx].hash
@@ -524,6 +536,8 @@ def main():
 			trained_accel_hashes_new.append(accel_hash)
 	trained_accel_hashes = trained_accel_hashes_new
 
+	print(f'{pu.bcolors.OKBLUE}Trained CNN-Accelerator pairs: {len(trained_accel_hashes)}. Initialization requirement: {args.num_init}{pu.bcolors.ENDC}')
+
 	# Train randomly sampled models if total trained models is less than num_init
 	# TODO: Add skopt.sampler.Sobol points instead
 	while len(trained_accel_hashes) < args.num_init:
@@ -553,6 +567,7 @@ def main():
 	accel_dataset = wait_for_jobs(model_jobs, accel_dataset, args.cnn_config_file, running_limit=0)
 
 	# Update dataset with newly trained models
+	print(f'{pu.bcolors.OKBLUE}Updating dataset{pu.bcolors.ENDC}')
 	old_best_performance = update_dataset(graphLib, accel_dataset, cnn_models_dir, accel_models_dir, 
 		new_graphlib_file, args.accel_dataset_file, args.performance_weights)
 
@@ -581,6 +596,8 @@ def main():
 							  model_aleatoric=True,
 							  save_path=args.surrogate_model_dir,
 							  pretrained=False)
+
+	print(f'{pu.bcolors.OKGREEN}Initialized BOSHCODE model{pu.bcolors.ENDC}')
 
 	# Get initial dataset after finetuning num_init models
 	X_cnn, X_accel, y = convert_to_tabular(accel_dataset, graphLib, args.performance_weights)
@@ -777,4 +794,5 @@ def main():
 
 if __name__ == '__main__':
 	main()
+
 
