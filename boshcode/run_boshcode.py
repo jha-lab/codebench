@@ -262,7 +262,7 @@ def update_dataset(graphLib: 'GraphLib',
 	for cnn_model_hash in os.listdir(cnn_models_dir):
 		checkpoint_path = os.path.join(cnn_models_dir, cnn_model_hash, 'model.pt')
 		if os.path.exists(checkpoint_path):
-			model_checkpoint = torch.load(checkpoint_path)
+			model_checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
 			_, model_idx = graphLib.get_graph(model_hash=cnn_model_hash)
 			graphLib.library[model_idx].accuracies['train'] = model_checkpoint['train_accuracies'][-1]
 			graphLib.library[model_idx].accuracies['val'] = model_checkpoint['val_accuracies'][-1]
@@ -290,7 +290,7 @@ def update_dataset(graphLib: 'GraphLib',
 		if os.path.exists(os.path.join(cnn_models_dir, accel_dataset[accel_hash]['cnn_hash'], 'model.pt')):
 			cnn_trained = True
 			model_checkpoint = torch.load(os.path.join(cnn_models_dir, 
-				accel_dataset[accel_hash]['cnn_hash'], 'model.pt'))
+				accel_dataset[accel_hash]['cnn_hash'], 'model.pt'), map_location=torch.device('cpu'))
 			accel_dataset[accel_hash]['train_acc'] = model_checkpoint['train_accuracies'][-1]
 			accel_dataset[accel_hash]['val_acc'] = model_checkpoint['val_accuracies'][-1]
 			accel_dataset[accel_hash]['test_acc'] = model_checkpoint['test_accuracies'][-1]
