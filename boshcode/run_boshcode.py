@@ -273,7 +273,7 @@ def update_dataset(graphLib: 'GraphLib',
 
 	# Updating co-design CNN-Accelerator library
 	trained_accel_files = [accel_file for accel_file in os.listdir(accel_models_dir)]
-	for accel_file in trained_accel_files:
+	for accel_file in tqdm(trained_accel_files, desc='Updatind CNN-Accelerator library'):
 		accel_hash = accel_file[:-4]
 		if accel_hash not in accel_dataset.keys(): continue
 
@@ -403,6 +403,11 @@ def main():
 		type=str,
 		help='path to the co-design CNN-Accelerator dataset file',
 		default='./accel_dataset/accel_dataset_mini.pkl')
+	parser.add_argument('--accel_dataset_file_trained',
+		metavar='',
+		type=str,
+		help='path to the co-design CNN-Accelerator dataset file',
+		default='./accel_dataset/accel_dataset_mini_trained.pkl')
 	parser.add_argument('--surrogate_model_dir',
 		metavar='',
 		type=str,
@@ -466,6 +471,20 @@ def main():
 	# New dataset file for CNN library
 	new_graphlib_file = args.graphlib_file.split('.json')[0] + '_trained.json'
 
+	cnn_config = yaml.safe_load(open(args.cnn_config_file))
+
+	# Set directories for training of CNN and Accelerator models
+	cnn_models_dir = os.path.join(args.models_dir, 'cnnbench_models', cnn_config['dataset'])
+	accel_models_dir = os.path.join(args.models_dir, 'accelbench_models')
+
+	# Get trained CNN models and Accelerator architectures
+	trained_cnn_hashes = os.listdir(cnn_models_dir)
+	trained_cnn_hashes_new = []
+	for cnn_hash in trained_cnn_hashes:
+		if 'model.pt' in os.listdir(os.path.join(cnn_models_dir, cnn_hash)): trained_cnn_hashes_new.append(cnn_hash)
+	trained_cnn_hashes = trained_cnn_hashes_new
+	trained_accel_hashes = [accel_hash[:-4] for accel_hash in os.listdir(accel_models_dir)]
+
 	# Create or load CNN-Accelerator pairs dataset
 	accel_dataset = {}
 	if os.path.exists(args.accel_dataset_file):
@@ -489,7 +508,19 @@ def main():
 			accel_embeddings = accel_embeddings[args.index, :].reshape(1, -1)
 		# Take random sample of the massive Accelerator dataset
 		elif RANDOM_SAMPLE_ACCEL_DATASET:
-			print(f'{pu.bcolors.OKBLUE}Taking random sample of Accelerator embeddings:{pu.bcolors.ENDC} {RANDOM_SAMPLE_ACCEL_DATASET}')
+			for accel_idx in tqdm(range(accel_embeddings.shape[0]), 'Adding existing accelerators to dataset'):
+				accel_str = str(accel_embeddings[accel_idx, :]).replace('\n', '')
+				for cnn_hash in trained_cnn_hashes:
+					accel_cnn_str = accel_str + cnn_hash
+					accel_hash = hashlib.sha256(accel_cnn_str.encode('utf-8')).hexdigest()
+					if accel_hash in trained_accel_hashes:
+						accel_dataset[hashlib.sha256(accel_cnn_str.encode('utf-8')).hexdigest()] = \
+							{'cnn_hash': cnn_hash, 'accel_emb': accel_embeddings[accel_idx, :], \
+							'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'area': None, \
+							'dynamic_energy': None, 'leakage_energy': None}
+						print(f'{pu.bcolors.OKGREEN}Added {len(accel_dataset)} trained accelerators to dataset.{pu.bcolors.ENDC}')
+
+			print(f'{pu.bcolors.OKBLUE}Taking random sample of Accelerator embeddings:{pu.bcolors.ENDC} {RANDOM_SAMPLE_ACCEL_DATASET - len(accel_dataset)}')
 			accel_embeddings = accel_embeddings[random.sample(list(range(accel_embeddings.shape[0])), RANDOM_SAMPLE_ACCEL_DATASET), :]
 
 		for accel_idx in tqdm(range(accel_embeddings.shape[0]), desc='Generating accelerator dataset'):
@@ -512,16 +543,6 @@ def main():
 
 	if not os.path.exists(args.models_dir):
 		os.makedirs(args.models_dir)
-
-	cnn_config = yaml.safe_load(open(args.cnn_config_file))
-
-	# Set directories for training of CNN and Accelerator models
-	cnn_models_dir = os.path.join(args.models_dir, 'cnnbench_models', cnn_config['dataset'])
-	accel_models_dir = os.path.join(args.models_dir, 'accelbench_models')
-
-	# Get trained CNN models and Accelerator architectures
-	trained_cnn_hashes = os.listdir(cnn_models_dir)
-	trained_accel_hashes = [accel_hash[:-4] for accel_hash in os.listdir(accel_models_dir)]
 
 	# Check trained_accel_hashes have all respective CNNs trained
 	trained_accel_hashes_new = []
@@ -569,7 +590,7 @@ def main():
 	# Update dataset with newly trained models
 	print(f'{pu.bcolors.OKBLUE}Updating dataset{pu.bcolors.ENDC}')
 	old_best_performance = update_dataset(graphLib, accel_dataset, cnn_models_dir, accel_models_dir, 
-		new_graphlib_file, args.accel_dataset_file, args.performance_weights)
+		new_graphlib_file, args.accel_dataset_file_trained, args.performance_weights)
 
 	# Get entire dataset in embedding space
 	cnn_embeddings = []
@@ -774,7 +795,7 @@ def main():
 
 		# Update dataset with newly trained models
 		best_performance = update_dataset(graphLib, accel_dataset, cnn_models_dir, accel_models_dir, 
-			new_graphlib_file, args.accel_dataset_file, args.performance_weights)
+			new_graphlib_file, args.accel_dataset_file_trained, args.performance_weights)
 
 		# Update same_performance to check convergence
 		if best_performance == old_best_performance and method == 'optimization':
@@ -787,7 +808,7 @@ def main():
 
 	# Update dataset with newly trained models
 	best_performance = update_dataset(graphLib, accel_dataset, cnn_models_dir, accel_models_dir, 
-		new_graphlib_file, args.accel_dataset_file, args.performance_weights)
+		new_graphlib_file, args.accel_dataset_file_trained, args.performance_weights)
 
 	print(f'{pu.bcolors.OKGREEN}Convergence criterion reached!{pu.bcolors.ENDC}')
 
