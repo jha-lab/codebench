@@ -236,7 +236,8 @@ def update_dataset(graphLib: 'GraphLib',
 	accel_models_dir: str, 
 	graphlib_file: str, 
 	accel_dataset_file: str,
-	weights: list):
+	weights: list,
+	save_dataset=True):
 	"""Update the dataset with all finetuned models
 	
 	Args:
@@ -253,7 +254,7 @@ def update_dataset(graphLib: 'GraphLib',
 	"""
 	count_cnn = 0
 	count_accel = 0
-	best_performance = 0
+	best_performance, best_accel_hash = 0, ''
 
 	assert len(weights) == 7, 'The weights list should be of size 7.'
 	assert sum(weights) == 1, 'Sum of weights should be equal to 1.'
@@ -273,7 +274,7 @@ def update_dataset(graphLib: 'GraphLib',
 
 	# Updating co-design CNN-Accelerator library
 	trained_accel_files = [accel_file for accel_file in os.listdir(accel_models_dir)]
-	for accel_file in tqdm(trained_accel_files, desc='Updatind CNN-Accelerator library'):
+	for accel_file in tqdm(trained_accel_files, desc='Updating CNN-Accelerator library'):
 		accel_hash = accel_file[:-4]
 		if accel_hash not in accel_dataset.keys(): continue
 
@@ -305,14 +306,19 @@ def update_dataset(graphLib: 'GraphLib',
 						  weights[6] * (1 - accel_dataset[accel_hash]['leakage_energy'] / MAX_LEAKAGE_ENERGY)
 			if performance > best_performance:
 				best_performance = performance
+				best_accel_hash = accel_hash
 
-	pickle.dump(accel_dataset, open(accel_dataset_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
-	print(f'{pu.bcolors.OKGREEN}Co-Design dataset saved to:{pu.bcolors.ENDC} {accel_dataset_file}')
+	if save_dataset:
+		pickle.dump(accel_dataset, open(accel_dataset_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
+		print(f'{pu.bcolors.OKGREEN}Co-Design dataset saved to:{pu.bcolors.ENDC} {accel_dataset_file}')
 
 	print()
 	print(f'{pu.bcolors.OKGREEN}Trained CNNs in dataset:{pu.bcolors.ENDC} {count_cnn}\n' \
 		+ f'{pu.bcolors.OKGREEN}Simulated CNN-Accelerator pairs:{pu.bcolors.ENDC} {count_accel}\n' \
-		+ f'{pu.bcolors.OKGREEN}Best performance:{pu.bcolors.ENDC} {best_performance}')
+		+ f'{pu.bcolors.OKGREEN}Best performance:{pu.bcolors.ENDC} {best_performance}\n' \
+		+ f'{pu.bcolors.OKGREEN}Best CNN-Accelerator pair hash:{pu.bcolors.ENDC} {best_accel_hash}\n' \
+		+ f'\t{pu.bcolors.OKGREEN}with accelerator embedding: {accel_dataset[best_accel_hash]["accel_emb"]}'
+		+ f'\t{pu.bcolors.OKGREEN}with CNN hash: {accel_dataset[best_accel_hash]["cnn_hash"]}')
 	print()
 
 	return best_performance
@@ -335,8 +341,8 @@ def convert_to_tabular(accel_dataset: dict, graphLib: 'GraphLib', weights: list)
 	assert len(weights) == 7, 'The weights list should be of size 7.'
 	assert sum(weights) == 1, 'Sum of weights should be equal to 1.'
 	
-	for accel_hash in accel_dataset.keys():
-		if accel_dataset[accel_hash]['train_acc'] is None or accel_dataset[accel_hash]['latency'] is None: continue
+	for accel_hash in tqdm(accel_dataset.keys(), desc='Converting dataset to tabular'):
+		if accel_dataset[accel_hash]['train_acc'] is None: continue
 		performance = weights[0] * accel_dataset[accel_hash]['train_acc'] + \
 					  weights[1] * accel_dataset[accel_hash]['val_acc'] + \
 					  weights[2] * accel_dataset[accel_hash]['test_acc'] + \
@@ -464,10 +470,6 @@ def main():
 		print(f'{pu.bcolors.OKBLUE}Fixing CNN to:{pu.bcolors.ENDC}\n{graphLib.library[args.index]}')
 		graphLib.library = [graphLib.library[args.index]]
 
-	# Initialize Accelerator embeddings
-	accel_embeddings = pickle.load(open(args.accel_embeddings_file, 'rb'))
-	accel_embeddings = np.array(accel_embeddings)
-
 	# New dataset file for CNN library
 	new_graphlib_file = args.graphlib_file.split('.json')[0] + '_trained.json'
 
@@ -502,6 +504,10 @@ def main():
 		accel_embeddings_set = [eval(elem) for elem in set(accel_embeddings_str)]
 		accel_embeddings = np.array(accel_embeddings_set)
 	else:
+		# Initialize Accelerator embeddings
+		accel_embeddings = pickle.load(open(args.accel_embeddings_file, 'rb'))
+		accel_embeddings = np.array(accel_embeddings)
+
 		# Fix the design space of Accelerator embeddings for one-sided search
 		if args.fix == 'accel': 
 			print(f'{pu.bcolors.OKBLUE}Fixing Accelerator to:{pu.bcolors.ENDC}\n{accel_embeddings[args.index, :]}')
@@ -642,6 +648,7 @@ def main():
 			_, _, status = get_job_info(job['job_id'])
 			if status == 'COMPLETED':
 				trained_hashes.append(job['accel_hash'])
+				trained_cnn_hashes.append(accel_dataset[job['accel_hash']]['cnn_hash'])
 			else:
 				pipeline_hashes.append(job['accel_hash'])
 
@@ -683,7 +690,7 @@ def main():
 				if chosen_neighbor_hash:
 					# Finetune model with the chosen neighbor
 					job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
-						cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
+						cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_model.hash, 
 						chosen_neighbor_hash=chosen_neighbor_hash, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
 						accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id)
 					assert scratch is False
@@ -715,7 +722,7 @@ def main():
 
 				# Train model
 				job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
-					cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
+					cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_model.hash, 
 					chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
 					accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
 				assert scratch is True
@@ -747,7 +754,7 @@ def main():
 
 				# Train model
 				job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
-					cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
+					cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_model.hash, 
 					chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
 					accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
 				assert scratch is False
@@ -777,7 +784,7 @@ def main():
 
 			# Train sampled model
 			job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
-				cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
+				cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_model.hash, 
 				chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
 				accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
 
