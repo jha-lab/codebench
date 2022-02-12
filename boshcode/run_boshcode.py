@@ -24,6 +24,7 @@ import torch
 
 from six.moves import cPickle as pickle
 from tqdm import tqdm
+import gc
 
 from boshnas_2inp import BOSHNAS as BOSHCODE
 from acq import gosh_acq as acq
@@ -38,7 +39,7 @@ OVERLAP_THRESHOLD = 0.9 # Corresponds to the minimum overlap for model to be con
 DEBUG = False
 PERFORMANCE_PATIENCE = 10 # Convergence criterion for accuracy
 ALEATORIC_QUERIES = 10 # Number of queries to be run with aleatoric uncertainty
-K = 10 # Number of parallel cold restarts for BOSHNAS
+K = 1 # Number of parallel cold restarts for BOSHNAS
 UNC_PROB = 0.1
 DIV_PROB = 0.1
 
@@ -309,15 +310,17 @@ def update_dataset(graphLib: 'GraphLib',
 				best_accel_hash = accel_hash
 
 	if save_dataset:
+		gc.disable()
 		pickle.dump(accel_dataset, open(accel_dataset_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
 		print(f'{pu.bcolors.OKGREEN}Co-Design dataset saved to:{pu.bcolors.ENDC} {accel_dataset_file}')
+		gc.enable()
 
 	print()
 	print(f'{pu.bcolors.OKGREEN}Trained CNNs in dataset:{pu.bcolors.ENDC} {count_cnn}\n' \
 		+ f'{pu.bcolors.OKGREEN}Simulated CNN-Accelerator pairs:{pu.bcolors.ENDC} {count_accel}\n' \
 		+ f'{pu.bcolors.OKGREEN}Best performance:{pu.bcolors.ENDC} {best_performance}\n' \
 		+ f'{pu.bcolors.OKGREEN}Best CNN-Accelerator pair hash:{pu.bcolors.ENDC} {best_accel_hash}\n' \
-		+ f'\t{pu.bcolors.OKGREEN}with accelerator embedding: {accel_dataset[best_accel_hash]["accel_emb"]}'
+		+ f'\t{pu.bcolors.OKGREEN}with accelerator embedding: {accel_dataset[best_accel_hash]["accel_emb"]}\n'
 		+ f'\t{pu.bcolors.OKGREEN}with CNN hash: {accel_dataset[best_accel_hash]["cnn_hash"]}')
 	print()
 
@@ -434,7 +437,7 @@ def main():
 		metavar='',
 		type=int,
 		help='number of initial models to initialize the BOSHCODE surrogate model',
-		default=2)
+		default=5)
 	parser.add_argument('--autotune',
 		metavar='',
 		type=int,
@@ -676,8 +679,12 @@ def main():
 
 			# Run queries
 			for i in set(query_indices):
-				accel_hash = accel_hashes[i]
-				accel_emb = accel_dataset[accel_hash]['accel_emb']
+				accel_emb = X_ds[i][1]
+				accel_hash = ''
+				for accel_hash_key in tqdm(accel_dataset.keys(), desc='Finding relevant accelerator hash'):
+					if np.array_equal(accel_dataset[accel_hash_key]['accel_emb'], accel_emb):
+						accel_hash = accel_hash_key
+						break
 
 				if not use_al and accel_hash in trained_accel_hashes + pipeline_hashes:
 					# If aleatoric uncertainty is not considered, only consider models that are not 
