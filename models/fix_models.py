@@ -15,6 +15,10 @@ import torch
 import shutil
 import numpy as np
 
+
+FIX_MANUAL_MODELS = False
+
+
 manual_models = {'vgg11': 'ad0a60f4a4077a823e03c806612b1739d7dbdcb9955a77b582d18ba9eea0a6b8',
 	'vgg13': '6d0862109b4bd4ba489ae97bc9f675734fc2a6a54a210b3a4f391fa01889a982',
 	'vgg16': 'c02c2fde320d179d81af17833c9466bfbfbb1facb42d82e14e9793a9b1ae7979',
@@ -66,6 +70,7 @@ mobilenet_accel_hashes = {'[ 1  1  1  6  4  1  1  1 14  8  1  2  3]': '7b8dd7df2
 
 spring_embedding = np.array([2e0, 16e0, 8e0, 4e0, 8e0, 3e0, 3e0, 1e0, 12e0, 24e0, 4e0, 1e0, 1e0])
 
+
 accel_dataset = pickle.load(open('../boshcode/accel_dataset/accel_dataset_mini.pkl', 'rb'))
 # accel_dataset = {}
 
@@ -104,42 +109,43 @@ for cnn_hash in trained_cnn_hashes:
 							torch.save(ckpt, os.path.join(cnn_models_dir, cnn_hash, 'model.pt'))
 
 
-for cnn_name, accel_hash in manual_accel_hashes.items():
-	cnn_hash = manual_models[cnn_name]
-	flag = True
-	if accel_hash + '.pkl' not in os.listdir(accel_models_dir): 
-		print(f'Accelerator hash: {accel_hash} is not trained')
-		flag = False
-	if 'model.pt' not in os.listdir(os.path.join(cnn_models_dir, cnn_hash)): 
-		print(f'CNN hash: {cnn_hash} is not trained')
-		flag = False
+if FIX_MANUAL_MODELS:
+	for cnn_name, accel_hash in manual_accel_hashes.items():
+		cnn_hash = manual_models[cnn_name]
+		flag = True
+		if accel_hash + '.pkl' not in os.listdir(accel_models_dir): 
+			print(f'Accelerator hash: {accel_hash} is not trained')
+			flag = False
+		if 'model.pt' not in os.listdir(os.path.join(cnn_models_dir, cnn_hash)): 
+			print(f'CNN hash: {cnn_hash} is not trained')
+			flag = False
 
-	if accel_hash not in accel_dataset.keys() and flag:
-		print(f'Adding accelerator hash: {accel_hash} to dataset')
-		accel_dataset[accel_hash] = \
-			{'cnn_hash': cnn_hash, 'accel_emb': spring_embedding, \
-			'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'area': None, \
-			'dynamic_energy': None, 'leakage_energy': None}
+		if accel_hash not in accel_dataset.keys() and flag:
+			print(f'Adding accelerator hash: {accel_hash} to dataset')
+			accel_dataset[accel_hash] = \
+				{'cnn_hash': cnn_hash, 'accel_emb': spring_embedding, \
+				'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'area': None, \
+				'dynamic_energy': None, 'leakage_energy': None}
 
-for accel_emb_str, accel_hash in mobilenet_accel_hashes.items():
-	accel_emb = np.array([int(num) for num in accel_emb_str[1:-1].split()])
-	cnn_hash = manual_models['mobilenet']
-	flag = True
-	if accel_hash + '.pkl' not in os.listdir(accel_models_dir): 
-		print(f'Accelerator hash: {accel_hash} is not trained')
-		flag = False
-	if 'model.pt' not in os.listdir(os.path.join(cnn_models_dir, cnn_hash)): 
-		print(f'CNN hash: {cnn_hash} is not trained')
-		flag = False
+	for accel_emb_str, accel_hash in mobilenet_accel_hashes.items():
+		accel_emb = np.array([int(num) for num in accel_emb_str[1:-1].split()])
+		cnn_hash = manual_models['mobilenet']
+		flag = True
+		if accel_hash + '.pkl' not in os.listdir(accel_models_dir): 
+			print(f'Accelerator hash: {accel_hash} is not trained')
+			flag = False
+		if 'model.pt' not in os.listdir(os.path.join(cnn_models_dir, cnn_hash)): 
+			print(f'CNN hash: {cnn_hash} is not trained')
+			flag = False
 
-	if accel_hash not in accel_dataset.keys() and flag:
-		print(f'Adding accelerator hash: {accel_hash} to dataset')
-		accel_dataset[accel_hash] = \
-			{'cnn_hash': cnn_hash, 'accel_emb': spring_embedding, \
-			'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'area': None, \
-			'dynamic_energy': None, 'leakage_energy': None}
+		if accel_hash not in accel_dataset.keys() and flag:
+			print(f'Adding accelerator hash: {accel_hash} to dataset')
+			accel_dataset[accel_hash] = \
+				{'cnn_hash': cnn_hash, 'accel_emb': spring_embedding, \
+				'train_acc': None, 'val_acc': None, 'test_acc': None, 'latency': None, 'area': None, \
+				'dynamic_energy': None, 'leakage_energy': None}
 
-accel_dataset_file = '../boshcode/accel_dataset/accel_dataset_mini_bkp.pkl'
-print(f'Saving dataset to: {accel_dataset_file}')
-pickle.dump(accel_dataset, open(accel_dataset_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
+	accel_dataset_file = '../boshcode/accel_dataset/accel_dataset_mini_bkp.pkl'
+	print(f'Saving dataset to: {accel_dataset_file}')
+	pickle.dump(accel_dataset, open(accel_dataset_file, 'wb+'), pickle.HIGHEST_PROTOCOL)
 
