@@ -51,8 +51,6 @@ MAX_LEAKAGE_ENERGY = 10.0 # Maximum leakage energy in Joules
 REMOVE_ERROR_CNN_ACCEL_PAIRS = False # Remove CNN-accelerator pairs that throw errors
 RANDOM_SAMPLE_ACCEL_DATASET = 10000 # Train on a radomly sampled dataset of accelerators
 
-USE_GPU_EE = False # Use GPU-EE partition on della cluster
-
 
 def worker(cnn_config_file: str,
 	graphlib_file: str,
@@ -63,9 +61,7 @@ def worker(cnn_config_file: str,
 	autotune: bool,
 	trained_cnn_hashes: list,
 	accel_emb: np.array,
-	accel_hash: str,
-	cluster: str,
-	id: str):
+	accel_hash: str):
 	"""Worker to finetune or pretrain the given model
 	
 	Args:
@@ -79,8 +75,6 @@ def worker(cnn_config_file: str,
 	    trained_cnn_hashes (list): list of all CNN hashes that have been trained
 	    accel_emb (np.array): embedding of the Accelerator to be simulated
 	    accel_hash (str): hash for the given CNN-Accelerator pair
-	    cluster (str): name of the cluster - "adroit", "tiger" or "della"
-	    id (str): PU-NetID that is used to run slurm commands
 	
 	Returns:
 	    job_id, scratch (str, bool): Job ID for the slurm scheduler and whether CNN model
@@ -110,13 +104,6 @@ def worker(cnn_config_file: str,
 
 	args = ['--dataset', cnn_config['dataset']]
 
-	args.extend(['--cluster', cluster])
-	if cluster == 'della' and USE_GPU_EE:
-		slurm_stdout = subprocess.check_output('squeue', shell=True, text=True)
-		if 'gpu-ee' not in slurm_stdout:
-			args.extend(['--partition', 'gpu-ee'])
-
-	args.extend(['--id', id])
 	args.extend(['--autotune', '1' if autotune else '0'])
 	args.extend(['--cnn_model_hash', cnn_model_hash])
 	args.extend(['--cnn_model_dir', os.path.join(cnn_models_dir, cnn_model_hash)])
@@ -146,7 +133,7 @@ def get_job_info(job_id: int):
 	Returns:
 		start_time, elapsed_time, status (str, str, str): job details
 	"""
-	slurm_stdout = subprocess.check_output(f'ssh della-gpu "slist {job_id}"', shell=True, text=True, executable="/bin/bash")
+	slurm_stdout = subprocess.check_output(f'slist {job_id}', shell=True, text=True, executable="/bin/bash")
 	slurm_stdout = slurm_stdout.split('\n')[2].split()
 
 	if len(slurm_stdout) > 7:
@@ -448,16 +435,6 @@ def main():
 		type=int,
 		help='number of parallel jobs for training BOSHCODE',
 		default=8)
-	parser.add_argument('--cluster',
-		metavar='',
-		type=str,
-		help='name of the cluster - "adroit", "tiger" or "della"',
-		default='della')
-	parser.add_argument('--id',
-		metavar='',
-		type=str,
-		help='PU-NetID that is used to run slurm commands',
-		default='stuli')
 
 	args = parser.parse_args()
 
@@ -583,7 +560,7 @@ def main():
 			job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
 				cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_hash, 
 				chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
-				accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
+				accel_emb=accel_emb, accel_hash=accel_hash) 
 			assert scratch is True
 
 			train_type = 'S' if scratch else 'WT'
@@ -699,7 +676,7 @@ def main():
 					job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
 						cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_model.hash, 
 						chosen_neighbor_hash=chosen_neighbor_hash, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
-						accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id)
+						accel_emb=accel_emb, accel_hash=accel_hash)
 					assert scratch is False
 				else:
 					# If no neighbor was found, proceed to next query model
@@ -731,7 +708,7 @@ def main():
 				job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
 					cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_model.hash, 
 					chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
-					accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
+					accel_emb=accel_emb, accel_hash=accel_hash) 
 				assert scratch is True
 
 				train_type = 'S' if scratch else 'WT'
@@ -763,7 +740,7 @@ def main():
 				job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
 					cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_model.hash, 
 					chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
-					accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
+					accel_emb=accel_emb, accel_hash=accel_hash) 
 				assert scratch is False
 
 				new_queries += 1
@@ -793,7 +770,7 @@ def main():
 			job_id, scratch = worker(cnn_config_file=args.cnn_config_file, graphlib_file=args.graphlib_file,
 				cnn_models_dir=cnn_models_dir, accel_models_dir=accel_models_dir, cnn_model_hash=cnn_model.hash, 
 				chosen_neighbor_hash=None, autotune=autotune, trained_cnn_hashes=trained_cnn_hashes, 
-				accel_emb=accel_emb, accel_hash=accel_hash, cluster=args.cluster, id=args.id) 
+				accel_emb=accel_emb, accel_hash=accel_hash) 
 
 			new_queries += 1
 
