@@ -3,6 +3,7 @@
 ![Python Version](https://img.shields.io/badge/python-v3.6%20%7C%20v3.7%20%7C%20v3.8-blue)
 ![Conda](https://img.shields.io/badge/conda%7Cconda--forge-v4.8.3-blue)
 ![PyTorch](https://img.shields.io/badge/pytorch-v1.11.0-e74a2b)
+![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FJHA-Lab%2Fcodebench&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)
 
 This repository contains the tool **CODEBench** which can be used to generate and evaluate different CNN-accelerator pairs. It runs the **BOSHCODE** algorithm to obtain the best-performing pair for the given constraints and the selected design space.
 
