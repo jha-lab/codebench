@@ -52,14 +52,17 @@ Other flags can be used to control the training procedure (check using `python r
 
 Cite our work using the following bitex entry:
 ```bibtex
-@article{tuli2022codebench,
-      title={{CODEBench}: A Neural Architecture and Hardware Accelerator Co-Design Framework}, 
-      author={Tuli, Shikhar and Li, Chia-Hao and Sharma, Ritvik and Jha, Niraj K.},
-      year={2022},
-      eprint={----.-----},
-      archivePrefix={arXiv},
-      primaryClass={--.--}
-}
+@article{tuli2022codebench, 
+  author = {Tuli, Shikhar and Li, Chia-Hao and Sharma, Ritvik and Jha, Niraj K.}, 
+   title = {{CODEBench}: A Neural Architecture and Hardware Accelerator Co-Design Framework}, 
+   year = {2022}, publisher = {Association for Computing Machinery}, 
+   address = {New York, NY, USA}, 
+   issn = {1539-9087}, 
+   url = {https://doi.org/10.1145/3575798}, 
+   doi = {10.1145/3575798}, 
+   note = {Just Accepted}, 
+   journal = {ACM Trans. Embed. Comput. Syst.}, 
+   month = {dec}}
 ```
 
 ## License
